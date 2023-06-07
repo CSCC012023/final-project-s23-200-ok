@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { createLFGPost, getLFGPosts, getLFGPost, updateLFGPost, deleteLFGPost } from "../controllers/LFGPostController";
+import {
+  createLFGPost,
+  getLFGPosts,
+  getLFGPost,
+  updateLFGPost,
+  deleteLFGPost,
+} from "../controllers/LFGPostController.js";
 
 const router = Router();
 
