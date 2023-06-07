@@ -68,7 +68,7 @@ Playbook follows a git flow style of branching
 To add your code:
 
 1. Get a JIRA ticket assigned
-2. Create a branch called `feature/<ticket number>-branch-name`
+2. Create a branch called `feature/<ticket number>-branch-name` from the develop branch
     1. for the `branch-name` make sure to call it something descriptive!
         1. If I was working on a ticket to add chat notifications I could call it `feature/CSCC01PROJ-13-chat-notifications`
         2. If I was working on a ticket to create a login page I could call it `feature/CSCC01PROJ-9-create-login-page`
