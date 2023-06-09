@@ -7,10 +7,23 @@ import Profile from "../models/Profile.js";
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const createProfile = asyncHandler(async (req, res) => {});
 
-//@route   GET api/profile
+//@route   GET api/profile/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getProfile = asyncHandler(async (req, res) => {});
+const getProfile = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Check if profile exists
+    const profile = await Profile.findById(id);
+    if (!profile) {
+      return res.status(404).json({ msg: "Profile not found" });
+    }
+    res.status(200).json(profile);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
 
 //@route PUT api/profile/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]

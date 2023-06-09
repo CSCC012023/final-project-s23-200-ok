@@ -11,6 +11,8 @@ import errorHandler from "./middleware/errorMiddleware.js";
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
+const app = express();
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -23,8 +25,6 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
 });
-
-const app = express();
 
 app.use(cors());
 app.use(express.json());

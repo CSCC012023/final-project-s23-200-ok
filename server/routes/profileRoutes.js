@@ -11,7 +11,8 @@ import {
 
 const router = Router();
 
-router.route("/").post(createProfile).get(getProfile);
+router.route("/").post(createProfile);
+router.route("/:id").get(getProfile);
 router.route("/:id").put(updateProfile).delete(deleteProfile);
 router.route("/:id/games/valorant").post(linkValorant);
 router.route("/:id/games/overwatch").post(linkOverwatch);
