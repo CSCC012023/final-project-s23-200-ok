@@ -5,6 +5,7 @@ import asyncHandler from "express-async-handler";
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const createPost = asyncHandler(async (req, res) => {
     res.send("hi there bro");
+    
 });
 
 //@route   GET api/posts
