@@ -3,7 +3,7 @@ import { createProfile, getProfile, updateProfile, deleteProfile } from "../cont
 
 const router = Router();
 
-router.route("/").post(createProfile).get(getProfile);
-router.route("/:id").put(updateProfile).delete(deleteProfile);
+router.route("/api/profile").post(createProfile).get(getProfile);
+router.route("/api/profile/:id").put(updateProfile).delete(deleteProfile);
 
 export default router;
