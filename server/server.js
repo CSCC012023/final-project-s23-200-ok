@@ -3,17 +3,10 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 
-import { Router } from "express";
 import postRoutes from "./routes/postRoutes.js";
 
-// import env2 from "../"
 
 dotenv.config(); 
- 
-
-const router = Router()
-router.use('/api/posts', postRoutes);
-
 
 const app = express();
 // const PORT = process.env.PORT || 5000;
@@ -22,12 +15,7 @@ const PORT = 5001
 app.use(cors());
 app.use(express.json());
 
-// console.log();
-// console.log("env below");
-// console.log(process.env.MONGO_URI);
-// console.log("env above");
-// console.log();
-
+app.use('/api/posts', postRoutes);
 
 
 mongoose.connect(process.env.MONGO_URI, {
