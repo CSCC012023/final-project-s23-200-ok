@@ -4,14 +4,14 @@ import asyncHandler from "express-async-handler";
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const createPost = asyncHandler(async (req, res) => {
-    
+    res.send("hi there bro");
 });
 
 //@route   GET api/posts
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const getPosts = asyncHandler(async (req, res) => {
-
+    res.send("hi there");
 });
 
 //@route   GET api/posts/:id
@@ -19,7 +19,7 @@ const getPosts = asyncHandler(async (req, res) => {
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const getPost = asyncHandler(async (req, res) => {
 
-});
+}); 
 
 //@route PUT api/posts/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
