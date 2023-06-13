@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import mongoose from "mongoose";
+import Post from "../models/Post.js"
 
 //@route  POST api/posts
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
@@ -10,6 +11,16 @@ const createPost = asyncHandler(async (req, res) => {
 
     // const result = JSON.parse(req.body);
     console.log(req.body);
+    const param = req.body;
+    
+    try {
+        let post = await Post.create(req.body);
+        console.log("post create successfully");
+    }
+    catch (err){
+        res.send("err found: ".concat(err));
+        return;
+    }
     
     res.send("hi there bro, your text is : ".concat(req.body.text));
 
