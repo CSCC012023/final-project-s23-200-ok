@@ -8,39 +8,14 @@ import userRoutes from "./routes/userRoutes.js";
 import LFGpostRoutes from "./routes/LFGpostRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
-<<<<<<< HEAD
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-=======
-import { Router } from "express";
-import postRoutes from "./routes/postRoutes.js";
-
-// import env2 from "../"
-
-dotenv.config(); 
- 
-
-const router = Router()
-router.use('/api/posts', postRoutes);
-
-
-const app = express();
-// const PORT = process.env.PORT || 5000;
-const PORT = 5001
->>>>>>> 1995dfd (set up env)
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// console.log();
-// console.log("env below");
-// console.log(process.env.MONGO_URI);
-// console.log("env above");
-// console.log();
-
 
 
 mongoose.connect(process.env.MONGO_URI, {
