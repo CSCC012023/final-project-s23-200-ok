@@ -21,20 +21,14 @@ const PostSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
-    unique: true,
   },
 
-  uid: {
-    type: String, required: true,
-  },
-  
   text: {
     type: String, default:""
   },
 
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-
+  
   date: { type: Date, default: Date.now },
 
   // image: {
