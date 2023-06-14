@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
+import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
 
 function Login() {
@@ -79,6 +80,11 @@ function Login() {
             placeholder="Password" 
             onChange={onChange} />
           <button className="btn btn-block" type="submit">Log In</button>
+          <hr />
+          {/* TODO: add underline-link class in css in dev branch, process is weird atm */}
+          <Link to="/register" className="underline-link">
+            Don't have an account? Register today!
+          </Link>
         </form>
       </section>
     </>
