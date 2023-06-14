@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
+import Socials from './Socials'
 
 
 function App() {
@@ -16,6 +17,11 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
           </Routes>
+          <p>
+            <Socials>
+              
+            </Socials>
+          </p>
         </div>
       </Router>
       <ToastContainer />
