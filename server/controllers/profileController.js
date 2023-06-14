@@ -12,10 +12,9 @@ const createProfile = asyncHandler(async (req, res) => {});
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const getProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
-
   try {
     // Check if profile exists
-    const profile = await Profile.findById(id);
+    let profile = await Profile.findById(id);
     if (!profile) {
       return res.status(404).json({ msg: "Profile not found" });
     }
@@ -74,9 +73,12 @@ const linkValorant = asyncHandler(async (req, res) => {
     // get valorant data
     const valorantData = response.data.data;
 
-    profile.games.Valorant.ign = valorantData.name + "#" + valorantData.tag;
-    profile.games.Valorant.rank = valorantData.current_data.currenttierpatched;
-    //TODO: Add stats calculation
+    const valorantGame = profile.games.find((game) => game.name === "Valorant");
+    if (valorantGame) {
+      valorantGame.ign = valorantData.name + "#" + valorantData.tag;
+      valorantGame.rank = valorantData.current_data.currenttierpatched;
+      // TODO: Add stats calculation
+    }
     await profile.save();
 
     return res.status(200).json({ msg: "Valorant account linked" });
@@ -157,9 +159,14 @@ const linkOverwatch = asyncHandler(async (req, res) => {
       }
     }
 
-    profile.games.Overwatch.ign = overwatchData.name + "#" + tagline;
-    profile.games.Overwatch.rank = highestRole.group + " " + highestRole.tier;
-    //TODO: Add stats calculation
+    const overwatchGame = profile.games.find(
+      (game) => game.name === "Overwatch"
+    );
+    if (overwatchGame) {
+      overwatchGame.ign = overwatchData.name + "#" + tagline;
+      overwatchGame.rank = highestRole.group + " " + highestRole.tier;
+      // TODO: Add stats calculation
+    }
     await profile.save();
 
     return res.status(200).json({ msg: "Overwatch account linked" });
@@ -171,33 +178,25 @@ const linkOverwatch = asyncHandler(async (req, res) => {
 
 const test = asyncHandler(async (req, res) => {
   const newProfile = new Profile({
-    user: "60cff642f8a2b117d6999a00", // Replace this with a valid ObjectId from your User collection
-    bio: "This is a test bio",
+    user: "60b9b0b9e6b3a1b4b8b3b3b3",
+    bio: "This is a random bio",
     backgroundPicture: "https://example.com/background.jpg",
-    location: "Toronto, Canada",
-    games: {
-      LeagueOfLegends: {
-        ign: "testIGN1",
-        rank: "Gold",
+    location: "Random City, Random Country",
+    games: [
+      {
+        name: "Valorant",
+        ign: "RandomPlayer#1234",
+        rank: "Diamond",
         stats: ["Stat1", "Stat2"],
       },
-      Valorant: {
-        ign: "",
-        rank: "",
-        stats: [],
+      {
+        name: "Overwatch",
+        ign: "RandomPlayer#5678",
+        rank: "Platinum",
+        stats: ["Stat3", "Stat4"],
       },
-      Overwatch: {
-        ign: "",
-        rank: "",
-        stats: [],
-      },
-      Csgo: {
-        ign: "",
-        rank: "",
-        stats: [],
-      },
-    },
-    socials: ["https://facebook.com", "https://twitter.com"],
+    ],
+    socials: ["https://twitter.com/random", "https://facebook.com/random"],
   });
 
   await newProfile.save();
