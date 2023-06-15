@@ -9,6 +9,6 @@ import {
 const router = Router();
 
 router.route("/").post(createProfile).get(getProfile);
-router.route("/:id").put(updateProfile).delete(deleteProfile);
+router.route("/:id").post(updateProfile).delete(deleteProfile);
 
 export default router;

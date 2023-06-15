@@ -8,7 +8,7 @@ const ProfileSchema = new mongoose.Schema({
     unique: true,
   },
   bio: { type: String, required: false, minlength: 1, maxlength: 1000 },
-  backgroundPicture: { type: String, required: false },
+  profilePic: { type: String, required: false },
   location: { type: String, required: false, minlength: 1, maxlength: 1000 },
   games: {
     LeagueOfLegends: {

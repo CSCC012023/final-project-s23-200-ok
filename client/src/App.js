@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile";
+import Profile from "./pages/MyProfile";
 
 function App() {
   return (
