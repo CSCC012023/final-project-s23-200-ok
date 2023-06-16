@@ -1,9 +1,9 @@
 import React from 'react'
-import IGIcon from './InstagramIcon.png'
-import TwitterIcon from './TwitterIcon.png'
-import TikTokIcon from './TikTokIcon.png'
-import YoutubeIcon from './YoutubeIcon.png'
-import TwitchIcon from './TwitchIcon.png'
+import IGIcon from '../InstagramIcon.png'
+import TwitterIcon from '../TwitterIcon.png'
+import TikTokIcon from '../TikTokIcon.png'
+import YoutubeIcon from '../YoutubeIcon.png'
+import TwitchIcon from '../TwitchIcon.png'
 
 const Socials = () =>  {
     return (
