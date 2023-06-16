@@ -11,14 +11,23 @@ import { overwatchLogos } from "../logos/overwatchLogo";
 import Modal from "react-modal";
 import ValorantGameForm from "../components/ValorantGameForm";
 import OverwatchGameForm from "../components/OverwatchGameForm";
-
+import Spinner from "../components/Spinner";
+import { readAndCompressImage } from "browser-image-resizer";
 
 const Profile = () => {
   const dispatch = useDispatch();
 
   // Select necessary state from the store
-  const { bio, name, profilePicture, socials, games, isError, message, isLoading } =
-    useSelector((state) => state.profile);
+  const {
+    bio,
+    name,
+    profilePicture,
+    socials,
+    games,
+    isError,
+    message,
+    isLoading,
+  } = useSelector((state) => state.profile);
 
   const [edit, setEdit] = useState(false);
   const [editBio, setEditBio] = useState(bio);
@@ -48,20 +57,21 @@ const Profile = () => {
     const profileData = {
       bio: editBio,
       profilePicture: editPicture,
-      name : name,
-      socials : socials,
-      games : games
+      name: name,
+      socials: socials,
+      games: games,
     };
 
-    dispatch( updateProfile({ profileId: "648a307ad4f77bff86785f2a", profileData }) );
+    dispatch(
+      updateProfile({ profileId: "648a307ad4f77bff86785f2a", profileData })
+    );
     setEdit(false);
   };
 
   useEffect(() => {
     setEditBio(bio);
     setEditPicture(profilePicture);
-}, [bio, profilePicture]);
-
+  }, [bio, profilePicture]);
 
   const handleBioChange = (e) => {
     setEditBio(e.target.value);
@@ -69,10 +79,17 @@ const Profile = () => {
 
   const handleChangePicture = async (e) => {
     const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
+    const config = {
+      quality: 0.5,
+      maxWidth: 500,
+      maxHeight: 500,
+    };
+
+    const resizedImage = await readAndCompressImage(file, config);
+
+    const base64 = await convertToBase64(resizedImage);
     setEditPicture(base64);
   };
-
 
   useEffect(() => {
     if (edit === true) {
@@ -107,23 +124,29 @@ const Profile = () => {
     return <div>Error: {message}</div>;
   }
 
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="profile-container">
       <div className="pic-name-bio-section">
         <div className="profile-picture-section">
-        <img
-              src={
-                editPicture ||
-                "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-              }
-              alt="Profile"
-              className="profile-picture"
-            />
+          <img
+            src={
+              editPicture ||
+              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+            }
+            alt="Profile"
+            className="profile-picture"
+          />
           {edit ? (
             <>
-            
-              <input className='file-upload' type="file" onChange={handleChangePicture} />
+              <input
+                className="file-upload"
+                type="file"
+                onChange={handleChangePicture}
+              />
             </>
           ) : (
             <></>
@@ -189,48 +212,50 @@ const Profile = () => {
       <div className="games-section">
         <h2>Games</h2>
         <div className="games-list">
-          {games && games.map((game, index) => (
-            <div key={index} className="game-info">
-              <div className="game-line">
-                <h3>{game.name}</h3>
-                <img
-                  src={
-                    game.name === "Valorant"
-                      ? valorantLogos[game.name]
-                      : game.name === "Overwatch"
-                      ? overwatchLogos[game.name]
-                      : null
-                  }
-                  alt="game"
-                  className="game-logo"
-                />
+          {games &&
+            games.map((game, index) => (
+              <div key={index} className="game-info">
+                <div className="game-line">
+                  <h3>{game.name}</h3>
+                  <img
+                    src={
+                      game.name === "Valorant"
+                        ? valorantLogos[game.name]
+                        : game.name === "Overwatch"
+                        ? overwatchLogos[game.name]
+                        : null
+                    }
+                    alt="game"
+                    className="game-logo"
+                  />
+                </div>
+                <p>{game.ign}</p>
+                <div>
+                  <img
+                    src={
+                      game.name === "Valorant"
+                        ? valorantLogos[game.rank]
+                        : game.name === "Overwatch"
+                        ? overwatchLogos[game.rank]
+                        : null
+                    }
+                    alt="game"
+                    className="game-logo"
+                  />
+                  <p>{game.rank}</p>
+                </div>
               </div>
-              <p>{game.ign}</p>
-              <div>
-                <img
-                  src={
-                    game.name === "Valorant"
-                      ? valorantLogos[game.rank]
-                      : game.name === "Overwatch"
-                      ? overwatchLogos[game.rank]
-                      : null
-                  }
-                  alt="game"
-                  className="game-logo"
-                />
-                <p>{game.rank}</p>
-              </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
       <div className="socials-section">
         <h2>Socials</h2>
-        {socials && socials.map((social, index) => (
-          <p key={index}>
-            {social.name}: <a href={social.url}>{social.url}</a>
-          </p>
-        ))}
+        {socials &&
+          socials.map((social, index) => (
+            <p key={index}>
+              {social.name}: <a href={social.url}>{social.url}</a>
+            </p>
+          ))}
       </div>
 
       {edit === false ? (
