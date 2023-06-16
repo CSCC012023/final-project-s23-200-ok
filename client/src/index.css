@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 * {
+  background-color: #191820;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: #fff;
 }
 
 body {
@@ -13,7 +15,7 @@ body {
 
 a {
   text-decoration: none;
-  color: #000;
+  color: #fff;
 }
 
 p {
@@ -44,6 +46,7 @@ h3 {
 }
 
 .header {
+  color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -53,6 +56,7 @@ h3 {
 }
 
 .header ul {
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -83,7 +87,7 @@ h3 {
 }
 
 .heading p {
-  color: #828282;
+  color: #fff;
 }
 
 .form,
@@ -107,6 +111,11 @@ h3 {
     font-family: inherit;
 }
 
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
 .btn {
   padding: 10px 20px;
   border: 1px solid #000;
@@ -121,6 +130,22 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.h1 {
+  color: #fff;
+}
+
+.h2 {
+  color: #fff;
+}
+
+.h3 {
+  color: #fff;
+}
+
+.p {
+  color: #fff;
 }
 
 .btn-block {
@@ -176,3 +201,186 @@ h3 {
       font-size: 1.5rem;
   }
 }
+
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-picture-section {
+  width: 250px;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 1px solid #dee2e6;
+  margin-right: 20px;
+}
+
+.profile-picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.edit-button {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #282c31;
+  color: #fff;
+  cursor: pointer;
+}
+
+.edit-button:hover {
+  background-color: #3e4a61;
+}
+
+.socials-section{
+  padding-bottom: 10px;
+  width: 80%;
+  display: flex;
+  flex-direction: horizontal;
+}
+.games-section {
+  padding-bottom: 10px;
+  width: 80%;
+  display: flex;
+  flex-direction: column; /* Change direction to column */
+}
+
+.games-list{
+  display: flex; /* Change to grid */
+  flex-direction: row;
+  gap: 10px; /* Add some space between the game cards */
+  list-style: none;
+  align-items: center;
+  align-self: center;
+  padding-bottom: 100px;
+}
+
+.game-info {
+  color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  display: flex; /* Make the game info a flex container */
+  flex-direction: column; /* Arrange game info in a column */
+  align-items: center; /* Center items horizontally */
+  text-align: center; /* Center text */
+}
+
+.game-info h3 {
+  margin-left: 20%;
+}
+
+.name-bio-section {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  align-items: start;
+  justify-content: flex-start;
+  padding-bottom: 100px;
+}
+
+.game-info:hover {
+  transform: scale(1.05); /* Enlarge the game card slightly */
+  transition: transform 0.2s ease-in-out; /* Animate the transformation */
+}
+
+.pic-name-bio-section{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px 0;
+  align-items: flex-start; 
+}
+
+.game-logo{
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.game-line  {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  gap: 10px;
+}
+
+
+.modal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  color: white;
+  border-radius: 10px;
+  padding: 10%;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(233, 228, 228, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 10%;
+  width: 400px;
+  height: 100px;
+}
+
+.game-options div {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.game-options div:hover {
+  transform: scale(1.1);
+  border: 2px solid rgb(230, 39, 39);
+}
+
+
+.bio-input {
+  position: relative;
+}
+
+.bio-input textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  line-height: 1.5;
+  resize: none;
+  font: inherit;
+}
+
+

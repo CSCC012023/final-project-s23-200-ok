@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+const gameSchema = new mongoose.Schema({
+  name: { type: String, default: "" },
+  ign: { type: String, default: "" },
+  rank: { type: String, default: "" },
+  stats: [{ type: String, default: "" }],
+});
+
 const ProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -11,26 +18,12 @@ const ProfileSchema = new mongoose.Schema({
   backgroundPicture: { type: String, required: false },
   location: { type: String, required: false, minlength: 1, maxlength: 1000 },
   games: {
-    LeagueOfLegends: {
-      ign: { type: String, default: "" },
-      rank: { type: String, default: "" },
-      stats: [{ type: String, default: "" }],
-    },
-    Valorant: {
-      ign: { type: String, default: "" },
-      rank: { type: String, default: "" },
-      stats: [{ type: String, default: "" }],
-    },
-    Overwatch: {
-      ign: { type: String, default: "" },
-      rank: { type: String, default: "" },
-      stats: [{ type: String, default: "" }],
-    },
-    Csgo: {
-      ign: { type: String, default: "" },
-      rank: { type: String, default: "" },
-      stats: [{ type: String, default: "" }],
-    },
+    type: [gameSchema],
+    required: false,
+    default: [
+      { name: "Valorant", ign: "", rank: "", stats: [] },
+      { name: "Overwatch", ign: "", rank: "", stats: [] },
+    ],
   },
   socials: [{ type: String, required: false, minlength: 1, maxlength: 1000 }],
 });
