@@ -35,9 +35,6 @@ function MyProfile() {
     <>
     <section className="heading">
       <h1>Profile</h1>
-    <p> 
-      Upload Profile Picture
-      </p>
     <form 
     id="profileform" 
     onSubmit={handleSubmit}>
