@@ -13,6 +13,7 @@ import ValorantGameForm from "../components/ValorantGameForm";
 import OverwatchGameForm from "../components/OverwatchGameForm";
 import Spinner from "../components/Spinner";
 import { readAndCompressImage } from "browser-image-resizer";
+import Socials from "../components/Socials";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -250,12 +251,12 @@ const Profile = () => {
       </div>
       <div className="socials-section">
         <h2>Socials</h2>
-        {socials &&
-          socials.map((social, index) => (
-            <p key={index}>
-              {social.name}: <a href={social.url}>{social.url}</a>
-            </p>
-          ))}
+        <Socials />
+        {/* socials && {socials.map((social, index) => (
+          <p key={index}>
+            {social.name}: <a href={social.url}>{social.url}</a>
+          </p>
+        ))} */}
       </div>
 
       {edit === false ? (
