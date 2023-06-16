@@ -27,7 +27,23 @@ const getProfile = asyncHandler(async (req, res) => {
 //@route PUT api/profile/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const updateProfile = asyncHandler(async (req, res) => {});
+const updateProfile = asyncHandler(async (req, res) => {
+  const { bio, profilePicture, name, socials, games } = req.body;
+  // const id = req.profileData.id;
+  console.log("Bio is " + req.body.bio);
+  try {
+    // Check if profile exists
+    let profile = await Profile.findById(req.params.id);
+    if (!profile) {
+      return res.status(404).json({ msg: "Profile not found" });
+    }
+    profile.bio = req.body.bio;
+    profile.save();
+    res.status(200).json(profile);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
 
 //@route DELETE api/profile/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]

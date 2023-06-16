@@ -45,15 +45,15 @@ const Profile = () => {
   };
 
   const confirmEdit = () => {
-    dispatch(
-      updateProfile("648a307ad4f77bff86785f2a", {
-        bio: editBio,
-        profilePicture: editPicture,
-        name,
-        socials,
-        games,
-      })
-    );
+    const profileData = {
+      bio: editBio,
+      profilePicture: editPicture,
+      name : name,
+      socials : socials,
+      games : games
+    };
+
+    dispatch( updateProfile({ profileId: "648a307ad4f77bff86785f2a", profileData }) );
     setEdit(false);
   };
 
