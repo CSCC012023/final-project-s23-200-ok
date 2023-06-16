@@ -29,7 +29,7 @@ const createProfile = asyncHandler(async (req, res) => {
 });
 
 //@route   GET api/profile/:id
-//@desc    [DESCRIPTION OF WHAT ROUTE DOES]
+//@desc    get profile by id
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const getProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
@@ -46,13 +46,35 @@ const getProfile = asyncHandler(async (req, res) => {
 });
 
 //@route PUT api/profile/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
+//@desc  Takes in updated profile data and updates it
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const updateProfile = asyncHandler(async (req, res) => {
-    
-    
-});
+  const id = req.params.id;
+  const { bio, profilePicture, name, socials, games } = req.body;
+  console.log(req.body.profilePicture);
+  try {
+    let profile = await Profile.findById(id);
+    if (!profile) {
+      return res.status(404).json({ msg: "Profile not found" });
+    }
 
+    // update profile
+    profile.bio = bio;
+    profile.profilePic = profilePicture;
+    profile.name = name;
+    profile.socials = socials;
+    profile.games = games;
+
+    console.log(profile);
+
+    await profile.save();
+
+    return res.status(200).json(profile);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ msg: "Server error" });
+  }
+});
 
 //@route DELETE api/profile/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
@@ -203,9 +225,9 @@ const linkOverwatch = asyncHandler(async (req, res) => {
 
 const test = asyncHandler(async (req, res) => {
   const newProfile = new Profile({
-    user: "60b9b0b9e6b3a1b4b8b3b3b3",
+    user: "60b9b0b9e6b3a1b4b8b3b3b2",
     bio: "This is a random bio",
-    backgroundPicture: "https://example.com/background.jpg",
+    profilePicture: "https://example.com/background.jpg",
     location: "Random City, Random Country",
     games: [
       {

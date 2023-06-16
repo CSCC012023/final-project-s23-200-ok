@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
+//import Profile from "./pages/MyProfile";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 

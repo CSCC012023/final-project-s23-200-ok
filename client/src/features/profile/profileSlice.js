@@ -35,6 +35,24 @@ export const getProfile = createAsyncThunk(
   }
 );
 
+// Update profile
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async ({ profileId, profileData }, thunkAPI) => {
+    try {
+      return await profileService.updateProfile(profileId, profileData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Link Valorant
 export const linkValorant = createAsyncThunk(
   "profile/linkValorant",
@@ -59,24 +77,6 @@ export const linkOverwatch = createAsyncThunk(
   async ({ profileId, overwatchData }, thunkAPI) => {
     try {
       return await profileService.linkOverwatch(profileId, overwatchData);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-// Update profile
-export const updateProfile = createAsyncThunk(
-  "profile/updateProfile",
-  async ({ profileId, profileData }, thunkAPI) => {
-    try {
-      return await profileService.updateProfile(profileId, profileData);
     } catch (error) {
       const message =
         (error.response &&
@@ -116,12 +116,28 @@ export const profileSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.bio = action.payload.bio;
-        state.profilePicture = action.payload.profilePicture;
+        state.profilePicture = action.payload.profilePic;
         state.name = action.payload.name;
         state.socials = action.payload.socials;
         state.games = action.payload.games;
       })
       .addCase(getProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.bio = action.payload.bio;
+        state.profilePicture = action.payload.profilePic;
+        state.name = action.payload.name;
+        state.socials = action.payload.socials;
+      })
+      .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -150,22 +166,6 @@ export const profileSlice = createSlice({
         state.games[1].rank = action.payload.rank;
       })
       .addCase(linkOverwatch.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
-      })
-      .addCase(updateProfile.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(updateProfile.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.bio = action.payload.bio;
-        state.profilePicture = action.payload.profilePicture;
-        state.name = action.payload.name;
-        state.socials = action.payload.socials;
-      })
-      .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
