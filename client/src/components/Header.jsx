@@ -35,11 +35,11 @@ function Header() {
                 register
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/profile">
                 profile
                 </Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/login">
                 log in
