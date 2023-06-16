@@ -11,6 +11,7 @@ import { overwatchLogos } from "../logos/overwatchLogo";
 import Modal from "react-modal";
 import ValorantGameForm from "../components/ValorantGameForm";
 import OverwatchGameForm from "../components/OverwatchGameForm";
+import Socials from "../components/Socials";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -197,11 +198,12 @@ const Profile = () => {
       </div>
       <div className="socials-section">
         <h2>Socials</h2>
-        {socials.map((social, index) => (
+        <Socials />
+        {/* {socials.map((social, index) => (
           <p key={index}>
             {social.name}: <a href={social.url}>{social.url}</a>
           </p>
-        ))}
+        ))} */}
       </div>
 
       {edit === false ? (
