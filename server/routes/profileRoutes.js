@@ -19,7 +19,7 @@ router.route("/:id").put(updateProfile).delete(deleteProfile);
 router.route("/:id/games/valorant").post(linkValorant);
 router.route("/:id/games/overwatch").post(linkOverwatch);
 
-router.route("/").post(protect, createProfile).get(protect, getProfile);
+//router.route("/").post(protect, createProfile).get(protect, getProfile);
 // router.route("/:id").put(protect, updateProfile).delete(protect, deleteProfile);
 
 export default router;

@@ -217,10 +217,8 @@ h3 {
   overflow: hidden;
   border-radius: 50%;
   margin-bottom: 20px;
-  /* make this a cirlce */
   border: 1px solid #dee2e6;
   margin-right: 20px;
-
 }
 
 .profile-picture {
@@ -298,15 +296,13 @@ h3 {
 }
 
 .pic-name-bio-section{
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-evenly;
-  padding-left: 0px;
-  align-self: flex-start;
+  justify-content: space-around;
+  padding: 20px 0;
+  align-items: flex-start; 
 }
-
 
 .game-logo{
   width: 50px;
@@ -376,7 +372,7 @@ h3 {
 }
 
 .bio-input textarea {
-  width: 100px;
+  width: 100%;
   height: 100px;
   padding: 10px;
   border-radius: 5px;
@@ -384,4 +380,7 @@ h3 {
   font-size: 1em;
   line-height: 1.5;
   resize: none;
+  font: inherit;
 }
+
+

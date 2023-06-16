@@ -25,7 +25,6 @@ const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalGame, setModalGame] = useState("");
 
-  
 
   const editProfile = () => {
     setEdit(true);
