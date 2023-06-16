@@ -18,6 +18,9 @@ function Header() {
       <div className="logo">
         <Link to="/">playbook</Link>
       </div>
+      <div className="logo">
+        <Link to="/profile">profile</Link>
+      </div>
       <ul>
         {user ? (
           <li>
@@ -35,6 +38,11 @@ function Header() {
             <li>
               <Link to="/profile">
                 profile
+                </Link>
+            </li>
+            <li>
+              <Link to="/login">
+                log in
               </Link>
             </li>
           </>

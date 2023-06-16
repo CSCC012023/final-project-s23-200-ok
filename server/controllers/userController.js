@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   if (emailExists) {
     res.status(400);
-    throw new Error("User with already exists");
+    throw new Error("This email is already registered");
   }
 
   // Hash password
@@ -60,6 +60,37 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
 });
+
+//@route   POST /login
+//@desc    Authenticates the user
+//@access  Public, anyone can use it to log in
+const loginUser = asyncHandler(async (req, res) => {
+  // Destructure user credentials
+  const { email, password } = req.body;
+
+  // Validate user entered all fields
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("Please enter all fields");
+  }
+
+  // Check for user email
+  const user = await User.findOne({ email });
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.status(200).json({
+      "_id": user.id,
+      "userName": user.name,
+      "email": user.email,
+      "token": generateToken(user.id)
+    });
+  }
+  else {
+    res.status(400);
+    throw new Error("Invalid credentials");
+  }
+});
+
 
 //@route   GET api/users
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
@@ -101,6 +132,7 @@ const generateToken = (id) => {
 
 export {
     registerUser,
+    loginUser,
     getUsers,
     getUser,
     updateUser,

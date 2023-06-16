@@ -31,10 +31,13 @@ function MyProfile() {
     putProfilePic({ ... putPic, profilePic: base64 })
   }
 
-  return(  
+  return(
     <>
     <section className="heading">
       <h1>Profile</h1>
+    <p> 
+      Upload Profile Picture
+      </p>
     <form 
     id="profileform" 
     onSubmit={handleSubmit}>

@@ -32,7 +32,7 @@ function Register() {
     }
 
     dispatch(reset());
-  });
+  }, [user, isSuccess, isError, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
