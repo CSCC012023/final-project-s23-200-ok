@@ -5,15 +5,11 @@ import {
   updateProfile,
   deleteProfile,
 } from "../controllers/profileController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-// router.get("/", (req, res) => {
-//   // Send a simple JSON response
-//   res.json({ message: "Hello, this is a simple response!" });
-// });
-
-router.route("/").post(createProfile).get(getProfile);
-router.route("/:id").put(updateProfile).delete(deleteProfile);
+router.route("/").post(protect, createProfile).get(protect, getProfile);
+router.route("/:id").put(protect, updateProfile).delete(protect, deleteProfile);
 
 export default router;
