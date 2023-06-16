@@ -4,7 +4,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-import Socials from './components/Socials'
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 
@@ -20,10 +19,6 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
           </Routes>
-          <p>
-            <Socials>
-            </Socials>
-          </p>
         </div>
       </Router>
       <ToastContainer />

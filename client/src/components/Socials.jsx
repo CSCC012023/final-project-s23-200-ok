@@ -1,16 +1,13 @@
 import React from 'react'
-import IGIcon from '../InstagramIcon.png'
-import TwitterIcon from '../TwitterIcon.png'
-import TikTokIcon from '../TikTokIcon.png'
-import YoutubeIcon from '../YoutubeIcon.png'
-import TwitchIcon from '../TwitchIcon.png'
+import IGIcon from '../assets/InstagramIcon.png'
+import TwitterIcon from '../assets/TwitterIcon.png'
+import TikTokIcon from '../assets/TikTokIcon.png'
+import YoutubeIcon from '../assets/YoutubeIcon.png'
+import TwitchIcon from '../assets/TwitchIcon.png'
 
 const Socials = () =>  {
     return (
         <div>
-            <h4>
-                Socials:
-            </h4>
             <a
                 className="IG-link"
                 href="https://instagram.com"
@@ -52,7 +49,6 @@ const Socials = () =>  {
                 <img src={TwitchIcon} alt="Twitch-icon" />
             </a>
         </div>
-        
     )
 } 
 
