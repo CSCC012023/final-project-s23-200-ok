@@ -413,6 +413,13 @@ h3 {
   transition: background 0.3s ease;
 }
 
+.lfg-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10%;
+  width: 400px;
+  height: 100px;
+}
 
 
 

@@ -21,6 +21,9 @@ function Header() {
       <div className="logo">
         <Link to="/profile">profile</Link>
       </div>
+      <div className="logo">
+        <Link to="/lfg">Lfg</Link>
+      </div>
       <ul>
         {user ? (
           <li>
