@@ -5,14 +5,21 @@ import LFGPost from "../models/LFGPost.js";
 //@desc   Create a new LFG post
 //@access Private
 const createLFGPost = asyncHandler(async (req, res) => {
-  const { user_id, game, notes, server, status, numberOfPlayers, rank } =
-    req.body;
-  console.log(req.body);
+  const {
+    user_id,
+    userName,
+    game,
+    notes,
+    server,
+    status,
+    numberOfPlayers,
+    rank,
+  } = req.body;
   const date = new Date();
-  console.log(user_id);
 
   const post = new LFGPost({
-    user: user_id,
+    user_id,
+    userName,
     game,
     date,
     notes,
@@ -54,14 +61,16 @@ const getLFGPost = asyncHandler(async (req, res) => {
 const updateLFGPost = asyncHandler(async (req, res) => {
   let post = await LFGPost.findById(req.params.id);
   post.date = new Date();
+  console.log(req.body);
+  console.log(post);
 
   if (post) {
-    post.game = req.body.game || post.game;
-    post.notes = req.body.notes || post.notes;
-    post.server = req.body.server || post.server;
-    post.status = req.body.status || post.status;
-    post.numberOfPlayers = req.body.numberOfPlayers || post.numberOfPlayers;
-    post.rank = req.body.rank || post.rank;
+    post.game = req.body.game;
+    post.notes = req.body.notes;
+    post.server = req.body.server;
+    post.status = req.body.status;
+    post.numberOfPlayers = req.body.numberOfPlayers;
+    post.rank = req.body.rank;
 
     const updatedPost = await post.save();
     res.json(updatedPost);

@@ -9,7 +9,7 @@ import jwt from "jsonwebtoken";
 const registerUser = asyncHandler(async (req, res) => {
   // Destructure user data
   const { userName, email, password } = req.body;
-  
+
   // Validate user data
   if (!userName || !email || !password) {
     res.status(400);
@@ -38,18 +38,17 @@ const registerUser = asyncHandler(async (req, res) => {
     const user = await User.create({
       userName: userName,
       email: email,
-      password: hashedPassword
+      password: hashedPassword,
     });
 
     if (user) {
       res.status(201).json({
-        "_id": user.id, // "id" is the string version of "_id"
-        "userName": user.userName,
-        "email": user.email,
-        "token": generateToken(user.id)
+        _id: user.id, // "id" is the string version of "_id"
+        userName: user.userName,
+        email: user.email,
+        token: generateToken(user.id),
       });
-    }
-    else {
+    } else {
       res.status(400);
       throw new Error("Invalid data");
     }
@@ -58,7 +57,6 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(500);
     throw new Error("Error while creating user");
   }
-
 });
 
 //@route   POST /login
@@ -79,62 +77,41 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
-      "_id": user.id,
-      "userName": user.name,
-      "email": user.email,
-      "token": generateToken(user.id)
+      _id: user.id,
+      userName: user.userName,
+      email: user.email,
+      token: generateToken(user.id),
     });
-  }
-  else {
+  } else {
     res.status(400);
     throw new Error("Invalid credentials");
   }
 });
 
-
 //@route   GET api/users
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getUsers = asyncHandler(async (req, res) => {
-
-});
+const getUsers = asyncHandler(async (req, res) => {});
 
 //@route   GET api/users/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getUser = asyncHandler(async (req, res) => {
-
-});
+const getUser = asyncHandler(async (req, res) => {});
 
 //@route PUT api/users/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const updateUser = asyncHandler(async (req, res) => {
-    
-});
+const updateUser = asyncHandler(async (req, res) => {});
 
 //@route DELETE api/users/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const deleteUser = asyncHandler(async (req, res) => {
-    
-});
+const deleteUser = asyncHandler(async (req, res) => {});
 
 const generateToken = (id) => {
-  return jwt.sign(
-    { id },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: "300s"
-    }
-  );
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "300s",
+  });
 };
 
-export {
-    registerUser,
-    loginUser,
-    getUsers,
-    getUser,
-    updateUser,
-    deleteUser
-};
+export { registerUser, loginUser, getUsers, getUser, updateUser, deleteUser };

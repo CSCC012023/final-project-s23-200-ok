@@ -140,7 +140,7 @@ export const lfgSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.posts = state.posts.map((post) =>
-          post.id === action.payload.id ? action.payload : post
+          post._id === action.payload._id ? action.payload : post
         );
       })
       .addCase(updatePost.rejected, (state, action) => {

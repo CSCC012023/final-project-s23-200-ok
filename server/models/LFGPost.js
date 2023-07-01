@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const LFGPostSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  user_id: { type: String, required: true },
+  userName: { type: String, required: true },
   game: { type: String, required: true },
   date: { type: Date, required: true },
   notes: { type: String, required: false, minlength: 1, maxlength: 1000 },

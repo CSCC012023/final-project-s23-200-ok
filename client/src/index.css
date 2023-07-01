@@ -109,6 +109,7 @@ h3 {
     border-radius: 5px;
     margin-bottom: 10px;
     font-family: inherit;
+    resize: none;
 }
 
 .form-group label {
@@ -413,13 +414,86 @@ h3 {
   transition: background 0.3s ease;
 }
 
-.lfg-buttons {
+
+.lfg-post {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  gap: 10%;
-  width: 400px;
-  height: 100px;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #ff6363;
+  color: #ff6363;
+  font-family: 'Poppins', sans-serif;
+  height: 120px;
 }
 
+.lfg-post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
 
+.lfg-post-header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lfg-post-user-id {
+  font-weight: bold;
+}
+
+.lfg-post-status {
+  margin-left: auto;
+}
+
+.lfg-post-status-open {
+  color: #77c277;
+}
+
+.lfg-post-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.edit-image {
+  width: 5px;
+  height: 5px;
+}
+
+.lfg-post-notes-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.lfg-post-notes {
+  color: #fff;
+}
+
+.lfg-post-game,
+.lfg-post-server,
+.lfg-post-players,
+.lfg-post-rank {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lfg-post-game-icon,
+.lfg-post-server-icon,
+.lfg-post-players-icon,
+.lfg-post-rank-icon {
+  color: #ff6363;
+}
+
+.lfg-post-game,
+.lfg-post-server,
+.lfg-post-players,
+.lfg-post-rank {
+  color: #ff6363;
+  font-weight: 400;
+}
 
