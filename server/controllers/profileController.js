@@ -28,6 +28,20 @@ const createProfile = asyncHandler(async (req, res) => {
       }
 });
 
+//@route   GET api/profile/
+//@desc    get profile WITHOUT id (assume there's only 1 per user)
+//@access  Private
+const getProfileNoId = asyncHandler(async (req, res) => {
+  try {
+    // User id set in authentication middleware
+    const profile = await Profile.findOne({ user: req.user.id });
+    console.log(profile);
+    res.status(200).json(profile);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 //@route   GET api/profile/:id
 //@desc    get profile by id
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
@@ -223,39 +237,12 @@ const linkOverwatch = asyncHandler(async (req, res) => {
   }
 });
 
-const test = asyncHandler(async (req, res) => {
-  const newProfile = new Profile({
-    user: "60b9b0b9e6b3a1b4b8b3b3b2",
-    bio: "This is a random bio",
-    profilePicture: "https://example.com/background.jpg",
-    location: "Random City, Random Country",
-    games: [
-      {
-        name: "Valorant",
-        ign: "RandomPlayer#1234",
-        rank: "Diamond",
-        stats: ["Stat1", "Stat2"],
-      },
-      {
-        name: "Overwatch",
-        ign: "RandomPlayer#5678",
-        rank: "Platinum",
-        stats: ["Stat3", "Stat4"],
-      },
-    ],
-    socials: ["https://twitter.com/random", "https://facebook.com/random"],
-  });
-
-  await newProfile.save();
-  res.json(newProfile);
-});
-
 export {
   createProfile,
+  getProfileNoId,
   getProfile,
   updateProfile,
   deleteProfile,
   linkValorant,
-  linkOverwatch,
-  test,
+  linkOverwatch
 };

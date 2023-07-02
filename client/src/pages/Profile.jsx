@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../styles/Profile.css";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProfile,
@@ -16,18 +17,22 @@ import { readAndCompressImage } from "browser-image-resizer";
 import Socials from "../components/Socials";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Select necessary state from the store
+  // Get and destructure the auth slice
+  const { user } = useSelector((state) => state.auth);
+  // Get and destructure the profile slice
   const {
+    profileId,
     bio,
-    name,
     profilePicture,
+    name,
     socials,
     games,
-    isError,
-    message,
     isLoading,
+    isError,
+    message    
   } = useSelector((state) => state.profile);
 
   const [edit, setEdit] = useState(false);
@@ -42,18 +47,6 @@ const Profile = () => {
     setEditPicture(profilePicture);
   };
 
-  const handleModalGameChange = (game) => {
-    setModalGame(game);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const confirmEdit = () => {
     const profileData = {
       bio: editBio,
@@ -64,15 +57,10 @@ const Profile = () => {
     };
 
     dispatch(
-      updateProfile({ profileId: "648a307ad4f77bff86785f2a", profileData })
+      updateProfile({ profileId: profileId, profileData })
     );
     setEdit(false);
   };
-
-  useEffect(() => {
-    setEditBio(bio);
-    setEditPicture(profilePicture);
-  }, [bio, profilePicture]);
 
   const handleBioChange = (e) => {
     setEditBio(e.target.value);
@@ -92,11 +80,6 @@ const Profile = () => {
     setEditPicture(base64);
   };
 
-  useEffect(() => {
-    if (edit === true) {
-    }
-  }, [edit]);
-
   // convert image into base 64 format
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -111,14 +94,38 @@ const Profile = () => {
     });
   }
 
+  const handleModalGameChange = (game) => {
+    setModalGame(game);
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   useEffect(() => {
-    dispatch(getProfile("648a307ad4f77bff86785f2a"));
+    if (isError) {
+      console.log(message);
+    }
+
+    //If no user is logged in redirect to the dashboard
+    if (!user) {
+      navigate("/");
+    }
+
+    dispatch(getProfile());
+
+    setEditBio(bio);
+    setEditPicture(profilePicture);
 
     // Clear the state when the component unmounts
     return () => {
       dispatch(reset());
     };
-  }, [dispatch, isModalOpen]);
+  }, [user, isError, message, navigate, dispatch]);
 
   // Render an error message if there was an error
   if (isError) {
@@ -167,6 +174,16 @@ const Profile = () => {
           </p>
         </div>
       </div>
+
+      {edit === false ? (
+        <button className="edit-button" onClick={editProfile}>
+          Edit Profile
+        </button>
+      ) : (
+        <button className="edit-button" onClick={confirmEdit}>
+          Confirm
+        </button>
+      )}
 
       <button className="edit-button" onClick={openModal}>
         Link Account
@@ -258,16 +275,6 @@ const Profile = () => {
           </p>
         ))} */}
       </div>
-
-      {edit === false ? (
-        <button className="edit-button" onClick={editProfile}>
-          Edit Profile
-        </button>
-      ) : (
-        <button className="edit-button" onClick={confirmEdit}>
-          Confirm
-        </button>
-      )}
     </div>
   );
 };
