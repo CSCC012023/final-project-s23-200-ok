@@ -4,28 +4,35 @@ import Profile from "../models/Profile.js";
 
 //@route  POST api/profile
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access Private
 const createProfile = asyncHandler(async (req, res) => {
-    const { user, bio, backgroundPicture, location, games, socials } = req.body
+  // Check if this user already has a profile
+  const userHasProfile = await Profile.findOne({ user: req.user._id });
+  
+  if (userHasProfile) {
+    res.status(400);
+    throw new Error("User already has a profile");
+  }
 
-    const profile = new Profile({
-        user,
-        bio,
-        backgroundPicture,
-        location,
-        games,
-        socials
-    })
-    try {
-        // Save the profile to the database
-        const createdProfile = await profile.save();
-    
-        // Send the created profile as the response
-        res.status(201).json(createdProfile);
-      } catch (error) {
-        // Handle any errors that occur during the creation process
-        res.status(500).json({ message: "Profile creation failed", error: error.message });
-      }
+  // Create profile
+  try {
+    const profile = await Profile.create({
+      // User id set in authentication middleware
+      user: req.user._id,
+    });
+
+    if (profile) {
+      res.status(201).json(profile);
+    } 
+    else {
+      res.status(400);
+      throw new Error("Invalid profile data");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while creating profile");
+  }
 });
 
 //@route   GET api/profile/
@@ -44,7 +51,7 @@ const getProfileNoId = asyncHandler(async (req, res) => {
 
 //@route   GET api/profile/:id
 //@desc    get profile by id
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access  Public
 const getProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
   try {
@@ -61,7 +68,7 @@ const getProfile = asyncHandler(async (req, res) => {
 
 //@route PUT api/profile/:id
 //@desc  Takes in updated profile data and updates it
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access Public
 const updateProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { bio, profilePicture, name, socials, games } = req.body;
