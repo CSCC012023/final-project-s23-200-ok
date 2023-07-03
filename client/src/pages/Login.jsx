@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login, reset } from "../features/auth/authSlice";
 import { Link } from "react-router-dom";
+import { getProfile } from "../features/profile/profileSlice";
 import Spinner from "../components/Spinner";
 
 function Login() {
@@ -26,6 +27,7 @@ function Login() {
     }
 
     if (isSuccess || user) {
+      dispatch(getProfile());
       navigate("/");
     }
 

@@ -119,12 +119,8 @@ const Profile = () => {
 
     setEditBio(bio);
     setEditPicture(profilePicture);
-
-    // Clear the state when the component unmounts
-    return () => {
-      dispatch(reset());
-    };
-  }, [user, isError, message, navigate, dispatch]);
+  
+  }, [user, isError, message, navigate, dispatch, isModalOpen]);
 
   // Render an error message if there was an error
   if (isError) {
