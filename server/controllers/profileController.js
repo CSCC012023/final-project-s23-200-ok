@@ -4,33 +4,60 @@ import Profile from "../models/Profile.js";
 
 //@route  POST api/profile
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access Private
 const createProfile = asyncHandler(async (req, res) => {
-    const { user, bio, backgroundPicture, location, games, socials } = req.body
+  // Check if this user already has a profile
+  const userHasProfile = await Profile.findOne({ user: req.user._id });
+  
+  if (userHasProfile) {
+    res.status(400);
+    throw new Error("User already has a profile");
+  }
 
-    const profile = new Profile({
-        user,
-        bio,
-        backgroundPicture,
-        location,
-        games,
-        socials
-    })
-    try {
-        // Save the profile to the database
-        const createdProfile = await profile.save();
-    
-        // Send the created profile as the response
-        res.status(201).json(createdProfile);
-      } catch (error) {
-        // Handle any errors that occur during the creation process
-        res.status(500).json({ message: "Profile creation failed", error: error.message });
-      }
+  // Create profile
+  try {
+    const profile = await Profile.create({
+      // User id set in authentication middleware
+      user: req.user._id,
+    });
+
+    if (profile) {
+      res.status(201).json(profile);
+    } 
+    else {
+      res.status(400);
+      throw new Error("Invalid profile data");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while creating profile");
+  }
+});
+
+//@route   GET api/profile/
+//@desc    get profile WITHOUT id (assume there's only 1 per user)
+//@access  Private
+const getProfileNoId = asyncHandler(async (req, res) => {
+  try {
+    // User id set in authentication middleware
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (profile) {
+      res.status(200).json(profile);
+    }
+    else {
+      res.status(400);
+      throw new Error("Profile not found");
+    }
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
 });
 
 //@route   GET api/profile/:id
 //@desc    get profile by id
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access  Public
 const getProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
   try {
@@ -47,7 +74,7 @@ const getProfile = asyncHandler(async (req, res) => {
 
 //@route PUT api/profile/:id
 //@desc  Takes in updated profile data and updates it
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access Public
 const updateProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { bio, profilePicture, name, socials, games } = req.body;
@@ -60,7 +87,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     // update profile
     profile.bio = bio;
-    profile.profilePic = profilePicture;
+    profile.profilePicture = profilePicture;
     profile.name = name;
     profile.socials = socials;
     profile.games = games;
@@ -223,39 +250,12 @@ const linkOverwatch = asyncHandler(async (req, res) => {
   }
 });
 
-const test = asyncHandler(async (req, res) => {
-  const newProfile = new Profile({
-    user: "60b9b0b9e6b3a1b4b8b3b3b2",
-    bio: "This is a random bio",
-    profilePicture: "https://example.com/background.jpg",
-    location: "Random City, Random Country",
-    games: [
-      {
-        name: "Valorant",
-        ign: "RandomPlayer#1234",
-        rank: "Diamond",
-        stats: ["Stat1", "Stat2"],
-      },
-      {
-        name: "Overwatch",
-        ign: "RandomPlayer#5678",
-        rank: "Platinum",
-        stats: ["Stat3", "Stat4"],
-      },
-    ],
-    socials: ["https://twitter.com/random", "https://facebook.com/random"],
-  });
-
-  await newProfile.save();
-  res.json(newProfile);
-});
-
 export {
   createProfile,
+  getProfileNoId,
   getProfile,
   updateProfile,
   deleteProfile,
   linkValorant,
-  linkOverwatch,
-  test,
+  linkOverwatch
 };

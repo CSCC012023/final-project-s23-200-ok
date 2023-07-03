@@ -2,14 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import profileService from "./profileService";
 
 const initialState = {
+  profileId: null,
   bio: "",
   profilePicture: "",
-  name: "",
-  socials: [],
+  location: "",
   games: [
     { name: "Valorant", username: "", rank: "" },
     { name: "Overwatch", username: "", rank: "" },
   ],
+  socials: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -19,10 +20,10 @@ const initialState = {
 // Get profile
 export const getProfile = createAsyncThunk(
   "profile/getProfile",
-  async (profileId, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const response = await profileService.getProfile(profileId);
-      return response;
+      const token = thunkAPI.getState().auth.user?.token;
+      return await profileService.getProfile(token);
     } catch (error) {
       const message =
         (error.response &&
@@ -40,7 +41,8 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async ({ profileId, profileData }, thunkAPI) => {
     try {
-      return await profileService.updateProfile(profileId, profileData);
+      const token = thunkAPI.getState().auth.user?.token;
+      return await profileService.updateProfile(profileId, profileData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -58,7 +60,8 @@ export const linkValorant = createAsyncThunk(
   "profile/linkValorant",
   async ({ profileId, valorantData }, thunkAPI) => {
     try {
-      return await profileService.linkValorant(profileId, valorantData);
+      const token = thunkAPI.getState().auth.user?.token;
+      return await profileService.linkValorant(profileId, valorantData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -76,7 +79,8 @@ export const linkOverwatch = createAsyncThunk(
   "profile/linkOverwatch",
   async ({ profileId, overwatchData }, thunkAPI) => {
     try {
-      return await profileService.linkOverwatch(profileId, overwatchData);
+      const token = thunkAPI.getState().auth.user?.token;
+      return await profileService.linkOverwatch(profileId, overwatchData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -93,19 +97,7 @@ export const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.bio = "";
-      state.profilePicture = "";
-      state.name = "";
-      state.socials = [];
-      state.games = [
-        { name: "Valorant", username: "", rank: "" },
-        { name: "Overwatch", username: "", rank: "" },
-      ];
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -115,9 +107,10 @@ export const profileSlice = createSlice({
       .addCase(getProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.profileId = action.payload._id;
         state.bio = action.payload.bio;
-        state.profilePicture = action.payload.profilePic;
-        state.name = action.payload.name;
+        state.profilePicture = action.payload.profilePicture;
+        state.location = action.payload.location;
         state.socials = action.payload.socials;
         state.games = action.payload.games;
       })
@@ -133,9 +126,10 @@ export const profileSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.bio = action.payload.bio;
-        state.profilePicture = action.payload.profilePic;
-        state.name = action.payload.name;
+        state.profilePicture = action.payload.profilePicture;
+        state.location = action.payload.location;
         state.socials = action.payload.socials;
+        state.games = action.payload.games;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;
@@ -148,8 +142,6 @@ export const profileSlice = createSlice({
       .addCase(linkValorant.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.games[0].username = action.payload.username;
-        state.games[0].rank = action.payload.rank;
       })
       .addCase(linkValorant.rejected, (state, action) => {
         state.isLoading = false;
@@ -162,8 +154,6 @@ export const profileSlice = createSlice({
       .addCase(linkOverwatch.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.games[1].username = action.payload.username;
-        state.games[1].rank = action.payload.rank;
       })
       .addCase(linkOverwatch.rejected, (state, action) => {
         state.isLoading = false;
