@@ -19,7 +19,7 @@ const LfgPost = ({ post, setIsEditing, isEditing }) => {
         <div className='lfg-post-header'>
           <span className='lfg-post-user-id'>{post.userName}</span>
           <p>{calculateTime(post.date)}</p>
-          <span className='lfg-post-status-open'> { "• Status: " + post.status}</span>
+          <span className={post.status === 'Open'? "lfg-post-status-open" : ( post.status === 'Closed' ? "lfg-post-status-closed" : "lfg-post-status-almost-full")}> { "• Status: " + post.status}</span>
         </div>
         <div className='lfg-post-body'>
           <div className='lfg-post-game'>Game: {post.game}</div>

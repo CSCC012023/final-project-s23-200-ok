@@ -449,9 +449,20 @@ h3 {
   margin-left: auto;
 }
 
+
 .lfg-post-status-open {
   color: #77c277;
 }
+
+.lfg-post-status-closed {
+  color: #ff6363;
+}
+
+.lfg-post-status-almost-full {
+  color: #ffe44d;
+}
+
+
 
 .lfg-post-body {
   display: flex;
