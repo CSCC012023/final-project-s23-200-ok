@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 //@route  POST api/users
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@access Public
 const registerUser = asyncHandler(async (req, res) => {
   // Destructure user data
   const { userName, email, password } = req.body;
@@ -51,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
     }
     else {
       res.status(400);
-      throw new Error("Invalid data");
+      throw new Error("Invalid user data");
     }
   } catch (error) {
     console.log(error);
@@ -63,7 +63,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 //@route   POST /login
 //@desc    Authenticates the user
-//@access  Public, anyone can use it to log in
+//@access  Public
 const loginUser = asyncHandler(async (req, res) => {
   // Destructure user credentials
   const { email, password } = req.body;

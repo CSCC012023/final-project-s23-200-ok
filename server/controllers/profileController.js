@@ -41,9 +41,15 @@ const createProfile = asyncHandler(async (req, res) => {
 const getProfileNoId = asyncHandler(async (req, res) => {
   try {
     // User id set in authentication middleware
-    const profile = await Profile.findOne({ user: req.user.id });
-    console.log(profile);
-    res.status(200).json(profile);
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (profile) {
+      res.status(200).json(profile);
+    }
+    else {
+      res.status(400);
+      throw new Error("Profile not found");
+    }
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
   }
@@ -81,7 +87,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     // update profile
     profile.bio = bio;
-    profile.profilePic = profilePicture;
+    profile.profilePicture = profilePicture;
     profile.name = name;
     profile.socials = socials;
     profile.games = games;

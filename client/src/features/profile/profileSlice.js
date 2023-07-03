@@ -5,12 +5,12 @@ const initialState = {
   profileId: null,
   bio: "",
   profilePicture: "",
-  name: "",
-  socials: [],
+  location: "",
   games: [
     { name: "Valorant", username: "", rank: "" },
     { name: "Overwatch", username: "", rank: "" },
   ],
+  socials: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -41,7 +41,7 @@ export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
   async ({ profileId, profileData }, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user?.token;
       return await profileService.updateProfile(profileId, profileData, token);
     } catch (error) {
       const message =
@@ -60,7 +60,7 @@ export const linkValorant = createAsyncThunk(
   "profile/linkValorant",
   async ({ profileId, valorantData }, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user?.token;
       return await profileService.linkValorant(profileId, valorantData, token);
     } catch (error) {
       const message =
@@ -79,7 +79,7 @@ export const linkOverwatch = createAsyncThunk(
   "profile/linkOverwatch",
   async ({ profileId, overwatchData }, thunkAPI) => {
     try {
-      const token = thunkAPI.getState().auth.user.token;
+      const token = thunkAPI.getState().auth.user?.token;
       return await profileService.linkOverwatch(profileId, overwatchData, token);
     } catch (error) {
       const message =
@@ -109,8 +109,8 @@ export const profileSlice = createSlice({
         state.isSuccess = true;
         state.profileId = action.payload._id;
         state.bio = action.payload.bio;
-        state.profilePicture = action.payload.profilePic;
-        state.name = action.payload.name;
+        state.profilePicture = action.payload.profilePicture;
+        state.location = action.payload.location;
         state.socials = action.payload.socials;
         state.games = action.payload.games;
       })
@@ -126,9 +126,10 @@ export const profileSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.bio = action.payload.bio;
-        state.profilePicture = action.payload.profilePic;
-        state.name = action.payload.name;
+        state.profilePicture = action.payload.profilePicture;
+        state.location = action.payload.location;
         state.socials = action.payload.socials;
+        state.games = action.payload.games;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.isLoading = false;

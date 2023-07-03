@@ -21,7 +21,7 @@ const ProfileSchema = new mongoose.Schema({
     maxlength: 1000,
     default: "I love gaming!"
   },
-  profilePic: { 
+  profilePicture: { 
     type: String,
     required: false,
     default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"

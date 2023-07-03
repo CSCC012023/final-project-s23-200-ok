@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProfile,
@@ -27,9 +26,9 @@ const Profile = () => {
     profileId,
     bio,
     profilePicture,
-    name,
-    socials,
+    location,
     games,
+    socials,    
     isLoading,
     isError,
     message    
@@ -51,9 +50,9 @@ const Profile = () => {
     const profileData = {
       bio: editBio,
       profilePicture: editPicture,
-      name: name,
-      socials: socials,
+      location: location,
       games: games,
+      socials: socials,
     };
 
     dispatch(
@@ -140,16 +139,15 @@ const Profile = () => {
     <div className="profile-container">
       <div className="pic-name-bio-section">
         <div className="profile-picture-section">
-          <img
-            src={
-              editPicture ||
-              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            }
-            alt="Profile"
-            className="profile-picture"
-          />
           {edit ? (
             <>
+              <img
+                src={
+                  editPicture
+                }
+                alt="Profile"
+                className="profile-picture"
+              />
               <input
                 className="file-upload"
                 type="file"
@@ -157,7 +155,15 @@ const Profile = () => {
               />
             </>
           ) : (
-            <></>
+            <>
+              <img
+                src={
+                  profilePicture
+                }
+                alt="Profile"
+                className="profile-picture"
+              />
+            </>
           )}
         </div>
 
