@@ -44,9 +44,6 @@ function Register() {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log(password);
-    console.log(confirmPassword);
-
     if (password.toString() !== confirmPassword.toString()) {
       toast.error("Passwords do not match");
     }

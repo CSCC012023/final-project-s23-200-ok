@@ -1,10 +1,13 @@
 import React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { linkValorant  } from "../features/profile/profileSlice";
 
 
 const ValorantGameForm = ({closeModal}) => {
+  // Get profileId from the profile slice
+  const { profileId } = useSelector((state) => state.profile);
+
   const [form, setForm] = useState({
     username: "",
     tagline: "",
@@ -16,11 +19,11 @@ const ValorantGameForm = ({closeModal}) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(linkValorant({ profileId : "648a307ad4f77bff86785f2a", valorantData: form }))
+    dispatch(linkValorant({ profileId : profileId, valorantData: form }))
     .then((res) => {
         if (res.type === "profile/linkValorant/fulfilled") {
           setMessage("Valorant account linked successfully!");

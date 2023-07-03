@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
   },
-  profiles: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" },
+  profile: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" },
   friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   lfgposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "LFGPost" }],
