@@ -2,6 +2,19 @@ import axios from "axios";
 
 const API_URL = "/api/profile/";
 
+// Create profile
+const createProfile = async (token) => {
+  const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.post(API_URL, {}, config);
+
+  return response.data;
+};
+
 // Get profile
 const getProfile = async (token) => {
   const config = {
@@ -60,6 +73,7 @@ const updateProfile = async (profileId, profileData, token) => {
 };
 
 const profileService = {
+  createProfile,
   getProfile,
   linkValorant,
   linkOverwatch,
