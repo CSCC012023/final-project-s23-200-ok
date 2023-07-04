@@ -95,6 +95,7 @@ const Lfg = () => {
   useEffect(() => {
     dispatch(getProfile());
     dispatch(getLFGPosts());
+
   }, [dispatch]);
 
   useEffect(() => {
@@ -102,6 +103,7 @@ const Lfg = () => {
       posts.find((post) => post._id === isEditing && setNewPost(post));
     }
   }, [isEditing, posts]);
+
 
   if (isLoading) {
     return <Spinner />;
@@ -124,8 +126,9 @@ const Lfg = () => {
               onChange={handleInputChange}
               required>
               <option value="">Select a game</option>
-              <option value="Valorant">Valorant</option>
-              <option value="Overwatch">Overwatch</option>
+              {games.map((game) => (
+                game.ign ? <option value={game.name}>{game.name}</option> : null
+              ))}
             </select>
             <select
               name="status"
