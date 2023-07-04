@@ -3,7 +3,6 @@ import lfgService from "./lfgService";
 
 const initialState = {
   posts: [],
-  currentPost: null,
   isLoading: false,
   isSuccess: false,
   isError: false,
@@ -11,7 +10,7 @@ const initialState = {
 };
 
 // Async Thunk actions
-export const createPost = createAsyncThunk(
+export const createLFGPost = createAsyncThunk(
   "lfgpost/createPost",
   async (postData, thunkAPI) => {
     try {
@@ -23,7 +22,7 @@ export const createPost = createAsyncThunk(
   }
 );
 
-export const getPosts = createAsyncThunk(
+export const getLFGPosts = createAsyncThunk(
   "lfgpost/getPosts",
   async (thunkAPI) => {
     try {
@@ -35,7 +34,7 @@ export const getPosts = createAsyncThunk(
   }
 );
 
-export const getPost = createAsyncThunk(
+export const getLFGPost = createAsyncThunk(
   "lfgpost/getPost",
   async (postId, thunkAPI) => {
     try {
@@ -47,7 +46,7 @@ export const getPost = createAsyncThunk(
   }
 );
 
-export const updatePost = createAsyncThunk(
+export const updateLFGPost = createAsyncThunk(
   "lfgpost/updatePost",
   async ({ postId, postData }, thunkAPI) => {
     try {
@@ -59,7 +58,7 @@ export const updatePost = createAsyncThunk(
   }
 );
 
-export const deletePost = createAsyncThunk(
+export const deleteLFGPost = createAsyncThunk(
   "lfgpost/deletePost",
   async (postId, thunkAPI) => {
     try {
@@ -81,84 +80,83 @@ export const lfgSlice = createSlice({
       state.isSuccess = false;
       state.isError = false;
       state.message = "";
-      state.currentPost = null;
       state.posts = [];
     },
   },
   extraReducers: (builder) => {
     builder
       // createPost
-      .addCase(createPost.pending, (state) => {
+      .addCase(createLFGPost.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createPost.fulfilled, (state, action) => {
+      .addCase(createLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.posts.push(action.payload);
       })
-      .addCase(createPost.rejected, (state, action) => {
+      .addCase(createLFGPost.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
 
       // getPosts
-      .addCase(getPosts.pending, (state) => {
+      .addCase(getLFGPosts.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getPosts.fulfilled, (state, action) => {
+      .addCase(getLFGPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.posts = action.payload;
       })
-      .addCase(getPosts.rejected, (state, action) => {
+      .addCase(getLFGPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
 
       // getPost
-      .addCase(getPost.pending, (state) => {
+      .addCase(getLFGPost.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getPost.fulfilled, (state, action) => {
+      .addCase(getLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.currentPost = action.payload;
+        // state.posts = action.payload;
       })
-      .addCase(getPost.rejected, (state, action) => {
+      .addCase(getLFGPost.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
 
       // updatePost
-      .addCase(updatePost.pending, (state) => {
+      .addCase(updateLFGPost.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updatePost.fulfilled, (state, action) => {
+      .addCase(updateLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.posts = state.posts.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );
       })
-      .addCase(updatePost.rejected, (state, action) => {
+      .addCase(updateLFGPost.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
 
       // deletePost
-      .addCase(deletePost.pending, (state) => {
+      .addCase(deleteLFGPost.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deletePost.fulfilled, (state, action) => {
+      .addCase(deleteLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.posts = state.posts.filter((post) => post.id !== action.payload);
       })
-      .addCase(deletePost.rejected, (state, action) => {
+      .addCase(deleteLFGPost.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

@@ -5,32 +5,43 @@ import LFGPost from "../models/LFGPost.js";
 //@desc   Create a new LFG post
 //@access Private
 const createLFGPost = asyncHandler(async (req, res) => {
-  const {
-    user_id,
-    userName,
-    game,
-    notes,
-    server,
-    status,
-    numberOfPlayers,
-    rank,
-  } = req.body;
-  const date = new Date();
+  try {
+    const {
+      user_id,
+      userName,
+      game,
+      notes,
+      server,
+      status,
+      numberOfPlayers,
+      rank,
+    } = req.body;
+    const date = new Date();
 
-  const post = new LFGPost({
-    user_id,
-    userName,
-    game,
-    date,
-    notes,
-    server,
-    status,
-    numberOfPlayers,
-    rank,
-  });
+    const post = new LFGPost({
+      user_id,
+      userName,
+      game,
+      date,
+      notes,
+      server,
+      status,
+      numberOfPlayers,
+      rank,
+    });
 
-  const createdPost = await post.save();
-  res.status(201).json(createdPost);
+    const createdPost = await post.save();
+
+    if (!createdPost) {
+      res.status(400);
+      throw new Error("Invalid post data");
+    } else {
+      res.status(201).json(createdPost);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server Error While Creating LFG Post" });
+  }
 });
 
 //@route   GET api/lfgpost

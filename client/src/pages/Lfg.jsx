@@ -2,11 +2,11 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  createPost,
-  getPosts,
-  updatePost,
-  deletePost,
-  getPost,
+  createLFGPost,
+  getLFGPosts,
+  updateLFGPost,
+  deleteLFGPost,
+  getLFGPost,
   reset,
 } from "../features/lfg/lfgSlice";
 import LfgPost from "../components/LfgPost";
@@ -55,7 +55,7 @@ const Lfg = () => {
       console.log("isEditing", isEditing);
 
       dispatch(
-        updatePost({
+        updateLFGPost({
           postId: isEditing,
           postData: {
             ...newPost,
@@ -75,7 +75,7 @@ const Lfg = () => {
       });
     } else {
       dispatch(
-        createPost({
+        createLFGPost({
           ...newPost,
           user_id: user._id,
           userName: user.userName,
@@ -94,7 +94,7 @@ const Lfg = () => {
 
   useEffect(() => {
     dispatch(getProfile());
-    dispatch(getPosts());
+    dispatch(getLFGPosts());
   }, [dispatch]);
 
   useEffect(() => {
