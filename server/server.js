@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/api/LFGposts", LFGpostRoutes);
+app.use("/api/lfg", LFGpostRoutes);
 
 app.use(errorHandler);
 

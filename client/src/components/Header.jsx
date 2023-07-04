@@ -18,13 +18,18 @@ function Header() {
       <div className="logo">
         <Link to="/">playbook</Link>
       </div>
+
       <ul>
         {user ? (
           <>
             <li>
-              <Link to="/profile">
-                profile
-              </Link>
+              <Link to="/profile">profile</Link>
+            </li>
+            <li>
+              {" "}
+              <div className="logo">
+                <Link to="/lfg">Lfg</Link>
+              </div>
             </li>
             <li>
               <button className="btn" onClick={onLogout}>
@@ -35,14 +40,10 @@ function Header() {
         ) : (
           <>
             <li>
-              <Link to="/register">
-                register
-              </Link>
+              <Link to="/register">register</Link>
             </li>
             <li>
-              <Link to="/login">
-                log in
-              </Link>
+              <Link to="/login">log in</Link>
             </li>
           </>
         )}

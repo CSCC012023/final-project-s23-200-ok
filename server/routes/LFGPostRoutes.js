@@ -10,7 +10,10 @@ import { protect } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.route("/").post(protect, createLFGPost).get(protect, getLFGPosts);
-router.route("/:id").get(protect, getLFGPost).put(protect, updateLFGPost).delete(protect, deleteLFGPost);
+// router.route("/").post(protect, createLFGPost).get(protect, getLFGPosts);
+// router.route("/:id").get(protect, getLFGPost).put(protect, updateLFGPost).delete(protect, deleteLFGPost);
+
+router.route("/").post(createLFGPost).get(getLFGPosts);
+router.route("/:id").get(getLFGPost).put(updateLFGPost).delete(deleteLFGPost);
 
 export default router;
