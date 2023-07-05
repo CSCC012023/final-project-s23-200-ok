@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Post from "../models/Post.js";
+import User from "../models/User.js";
 
 //@route  POST api/posts
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
