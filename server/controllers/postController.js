@@ -56,13 +56,18 @@ const updatePost = asyncHandler(async (req, res) => {});
 //@access private 
 const deletePost = asyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id);
-
-    if (post) {
-      await post.deleteOne({ _id: req.params.id });
-      res.json({ message: "Post removed" });
-    } else {
-      res.status(404);
-      throw new Error("Post not found");
+    if (!post) {
+        res.status(404);
+        throw new Error("Post not found");
+    }
+    // user is not the owner of the post, so they shouldn't be able to delete it. 
+    if (post.user.toString() !== req.user._id.toString()) {
+        res.status(401).json({ message: "Not authorized to delete this post" });
+        return;
+    }
+    else {
+        await post.remove();
+        res.json({ message: "Post deleted successfully" });
     }
     
 });
