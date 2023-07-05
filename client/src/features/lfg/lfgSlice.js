@@ -154,7 +154,7 @@ export const lfgSlice = createSlice({
       .addCase(deleteLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.posts = state.posts.filter((post) => post.id !== action.payload);
+        state.posts = state.posts.filter((post) => post._id !== action.payload);
       })
       .addCase(deleteLFGPost.rejected, (state, action) => {
         state.isLoading = false;

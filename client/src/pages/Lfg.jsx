@@ -21,6 +21,10 @@ const Lfg = () => {
   const { user } = useSelector((state) => state.auth);
   const { games } = useSelector((state) => state.profile);
 
+  const handleDelete = (id) => {
+    dispatch(deleteLFGPost(id));
+  }
+
   console.log("games", games);
   console.log("valorant", games[0]);
   console.log("overwatch", games[1]);
@@ -95,7 +99,10 @@ const Lfg = () => {
   useEffect(() => {
     dispatch(getProfile());
     dispatch(getLFGPosts());
-
+    
+    return () => {
+      dispatch(reset());
+    }
   }, [dispatch]);
 
   useEffect(() => {
@@ -178,6 +185,7 @@ const Lfg = () => {
           post={post}
           setIsEditing={setIsEditing}
           isEditing={isEditing}
+          handleDelete={handleDelete}
         />
       ))}
     </div>

@@ -99,7 +99,7 @@ const deleteLFGPost = asyncHandler(async (req, res) => {
 
   if (post) {
     await post.deleteOne({ _id: req.params.id });
-    res.json({ message: "Post removed" });
+    res.json({ "_id": req.params.id });
   } else {
     res.status(404);
     throw new Error("Post not found");
