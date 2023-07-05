@@ -35,46 +35,35 @@ const deletePost = asyncHandler(async (req, res) => {
     
 });
 
-//@route   PATCH api/posts/:id/like
+//@route   PATCH api/posts/:id/react
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const likePost = asyncHandler(async (req, res) => {
+const reactToPost = asyncHandler(async (req, res) => {
   try {
+    const { reaction } = req.body; // Taking reaction type from the request body
     const post = await Post.findById(req.params.id);
     const user = req.user.id;
-    
-    // Check if post was already liked by user
-    if (post.likes.includes(user)) {
-      return res.status(400).json({ msg: 'Post already liked' });
-    }
-    post.likes.unshift({ user });
-    await post.save();
-    res.json(post.likes);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
-  }
-});
+    // Gettting the index of the reaction to update
+    const reactionIndex = post.likes.findIndex(like => like.user.toString() === user);
 
-//@route   PATCH api/posts/:id/unlike
-//@desc    [DESCRIPTION OF WHAT ROUTE DOES]
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const unlikePost = asyncHandler(async (req, res) => {
-  try {
-    const post = await Post.findById(req.params.id);
-    const user = req.user.id;
-    // Get index of like to remove
-    const likedIndex = post.likes.findIndex(like => like.user.toString() === user);
-    
-    if (likedIndex === -1) {
-      return res.status(400).json({ msg: 'Post not previously liked' });
+    if (reactionIndex === -1) {
+      // If the user has not reacted to the post before, add reaction
+      post.likes.unshift({ user, reaction });
+    } else {
+      if (reaction === post.likes[reactionIndex].reaction) {
+        // If the user clicked the same reaction again, remove reaction
+        post.likes.splice(reactionIndex, 1);
+      } else {
+        // If the user clicked a different reaction, change reaction
+        post.likes[reactionIndex].reaction = reaction;
+      }
     }
-    post.likes.splice(likedIndex, 1);
+
     await post.save();
     res.json(post.likes);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send('Server error, failed to react to post');
   }
 });
 
@@ -84,6 +73,5 @@ export {
     getPost,
     updatePost,
     deletePost,
-    likePost,
-    unlikePost
+    reactToPost
 };
