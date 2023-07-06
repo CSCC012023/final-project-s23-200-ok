@@ -8,12 +8,8 @@ const gameSchema = new mongoose.Schema({
 });
 
 const ProfileSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-    unique: true,
-  },
+  user_id: { type: String, required: true },
+  userName: { type: String, required: true },
   bio: { 
     type: String,
     required: false,

@@ -7,7 +7,8 @@ import Profile from "../models/Profile.js";
 //@access Private
 const createProfile = asyncHandler(async (req, res) => {
   // Check if this user already has a profile
-  const userHasProfile = await Profile.findOne({ user: req.user._id });
+  const user_idString = req.user._id.toString();
+  const userHasProfile = await Profile.findOne({ user_id: user_idString });
   
   if (userHasProfile) {
     res.status(400);
@@ -17,8 +18,9 @@ const createProfile = asyncHandler(async (req, res) => {
   // Create profile
   try {
     const profile = await Profile.create({
-      // User id set in authentication middleware
-      user: req.user._id,
+      // User id and userName set in authentication middleware
+      user_id: user_idString,
+      userName: req.user.userName
     });
 
     if (profile) {
@@ -41,7 +43,7 @@ const createProfile = asyncHandler(async (req, res) => {
 const getProfileNoId = asyncHandler(async (req, res) => {
   try {
     // User id set in authentication middleware
-    const profile = await Profile.findOne({ user: req.user._id });
+    const profile = await Profile.findOne({ user_id: req.user._id });
 
     if (profile) {
       res.status(200).json(profile);
@@ -67,6 +69,37 @@ const getProfile = asyncHandler(async (req, res) => {
       return res.status(404).json({ msg: "Profile not found" });
     }
     res.status(200).json(profile);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
+//@route   PUT api/profile/
+//@desc    update profile WITHOUT id (assume there's only 1 per user)
+//@access  Private
+const updateProfileNoId = asyncHandler(async (req, res) => {
+  try {
+    // User id set in authentication middleware
+    const profile = await Profile.findOne({ user_id: req.user._id });
+
+    if (profile) {
+      // Don't allow user to update user_id or userName
+      const { bio, profilePicture, location, games, socials } = req.body;
+      
+      // Update profile
+      profile.bio = bio;
+      profile.profilePicture = profilePicture;
+      profile.location = location;
+      profile.games = games;
+      profile.socials = socials;
+      await profile.save();
+      
+      res.status(200).json(profile);
+    }
+    else {
+      res.status(400);
+      throw new Error("Profile not found");
+    }
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
   }
@@ -254,6 +287,7 @@ export {
   createProfile,
   getProfileNoId,
   getProfile,
+  updateProfileNoId,
   updateProfile,
   deleteProfile,
   linkValorant,
