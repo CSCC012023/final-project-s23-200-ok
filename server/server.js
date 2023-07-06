@@ -8,20 +8,10 @@ import userRoutes from "./routes/userRoutes.js";
 import LFGpostRoutes from "./routes/LFGpostRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
-<<<<<<< HEAD
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
-=======
-import postRoutes from "./routes/postRoutes.js";
-
-dotenv.config();
-const PORT = process.env.PORT || 5000;
- 
-const app = express();
-
->>>>>>> da249f7a5bc0f32188460642de7abc67c136381c
 
 app.use(cors());
 app.use(express.json());
