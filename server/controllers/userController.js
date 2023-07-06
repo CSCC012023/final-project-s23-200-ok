@@ -35,6 +35,19 @@ const deleteUser = asyncHandler(async (req, res) => {
     
 });
 
+<<<<<<< Updated upstream
+=======
+const generateToken = (id) => {
+  return jwt.sign(
+    { id },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "30000s"
+    }
+  );
+};
+
+>>>>>>> Stashed changes
 export {
     createUser,
     getUsers,
