@@ -18,6 +18,7 @@ const Lfg = () => {
   const { posts, isLoading, isError, message } = useSelector(
     (state) => state.lfg
   );
+
   const { user } = useSelector((state) => state.auth);
   const { games } = useSelector((state) => state.profile);
 
@@ -37,6 +38,33 @@ const Lfg = () => {
     status: "",
     numberOfPlayers: "",
   });
+
+  const [latestSort, setLatestSort] = useState(1);
+  const sortByDate = (lfgPosts) => {
+    const res = [].concat(lfgPosts)
+
+    if (latestSort){
+      res.sort((a,b) => a.date > b.date ? -1:1)
+    }
+    else{
+      res.sort((a,b) => a.date > b.date ? 1:-1)
+    }
+    
+    console.log(res);
+    return res;
+  }
+
+  const handleSort = ()=>{
+    console.log('sort clicked');
+    if (latestSort){
+      setLatestSort(0);
+    }
+
+    else{
+      setLatestSort(1);
+    }
+  }
+
 
   const handleInputChange = (e) => {
     setNewPost({
@@ -122,6 +150,7 @@ const Lfg = () => {
 
   return (
     <div>
+
       {user && (
         <>
           {isEditing ? <h3>Edit Post</h3> : <h3>Create Post</h3>}
@@ -177,9 +206,14 @@ const Lfg = () => {
           </form>
         </>
       )}
-      <h1>Looking For Group</h1>
-      <div className="lfg-buttons"></div>
-      {posts.map((post) => (
+      <div style={{display:'flex', justifyContent:'space-between', alignItems:"center"}}>
+        <div style={{width:"7rem"}}></div>
+        <h1 style={{flex:1}}>Looking For Group</h1>
+        {/* <div> */}
+         <button style={{marginLeft:'auto',width:"7rem"}} className="btn" onClick={()=>handleSort()}>{latestSort===1? "Latest":"Earliest"}</button>
+        {/* </div> */}
+      </div>
+      {sortByDate(posts).map((post) => (
         <LfgPost
           key={post._id}
           post={post}
