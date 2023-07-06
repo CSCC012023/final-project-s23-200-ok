@@ -9,7 +9,7 @@ const PostSchema = new mongoose.Schema({
 
   type: { type: String, required: true, enum: ["text", "image", "video"] },
   content: { type: String, required: true, minlength: 1, maxlength: 1000 },
-  fileId: { type: String, required: false},
+  fileId: { type: mongoose.Schema.Types.ObjectId, ref: "postFiles.files", required: false},
   likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   
   date: { type: Date, default: Date.now },
