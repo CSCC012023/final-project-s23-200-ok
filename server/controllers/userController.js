@@ -115,4 +115,5 @@ const generateToken = (id) => {
 };
 
 
+
 export { registerUser, loginUser, getUsers, getUser, updateUser, deleteUser };
