@@ -10,8 +10,14 @@ import errorHandler from "./middleware/errorMiddleware.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
+<<<<<<< HEAD
 
 const app = express();
+=======
+ 
+const app = express();
+
+>>>>>>> da249f7 (complete full stack post creation)
 
 app.use(cors());
 app.use(express.json());

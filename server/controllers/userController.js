@@ -114,4 +114,27 @@ const generateToken = (id) => {
   });
 };
 
+<<<<<<< HEAD
 export { registerUser, loginUser, getUsers, getUser, updateUser, deleteUser };
+=======
+<<<<<<< Updated upstream
+=======
+const generateToken = (id) => {
+  return jwt.sign(
+    { id },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "30000s"
+    }
+  );
+};
+
+>>>>>>> Stashed changes
+export {
+    createUser,
+    getUsers,
+    getUser,
+    updateUser,
+    deleteUser
+};
+>>>>>>> da249f7 (complete full stack post creation)

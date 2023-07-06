@@ -1,0 +1,59 @@
+Routes {
+    display:flex;
+    justify-content: center;
+}
+
+#post-creation-form {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    align-items: center;
+    min-width: 40vw;
+    max-width: 80vw;
+    min-height: 50vh;
+    max-height: 90vh;
+}
+
+.post-text-container {
+    /* flex:3; */
+    flex-basis: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    flex-grow: 3;
+    padding: 2rem;
+    
+    
+}
+
+.post-text-container textarea {
+
+    width: max(40vw, 200px);
+    height: max(20vh, 250px);
+    /* max-width: 771.94px;
+    min-width: 500px; */
+    
+    padding-left: 2rem;
+    padding-right: 2rem;
+    background-color: white;
+    color: black;
+    flex-grow: 1;
+    box-sizing: border-box;
+    flex-basis:100%;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+
+    border: 1px solid black;
+    border-radius: 5px;
+    resize: none;
+}
+
+.post-opt-container{
+    flex:1;
+    flex-basis:auto
+}
+
+.post-opt-container input{
+
+}

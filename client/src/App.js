@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> da249f7 (complete full stack post creation)
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,6 +11,7 @@ import Register from "./pages/Register";
 //import Profile from "./pages/MyProfile";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
+<<<<<<< HEAD
 import Lfg from "./pages/Lfg.jsx";
 
 function App() {
@@ -52,6 +56,28 @@ function App() {
       </header>
     </div>
 >>>>>>> 40f19cd (init working post skeleton)
+=======
+import Post from "./pages/Post";
+
+function App() {
+  return (
+    <>
+      <Router>
+        <div className="container">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Post />} />
+
+            {/* <Route path="/" element={<Dashboard />} /> */}
+            <Route path="/register" element={<Register />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </div>
+      </Router>
+      <ToastContainer />
+    </>
+>>>>>>> da249f7 (complete full stack post creation)
   );
 }
 
