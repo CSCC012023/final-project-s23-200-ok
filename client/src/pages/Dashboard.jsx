@@ -10,7 +10,7 @@ import Post from "../components/Post";
 function Dashboard() {
   const dispatch = useDispatch();
 
-  const {posts, isLoading, isError, message, likes, date } = useSelector((state) => state.posts);
+  const {posts, isLoading, isError, message} = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
 
 

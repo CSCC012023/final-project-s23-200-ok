@@ -112,7 +112,7 @@ export const postSlice = createSlice({
       .addCase(createPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.posts.push(action.payload);
+        state.posts.unshift(action.payload);
       })
       .addCase(createPost.rejected, (state, action) => {
         state.isLoading = false;
@@ -130,8 +130,7 @@ export const postSlice = createSlice({
       .addCase(getPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.posts = action.payload;
-        console.log(action.payload, "action.payload");
+        state.posts = action.payload.reverse();
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.isLoading = false;
