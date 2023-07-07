@@ -80,7 +80,8 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
   try {
     // User id set in authentication middleware
     const profile = await Profile.findOne({ user_id: req.user._id });
-
+    console.log(profile);
+    console.log(req.body);
     if (profile) {
       // Don't allow user to update user_id or userName
       const { bio, profilePicture, location, games, socials } = req.body;

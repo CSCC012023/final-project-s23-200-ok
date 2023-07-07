@@ -47,10 +47,6 @@ function Dashboard() {
 
     e.preventDefault();
 
-    console.log(newPost);
-    console.log(user._id);
-    console.log(user.userName);
-
     dispatch(createPost({ ...newPost, user_id: user._id,
       userName: user.userName, }));
 

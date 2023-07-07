@@ -28,9 +28,7 @@ const Lfg = () => {
     dispatch(deleteLFGPost(id));
   }
 
-  console.log("games", games);
-  console.log("valorant", games[0]);
-  console.log("overwatch", games[1]);
+
   const [isEditing, setIsEditing] = useState("");
 
   const [newPost, setNewPost] = useState({
@@ -74,7 +72,7 @@ const Lfg = () => {
     }
 
     if (isEditing) {
-      console.log("isEditing", isEditing);
+
 
       dispatch(
         updateLFGPost({
@@ -121,8 +119,7 @@ const Lfg = () => {
       getLFGPostFiltered(newFilter)
     );
 
-    console.log("Filtered ?");
-    // console.log(filtered);
+  
   }
 
   const filterReset = () => {
