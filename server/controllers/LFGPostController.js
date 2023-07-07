@@ -52,6 +52,22 @@ const getLFGPosts = asyncHandler(async (req, res) => {
   res.json(posts);
 });
 
+//@route   GET api/lfgpost/filter
+//@desc    Get all filtered LFG posts
+//@access  Public
+const getLFGPostsFiltered = asyncHandler(async (req, res) => {
+  try{
+    const posts = await LFGPost.find().where("game").equals(req.query.game).where("server").equals(req.query.server).where("numberOfPlayers").equals(req.query.numberOfPlayers).where("status").equals(req.query.status);
+    res.status(200).json(posts);
+  } catch (err){
+    res.status(404).json({
+      status: "fail",
+      message: err.message
+    })
+  }
+  
+});
+
 //@route   GET api/lfgpost/:id
 //@desc    Get LFG post by ID
 //@access  Public
@@ -106,4 +122,4 @@ const deleteLFGPost = asyncHandler(async (req, res) => {
   }
 });
 
-export { createLFGPost, getLFGPosts, getLFGPost, updateLFGPost, deleteLFGPost };
+export { createLFGPost, getLFGPosts, getLFGPost, getLFGPostsFiltered, updateLFGPost, deleteLFGPost };

@@ -20,6 +20,13 @@ const getPost = async (postId) => {
   return response.data;
 };
 
+// Get filtered post
+const getPostFiltered = async (filter) => {
+  const response = await axios.get(API_URL + "filter", {params: filter});
+  // console.log(response.data);
+  return response.data;
+};
+
 // Update post
 const updatePost = async (postId, postData) => {
   const response = await axios.put(API_URL + postId, postData);
@@ -38,6 +45,7 @@ const lfgService = {
   getPost,
   updatePost,
   deletePost,
+  getPostFiltered,
 };
 
 export default lfgService;

@@ -46,6 +46,20 @@ export const getLFGPost = createAsyncThunk(
   }
 );
 
+export const getLFGPostFiltered = createAsyncThunk(
+  "lfgpost/getPostFiltered",
+  async (filter, thunkAPI) => {
+    try {
+      const response = await lfgService.getPostFiltered(filter);
+      console.log("Filtered response with id and evevrything: ");
+      console.log(response);
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 export const updateLFGPost = createAsyncThunk(
   "lfgpost/updatePost",
   async ({ postId, postData }, thunkAPI) => {
@@ -125,6 +139,21 @@ export const lfgSlice = createSlice({
         // state.posts = action.payload;
       })
       .addCase(getLFGPost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      // getPostsFiltered
+      .addCase(getLFGPostFiltered.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getLFGPostFiltered.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.posts = action.payload;
+      })
+      .addCase(getLFGPostFiltered.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

@@ -3,6 +3,7 @@ import {
   createLFGPost,
   getLFGPosts,
   getLFGPost,
+  getLFGPostsFiltered,
   updateLFGPost,
   deleteLFGPost,
 } from "../controllers/LFGPostController.js";
@@ -14,6 +15,7 @@ const router = Router();
 // router.route("/:id").get(protect, getLFGPost).put(protect, updateLFGPost).delete(protect, deleteLFGPost);
 
 router.route("/").post(createLFGPost).get(getLFGPosts);
+router.route("/filter").get(getLFGPostsFiltered);
 router.route("/:id").get(getLFGPost).put(updateLFGPost).delete(deleteLFGPost);
 
 export default router;
