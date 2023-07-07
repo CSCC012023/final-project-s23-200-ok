@@ -26,7 +26,7 @@ const ValorantGameForm = ({closeModal}) => {
     dispatch(linkValorant({ profileId : profileId, valorantData: form }))
     .then((res) => {
         if (res.type === "profile/linkValorant/fulfilled") {
-          setMessage("Valorant account linked successfully!");
+            setMessage("Valorant account linked successfully!");
             closeModal();
         } else {
             setMessage("Error linking Valorant account!");

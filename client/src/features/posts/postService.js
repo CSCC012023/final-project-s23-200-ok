@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/lfg/";
+const API_URL = "/api/posts/";
 
 // Create post
 const createPost = async (postData, token) => {
@@ -11,6 +11,7 @@ const createPost = async (postData, token) => {
   };
 
   const response = await axios.post(API_URL, postData, config);
+
   return response.data;
 };
 
@@ -26,32 +27,7 @@ const getPosts = async (token) => {
   return response.data;
 };
 
-// Get post by id
-const getPost = async (postId, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  const response = await axios.get(API_URL + postId, config);
-  return response.data;
-};
-
-// Get filtered post
-const getPostFiltered = async (filter, token) => {
-  const config = {
-    params: filter,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  
-  const response = await axios.get(API_URL + "filter", config);
-  return response.data;
-};
-
-// Update post
+// update post
 const updatePost = async (postId, postData, token) => {
   const config = {
     headers: {
@@ -75,13 +51,27 @@ const deletePost = async (postId, token) => {
   return response.data;
 };
 
-const lfgService = {
+const reactToPost = async (postId, reaction, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.patch(
+    API_URL + postId + "/react", 
+    {"reaction": reaction},
+    config
+  );
+  return response.data;
+}
+
+const postService = {
   createPost,
   getPosts,
-  getPost,
   updatePost,
   deletePost,
-  getPostFiltered,
+  reactToPost,
 };
 
-export default lfgService;
+export default postService;

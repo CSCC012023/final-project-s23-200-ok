@@ -6,6 +6,7 @@ import LFGPost from "../models/LFGPost.js";
 //@access Private
 const createLFGPost = asyncHandler(async (req, res) => {
   try {
+    // User id and userName set in authentication middleware
     const {
       user_id,
       userName,
@@ -14,53 +15,89 @@ const createLFGPost = asyncHandler(async (req, res) => {
       server,
       status,
       numberOfPlayers,
-      rank,
+      rank
     } = req.body;
-    const date = new Date();
 
-    const post = new LFGPost({
+    // Create LFG post
+    const lfgPost = await LFGPost.create({
       user_id,
       userName,
       game,
-      date,
       notes,
       server,
       status,
       numberOfPlayers,
-      rank,
+      rank
     });
 
-    const createdPost = await post.save();
-
-    if (!createdPost) {
-      res.status(400);
-      throw new Error("Invalid post data");
-    } else {
-      res.status(201).json(createdPost);
+    if (lfgPost) {
+      res.status(201).json(lfgPost);
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server Error While Creating LFG Post" });
+    else {
+      res.status(400);
+      throw new Error("Invalid LFG post data");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while creating LFG post");
   }
 });
 
 //@route   GET api/lfgpost
 //@desc    Get all LFG posts
-//@access  Public
+//@access  Private
 const getLFGPosts = asyncHandler(async (req, res) => {
+  // Check for user (set in authentication middleware)
+  if (!req.user) {
+    res.status(400);
+    throw new Error("Invalid user");
+  }
+
   const posts = await LFGPost.find({});
   res.json(posts);
 });
 
+//@route   GET api/lfgpost/filter
+//@desc    Get all filtered LFG posts
+//@access  Private
+const getLFGPostsFiltered = asyncHandler(async (req, res) => {
+  // Check for user (set in authentication middleware)
+  if (!req.user) {
+    res.status(400);
+    throw new Error("Invalid user");
+  }
+
+  try{
+    const filteredLFGPosts = await LFGPost.find()
+                                          .where("game").equals(req.query.game)
+                                          .where("server").equals(req.query.server)
+                                          .where("numberOfPlayers").equals(req.query.numberOfPlayers)
+                                          .where("status").equals(req.query.status);
+    res.status(200).json(filteredLFGPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while getting filtered LFG posts");
+  }  
+});
+
 //@route   GET api/lfgpost/:id
 //@desc    Get LFG post by ID
-//@access  Public
+//@access  Private
 const getLFGPost = asyncHandler(async (req, res) => {
+  // Check for user (set in authentication middleware)
+  if (!req.user) {
+    res.status(400);
+    throw new Error("Invalid user");
+  }
+
   const post = await LFGPost.findById(req.params.id);
 
   if (post) {
-    res.json(post);
-  } else {
+    res.status(200).json(post);
+  } 
+  else {
     res.status(404);
     throw new Error("Post not found");
   }
@@ -70,10 +107,14 @@ const getLFGPost = asyncHandler(async (req, res) => {
 //@desc  Update LFG post
 //@access Private
 const updateLFGPost = asyncHandler(async (req, res) => {
+  // Check for user (set in authentication middleware)
+  if (!req.user) {
+    res.status(400);
+    throw new Error("Invalid user");
+  }
+
   let post = await LFGPost.findById(req.params.id);
   post.date = new Date();
-  console.log(req.body);
-  console.log(post);
 
   if (post) {
     post.game = req.body.game;
@@ -84,7 +125,7 @@ const updateLFGPost = asyncHandler(async (req, res) => {
     post.rank = req.body.rank;
 
     const updatedPost = await post.save();
-    res.json(updatedPost);
+    res.status(200).json(updatedPost);
   } else {
     res.status(404);
     throw new Error("Post not found");
@@ -95,15 +136,21 @@ const updateLFGPost = asyncHandler(async (req, res) => {
 //@desc  Delete LFG post
 //@access Private
 const deleteLFGPost = asyncHandler(async (req, res) => {
+  // Check for user (set in authentication middleware)
+  if (!req.user) {
+    res.status(400);
+    throw new Error("Invalid user");
+  }
+
   const post = await LFGPost.findById(req.params.id);
 
   if (post) {
     await post.deleteOne({ _id: req.params.id });
-    res.json({ "_id": req.params.id });
+    res.status(200).json({ "_id": req.params.id });
   } else {
     res.status(404);
     throw new Error("Post not found");
   }
 });
 
-export { createLFGPost, getLFGPosts, getLFGPost, updateLFGPost, deleteLFGPost };
+export { createLFGPost, getLFGPosts, getLFGPost, getLFGPostsFiltered, updateLFGPost, deleteLFGPost };

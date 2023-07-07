@@ -14,22 +14,34 @@ export const createLFGPost = createAsyncThunk(
   "lfgpost/createPost",
   async (postData, thunkAPI) => {
     try {
-      const response = await lfgService.createPost(postData);
-      return response;
+      const token = thunkAPI.getState().auth.user?.token;
+      return await lfgService.createPost(postData, token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
 export const getLFGPosts = createAsyncThunk(
   "lfgpost/getPosts",
-  async (thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const response = await lfgService.getPosts();
-      return response;
+      const token = thunkAPI.getState().auth.user?.token;
+      return await lfgService.getPosts(token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
@@ -38,10 +50,34 @@ export const getLFGPost = createAsyncThunk(
   "lfgpost/getPost",
   async (postId, thunkAPI) => {
     try {
-      const response = await lfgService.getPost(postId);
-      return response;
+      const token = thunkAPI.getState().auth.user?.token;
+      return await lfgService.getPost(postId, token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getLFGPostFiltered = createAsyncThunk(
+  "lfgpost/getPostFiltered",
+  async (filter, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await lfgService.getPostFiltered(filter, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
@@ -50,10 +86,16 @@ export const updateLFGPost = createAsyncThunk(
   "lfgpost/updatePost",
   async ({ postId, postData }, thunkAPI) => {
     try {
-      const response = await lfgService.updatePost(postId, postData);
-      return response;
+      const token = thunkAPI.getState().auth.user?.token;
+      return await lfgService.updatePost(postId, postData, token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
@@ -62,10 +104,16 @@ export const deleteLFGPost = createAsyncThunk(
   "lfgpost/deletePost",
   async (postId, thunkAPI) => {
     try {
-      await lfgService.deletePost(postId);
-      return postId;
+      const token = thunkAPI.getState().auth.user?.token;
+      return await lfgService.deletePost(postId, token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
@@ -112,6 +160,7 @@ export const lfgSlice = createSlice({
       .addCase(getLFGPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
+        console.log("action payload: " + action.payload);
         state.message = action.payload;
       })
 
@@ -125,6 +174,21 @@ export const lfgSlice = createSlice({
         // state.posts = action.payload;
       })
       .addCase(getLFGPost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      // getPostsFiltered
+      .addCase(getLFGPostFiltered.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getLFGPostFiltered.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.posts = action.payload;
+      })
+      .addCase(getLFGPostFiltered.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -154,7 +218,8 @@ export const lfgSlice = createSlice({
       .addCase(deleteLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.posts = state.posts.filter((post) => post._id !== action.payload);
+        console.log("Delete payload: " + action.payload);
+        state.posts = state.posts.filter((post) => post._id !== action.payload._id);
       })
       .addCase(deleteLFGPost.rejected, (state, action) => {
         state.isLoading = false;

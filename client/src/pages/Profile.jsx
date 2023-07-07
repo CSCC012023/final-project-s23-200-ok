@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getProfile,
   updateProfile,
-  reset
+  reset,
 } from "../features/profile/profileSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
@@ -14,6 +14,12 @@ import OverwatchGameForm from "../components/OverwatchGameForm";
 import Spinner from "../components/Spinner";
 import { readAndCompressImage } from "browser-image-resizer";
 import Socials from "../components/Socials";
+import SocialLinkForm from "../components/SocialLinkForm";
+import InstagramIcon from "../assets/InstagramIcon.png";
+import TwitterIcon from "../assets/TwitterIcon.png";
+import TikTokIcon from "../assets/TikTokIcon.png";
+import YoutubeIcon from "../assets/YoutubeIcon.png";
+import TwitchIcon from "../assets/TwitchIcon.png";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -28,17 +34,21 @@ const Profile = () => {
     profilePicture,
     location,
     games,
-    socials,    
+    socials,
     isLoading,
     isError,
-    message    
+    message,
   } = useSelector((state) => state.profile);
 
   const [edit, setEdit] = useState(false);
   const [editBio, setEditBio] = useState(bio);
   const [editPicture, setEditPicture] = useState(profilePicture);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSocialsModalOpen, setIsSocialsModalOpen] = useState(false);
+  const [submittedLinks, setSubmittedLinks] = useState(socials);
   const [modalGame, setModalGame] = useState("");
+
+
 
   const editProfile = () => {
     setEdit(true);
@@ -52,14 +62,16 @@ const Profile = () => {
       profilePicture: editPicture,
       location: location,
       games: games,
-      socials: socials,
+      socials: submittedLinks,
     };
 
-    dispatch(
-      updateProfile({ profileData })
-    );
+  
+
+    dispatch(updateProfile({ profileData }));
     setEdit(false);
   };
+
+
 
   const handleBioChange = (e) => {
     setEditBio(e.target.value);
@@ -101,8 +113,16 @@ const Profile = () => {
     setIsModalOpen(true);
   };
 
+  const openSocialsModal = () => {
+    setIsSocialsModalOpen(true);
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const closeSocialsModal = () => {
+    setIsSocialsModalOpen(false);
   };
 
   useEffect(() => {
@@ -122,8 +142,12 @@ const Profile = () => {
 
     return () => {
       dispatch(reset());
-    };  
+    };
   }, [user, isError, message, navigate, dispatch, isModalOpen]);
+
+  useEffect(() => {
+    setSubmittedLinks(socials);
+  }, [socials]);
 
   // Render an error message if there was an error
   if (isError) {
@@ -141,9 +165,7 @@ const Profile = () => {
           {edit ? (
             <>
               <img
-                src={
-                  editPicture
-                }
+                src={editPicture}
                 alt="Profile"
                 className="profile-picture"
               />
@@ -156,9 +178,7 @@ const Profile = () => {
           ) : (
             <>
               <img
-                src={
-                  profilePicture
-                }
+                src={profilePicture}
                 alt="Profile"
                 className="profile-picture"
               />
@@ -178,6 +198,87 @@ const Profile = () => {
             )}
           </p>
         </div>
+      </div>
+      <h2> </h2>
+      <div className="socials-section">
+        <h2>Socials</h2>
+        {/* <Socials /> */}
+        {edit ? (
+          <div className="update-socials-button">
+            <button className="edit-button" onClick={openSocialsModal}>
+              Update Socials
+            </button>
+          </div>
+        ) : (
+          <div className="socials">
+            {socials &&
+              socials.map((social, index) => (
+                <p key={index}>
+                  {social.social === "instagram" && (
+                    <a
+                      className="IG-link"
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <img src={InstagramIcon} alt="IG-icon" />
+                    </a>
+                  )}
+                  {social.social === "twitter" && (
+                    <a
+                      className="Twitter-link"
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <img src={TwitterIcon} alt="Twitter" />
+                    </a>
+                  )}
+                  {social.social === "tiktok" && (
+                    <a
+                      className="TikTok-link"
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <img src={TikTokIcon} alt="Tiktok" />
+                    </a>
+                  )}
+                  {social.social === "youtube" && (
+                    <a
+                      className="YouTube-link"
+                      href={social.url}
+                      target="_blank"
+>
+                      <img src={YoutubeIcon} alt="Youtube" />
+                    </a>
+                  )}
+                  {social.social === "twitch" && (
+                    <a
+                      className="Twitch-link"
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <img src={TwitchIcon} alt="Twitch" />
+                    </a>
+                  )}
+                </p>
+              ))}
+          </div>
+        )}
+        <Modal
+          isOpen={isSocialsModalOpen}
+          onRequestClose={closeSocialsModal}
+          className="modal-dialog"
+          overlayClassName="modal-overlay"
+          // contentLabel="Update Socials">
+        >
+          <SocialLinkForm
+            socials={socials}
+            submittedLinks={submittedLinks}
+            setSubmittedLinks={setSubmittedLinks}
+            closeSocialsModal={closeSocialsModal}></SocialLinkForm>
+          <button className="edit-button" onClick={closeSocialsModal}>
+            Close
+          </button>
+        </Modal>
       </div>
 
       {edit === false ? (
@@ -270,15 +371,6 @@ const Profile = () => {
               </div>
             ))}
         </div>
-      </div>
-      <div className="socials-section">
-        <h2>Socials</h2>
-        <Socials />
-        {/* socials && {socials.map((social, index) => (
-          <p key={index}>
-            {social.name}: <a href={social.url}>{social.url}</a>
-          </p>
-        ))} */}
       </div>
     </div>
   );

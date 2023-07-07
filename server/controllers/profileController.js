@@ -7,8 +7,7 @@ import Profile from "../models/Profile.js";
 //@access Private
 const createProfile = asyncHandler(async (req, res) => {
   // Check if this user already has a profile
-  const user_idString = req.user._id.toString();
-  const userHasProfile = await Profile.findOne({ user_id: user_idString });
+  const userHasProfile = await Profile.findOne({ user_id: req.user._id });
   
   if (userHasProfile) {
     res.status(400);
@@ -19,7 +18,7 @@ const createProfile = asyncHandler(async (req, res) => {
   try {
     const profile = await Profile.create({
       // User id and userName set in authentication middleware
-      user_id: user_idString,
+      user_id: req.user._id,
       userName: req.user.userName
     });
 
@@ -50,7 +49,7 @@ const getProfileNoId = asyncHandler(async (req, res) => {
     }
     else {
       res.status(400);
-      throw new Error("Profile not found");
+      throw new Error("Invalid user");
     }
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
@@ -81,7 +80,8 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
   try {
     // User id set in authentication middleware
     const profile = await Profile.findOne({ user_id: req.user._id });
-
+    console.log(profile);
+    console.log(req.body);
     if (profile) {
       // Don't allow user to update user_id or userName
       const { bio, profilePicture, location, games, socials } = req.body;
@@ -98,7 +98,7 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
     }
     else {
       res.status(400);
-      throw new Error("Profile not found");
+      throw new Error("Invalid user");
     }
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
@@ -111,7 +111,6 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
 const updateProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { bio, profilePicture, name, socials, games } = req.body;
-  console.log(req.body.profilePicture);
   try {
     let profile = await Profile.findById(id);
     if (!profile) {
