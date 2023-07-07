@@ -51,11 +51,27 @@ const deletePost = async (postId, token) => {
   return response.data;
 };
 
+const reactToPost = async (postId, reaction, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.patch(
+    API_URL + postId + "/react", 
+    reaction,
+    config
+  );
+  return response.data;
+}
+
 const postService = {
   createPost,
   getPosts,
   updatePost,
   deletePost,
+  reactToPost,
 };
 
 export default postService;
