@@ -41,12 +41,13 @@ const getPost = async (postId, token) => {
 // Get filtered post
 const getPostFiltered = async (filter, token) => {
   const config = {
+    params: filter,
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-
-  const response = await axios.get(API_URL + "filter", {params: filter}, config);
+  
+  const response = await axios.get(API_URL + "filter", config);
   return response.data;
 };
 
