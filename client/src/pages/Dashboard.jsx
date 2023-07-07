@@ -14,7 +14,7 @@ function Dashboard() {
   const { user } = useSelector((state) => state.auth);
 
   const [newPost, setNewPost] = useState({
-    text : "",
+    content : "",
     image : "",
   });
 
@@ -54,6 +54,11 @@ function Dashboard() {
     dispatch(createPost({ ...newPost, user_id: user._id,
       userName: user.userName, }));
 
+    setNewPost({
+      content: "",
+      image: "",
+    });
+
     };
 
   function convertToBase64(file) {
@@ -88,9 +93,9 @@ function Dashboard() {
           <section className="create-post">
             <form onSubmit={handlePostSubmit} className="form-group">
               <textarea
-                name="text"
+                name="content"
                 placeholder="What's on your mind?"
-                value={newPost.text}
+                value={newPost.content}
                 onChange={handleInputChange}
                 required
               />
@@ -118,6 +123,7 @@ function Dashboard() {
       ) }
     </> 
   );
+
 }
 
 export default Dashboard;
