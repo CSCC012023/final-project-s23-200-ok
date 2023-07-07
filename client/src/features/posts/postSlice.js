@@ -34,7 +34,8 @@ export const getPosts = createAsyncThunk(
   "post/getPosts",
   async (_, thunkAPI) => {
     try {
-      const response = await postService.getPosts();
+      const token = thunkAPI.getState().auth.user?.token;
+      const response = await postService.getPosts(token);
       return response;
     } catch (error) {
       const message =
@@ -92,13 +93,7 @@ export const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-      state.posts = [];
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
