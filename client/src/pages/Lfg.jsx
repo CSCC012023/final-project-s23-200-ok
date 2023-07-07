@@ -7,7 +7,6 @@ import {
   getLFGPosts,
   updateLFGPost,
   deleteLFGPost,
-  getLFGPost,
   getLFGPostFiltered,
   reset,
 } from "../features/lfg/lfgSlice";
