@@ -86,7 +86,6 @@ const reactToPost = asyncHandler(async (req, res) => {
     }
 
     await post.save();
-    res.json(post.likes);
     return res.status(200).json({ msg: "Reaction successful" });
   } catch (err) {
     console.error(err.message);

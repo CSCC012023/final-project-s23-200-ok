@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
+import Reactions from "./Reactions";
 
 const Post = ({ post }) => {
   const { user } = useSelector((state) => state.auth);
@@ -24,6 +25,7 @@ const Post = ({ post }) => {
           <p>{post.content}</p>
         </div>
       </div>
+        <Reactions key={post._id} post={post} />
     </div>
   );
 };
