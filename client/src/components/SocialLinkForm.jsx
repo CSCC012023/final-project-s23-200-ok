@@ -1,14 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import InstagramIcon from '../assets/InstagramIcon.png'
-import TwitterIcon from '../assets/TwitterIcon.png'
-import TikTokIcon from '../assets/TikTokIcon.png'
-import YoutubeIcon from '../assets/YoutubeIcon.png'
-import TwitchIcon from '../assets/TwitchIcon.png'
 
-const SocialLinkForm = ({ closeSocialsModal, submittedLinks, setSubmittedLinks, socials }) => {
+
+const SocialLinkForm = ({ closeSocialsModal, submittedLinks, setSubmittedLinks }) => {
     const [form, setForm] = useState({
-        socials: "",
+        social: "",
         url: "",
     });
 
@@ -20,7 +16,7 @@ const SocialLinkForm = ({ closeSocialsModal, submittedLinks, setSubmittedLinks, 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setSubmittedLinks([...submittedLinks, { socials: form.socials, url: form.url }]);
+        setSubmittedLinks([...submittedLinks, { social: form.social, url: form.url }]);
         closeSocialsModal();
       };    
 
@@ -29,8 +25,8 @@ const SocialLinkForm = ({ closeSocialsModal, submittedLinks, setSubmittedLinks, 
             <label>Add Links</label>
             <div className="form-group">
                 <select
-                    name="socials"
-                    value={form.socials}
+                    name="social"
+                    value={form.social}
                     onChange={handleFormChange}
                 >
                     <option value="">--Select a platform--</option>
@@ -49,19 +45,6 @@ const SocialLinkForm = ({ closeSocialsModal, submittedLinks, setSubmittedLinks, 
                 />
             </div>
             <button type="submit" className="edit-button">Submit</button>
-            {/*{socials && socials.map((link, index) => (
-                
-                <a href={link.url} target="_blank" rel="noopener noreferrer" key={index}>
-                    
-                    {link.socials === "instagram" && <InstagramIcon />}
-                    {link.socials === "twitter" && <TwitterIcon />}
-                    {link.socials === "tiktok" && <TikTokIcon />}
-                    {link.socials === "youtube" && <YoutubeIcon />}
-                    {link.socials === "twich" && <TwitchIcon />}
-                    
-                </a>
-            ))}
-            */}
         </form>
     )
 }
