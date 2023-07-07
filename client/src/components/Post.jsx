@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
+import Reactions from "./Reactions";
 
 const Post = ({ post, handleDelete }) => {
   const { user } = useSelector((state) => state.auth);
@@ -31,6 +32,7 @@ const Post = ({ post, handleDelete }) => {
           <p>{post.text}</p>
         </div>
       </div>
+        <Reactions key={post._id} post={post} />
       <div className="delete-post"> 
 
       {post.user_id === user._id && (
