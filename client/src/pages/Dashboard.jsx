@@ -14,7 +14,7 @@ function Dashboard() {
   const { user } = useSelector((state) => state.auth);
 
   const [newPost, setNewPost] = useState({
-    content : "",
+    text : "",
     image : "",
   });
 
@@ -88,9 +88,9 @@ function Dashboard() {
           <section className="create-post">
             <form onSubmit={handlePostSubmit} className="form-group">
               <textarea
-                name="content"
+                name="text"
                 placeholder="What's on your mind?"
-                value={newPost.content}
+                value={newPost.text}
                 onChange={handleInputChange}
                 required
               />
