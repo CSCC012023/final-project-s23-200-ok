@@ -7,6 +7,11 @@ const gameSchema = new mongoose.Schema({
   stats: [{ type: String, default: "" }],
 });
 
+const socialSchema = new mongoose.Schema({
+  social: { type: String, default: ""},
+  url: { type: String, default: ""},
+})
+
 const ProfileSchema = new mongoose.Schema({
   user_id: { type: String, required: true },
   userName: { type: String, required: true },
@@ -37,7 +42,10 @@ const ProfileSchema = new mongoose.Schema({
       { name: "Overwatch", ign: "", rank: "", stats: [] },
     ],
   },
-  socials: [{ type: String, required: false, minlength: 1, maxlength: 1000 }],
+  socials: {
+    type: [socialSchema]
+  }
+
 });
 
 const Profile = mongoose.model("Profile", ProfileSchema);

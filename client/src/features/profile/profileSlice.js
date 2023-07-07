@@ -81,7 +81,11 @@ export const linkOverwatch = createAsyncThunk(
   async ({ profileId, overwatchData }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await profileService.linkOverwatch(profileId, overwatchData, token);
+      return await profileService.linkOverwatch(
+        profileId,
+        overwatchData,
+        token
+      );
     } catch (error) {
       const message =
         (error.response &&
@@ -125,6 +129,7 @@ export const profileSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
+        console.log("1231231323", action.payload);
         state.isLoading = false;
         state.isSuccess = true;
         state.bio = action.payload.bio;
