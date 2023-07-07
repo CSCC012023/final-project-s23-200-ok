@@ -7,7 +7,8 @@ import Profile from "../models/Profile.js";
 //@access Private
 const createProfile = asyncHandler(async (req, res) => {
   // Check if this user already has a profile
-  const userHasProfile = await Profile.findOne({ user_id: req.user._id });
+  const user_idString = req.user._id.toString();
+  const userHasProfile = await Profile.findOne({ user_id: user_idString });
   
   if (userHasProfile) {
     res.status(400);
@@ -18,7 +19,7 @@ const createProfile = asyncHandler(async (req, res) => {
   try {
     const profile = await Profile.create({
       // User id and userName set in authentication middleware
-      user_id: req.user._id,
+      user_id: user_idString,
       userName: req.user.userName
     });
 
