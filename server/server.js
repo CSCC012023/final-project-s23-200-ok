@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import postRoutes from "./routes/postRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import LFGpostRoutes from "./routes/LFGpostRoutes.js";
+import LFGPostRoutes from "./routes/LFGPostRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postRoutes);
-app.use("/api/lfg", LFGpostRoutes);
+app.use("/api/lfg", LFGPostRoutes);
 
 app.use(errorHandler);
 
