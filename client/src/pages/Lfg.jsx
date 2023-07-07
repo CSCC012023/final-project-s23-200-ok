@@ -8,7 +8,7 @@ import {
   updateLFGPost,
   deleteLFGPost,
   getLFGPostFiltered,
-  reset,
+  reset
 } from "../features/lfg/lfgSlice";
 import LfgPost from "../components/LfgPost";
 import Spinner from "../components/Spinner";
@@ -27,7 +27,6 @@ const Lfg = () => {
   const handleDelete = (id) => {
     dispatch(deleteLFGPost(id));
   }
-
 
   const [isEditing, setIsEditing] = useState("");
 
@@ -51,7 +50,6 @@ const Lfg = () => {
       ...newFilter,
       [e.target.name]: e.target.value,
     });
-    // console.log("filter changed: " + e.target.value);
   };
 
   const handleInputChange = (e) => {
@@ -72,8 +70,6 @@ const Lfg = () => {
     }
 
     if (isEditing) {
-
-
       dispatch(
         updateLFGPost({
           postId: isEditing,
@@ -113,13 +109,9 @@ const Lfg = () => {
   };
 
   const handleFilter = (e) => {
-    // e.preventDefault();
-
     dispatch(
       getLFGPostFiltered(newFilter)
     );
-
-  
   }
 
   const filterReset = () => {

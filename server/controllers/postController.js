@@ -2,10 +2,11 @@ import asyncHandler from "express-async-handler";
 import Post from "../models/Post.js";
 
 //@route  POST api/posts
-//@desc   [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@desc   Create a new post
+//@access Private
 const createPost = asyncHandler(async (req, res) => {
   try {
+    // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
 
     // Create post
@@ -34,14 +35,14 @@ const createPost = asyncHandler(async (req, res) => {
 //@desc    TODO: Get all posts created by logged in user or their friends, all posts for now
 //@access  Private
 const getPosts = asyncHandler(async (req, res) => {
-  // Check for user
+  // Check for user (set in authentication middleware)
   if (!req.user) {
     res.status(400);
-    throw new Error("User not found");
+    throw new Error("Invalid user");
   }
 
   const posts = await Post.find({});
-  res.json(posts);
+  res.status(200).json(posts);
 });
 
 //@route   GET api/posts/:id

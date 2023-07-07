@@ -49,7 +49,7 @@ const getProfileNoId = asyncHandler(async (req, res) => {
     }
     else {
       res.status(400);
-      throw new Error("Profile not found");
+      throw new Error("Invalid user");
     }
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
@@ -98,7 +98,7 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
     }
     else {
       res.status(400);
-      throw new Error("Profile not found");
+      throw new Error("Invalid user");
     }
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
@@ -111,7 +111,6 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
 const updateProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { bio, profilePicture, name, socials, games } = req.body;
-  console.log(req.body.profilePicture);
   try {
     let profile = await Profile.findById(id);
     if (!profile) {

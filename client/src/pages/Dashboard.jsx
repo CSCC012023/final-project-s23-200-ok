@@ -44,7 +44,6 @@ function Dashboard() {
   };
 
   const handlePostSubmit = (e) => {
-
     e.preventDefault();
 
     dispatch(createPost({ ...newPost, user_id: user._id,

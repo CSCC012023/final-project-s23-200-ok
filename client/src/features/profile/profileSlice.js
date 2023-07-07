@@ -102,12 +102,7 @@ export const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
