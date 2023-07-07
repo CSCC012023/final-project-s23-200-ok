@@ -1,12 +1,22 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
 
-const Post = ({ post }) => {
+const Post = ({ post, handleDelete }) => {
+  const { user } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
   const calculateTime = (date) => {
     dayjs.extend(relativeTime).locale(localeEn);
     return dayjs(date).fromNow();
+  };
+
+
+  const handleDeletePost = () => {
+    handleDelete(post._id)
   };
 
   return (
@@ -20,6 +30,13 @@ const Post = ({ post }) => {
         <div className="post-text">
           <p>{post.text}</p>
         </div>
+      </div>
+      <div className="delete-post"> 
+
+      {post.user_id === user._id && (
+          // delete button
+          <button className='btn' onClick={handleDeletePost}>Delete</button>
+        )}
       </div>
     </div>
   );
