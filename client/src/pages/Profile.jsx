@@ -14,6 +14,7 @@ import OverwatchGameForm from "../components/OverwatchGameForm";
 import Spinner from "../components/Spinner";
 import { readAndCompressImage } from "browser-image-resizer";
 import Socials from "../components/Socials";
+import SocialLinkForm from "../components/SocialLinkForm";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -37,13 +38,17 @@ const Profile = () => {
   const [edit, setEdit] = useState(false);
   const [editBio, setEditBio] = useState(bio);
   const [editPicture, setEditPicture] = useState(profilePicture);
+  const [editSocials, setEditSocials] = useState(socials);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSocialsModalOpen, setIsSocialsModalOpen] = useState(false);
+  const [submittedLinks, setSubmittedLinks] = useState([]);
   const [modalGame, setModalGame] = useState("");
 
   const editProfile = () => {
     setEdit(true);
     setEditBio(bio);
     setEditPicture(profilePicture);
+    setEditSocials(socials);
   };
 
   const confirmEdit = () => {
@@ -52,7 +57,7 @@ const Profile = () => {
       profilePicture: editPicture,
       location: location,
       games: games,
-      socials: socials,
+      socials: submittedLinks,
     };
 
     dispatch(
@@ -93,6 +98,10 @@ const Profile = () => {
     });
   }
 
+  const handleSocialChange = (e) => {
+    setEditSocials(e.target.value);
+  }
+
   const handleModalGameChange = (game) => {
     setModalGame(game);
   };
@@ -101,8 +110,16 @@ const Profile = () => {
     setIsModalOpen(true);
   };
 
+  const openSocialsModal = () => {
+    setIsSocialsModalOpen(true);
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const closeSocialsModal = () => {
+    setIsSocialsModalOpen(false);
   };
 
   useEffect(() => {
@@ -177,8 +194,38 @@ const Profile = () => {
               bio
             )}
           </p>
-        </div>
+        </div> 
+
       </div>
+      <h2> </h2>
+      <div className="socials-section">
+        <h2>Socials</h2>
+          {/* <Socials /> */}
+          {edit ? (
+              <div className="update-socials-button">
+                <button className="edit-button" onClick={openSocialsModal}>Update Socials</button>
+              </div>
+          ) : (
+            socials
+          )}
+          <Modal
+            isOpen={isSocialsModalOpen}
+            onRequestClose={closeSocialsModal}
+            className="modal-dialog"
+            overlayClassName="modal-overlay"
+            // contentLabel="Update Socials">
+            >
+            {/* <SocialLinkForm socials={socials} submittedLinks={submittedLinks} setSubmittedLinks={setSubmittedLinks} closeSocialsModal={closeSocialsModal}></SocialLinkForm> */}
+            <button className="edit-button" onClick={closeSocialsModal}> 
+            Close
+            </button>
+          </Modal>
+        {/* socials && {socials.map((social, index) => (
+          <p key={index}>
+            {social.name}: <a href={social.url}>{social.url}</a>
+          </p>
+        ))} */}
+      </div>     
 
       {edit === false ? (
         <button className="edit-button" onClick={editProfile}>
@@ -270,15 +317,6 @@ const Profile = () => {
               </div>
             ))}
         </div>
-      </div>
-      <div className="socials-section">
-        <h2>Socials</h2>
-        <Socials />
-        {/* socials && {socials.map((social, index) => (
-          <p key={index}>
-            {social.name}: <a href={social.url}>{social.url}</a>
-          </p>
-        ))} */}
       </div>
     </div>
   );

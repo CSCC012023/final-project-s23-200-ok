@@ -130,6 +130,7 @@ export const profileSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
+        console.log("!23", action.payload);
         state.isLoading = false;
         state.isSuccess = true;
         state.bio = action.payload.bio;
