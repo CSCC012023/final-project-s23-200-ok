@@ -74,8 +74,8 @@ const deletePost = asyncHandler(async (req, res) => {
 });
 
 //@route   PATCH api/posts/:id/react
-//@desc    [DESCRIPTION OF WHAT ROUTE DOES]
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@desc    Add a like to the post
+//@access  Private
 const reactToPost = asyncHandler(async (req, res) => {
   try {
     const { reaction } = req.body; // Taking reaction type from the request body
@@ -83,7 +83,8 @@ const reactToPost = asyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      return res.status(404).json({ msg: "Post not found" });
+      res.status(404);
+      throw new Error("Post not found");
     }
 
     // Gettting the index of the reaction to update
@@ -101,12 +102,13 @@ const reactToPost = asyncHandler(async (req, res) => {
         post.likes[reactionIndex].reaction = reaction;
       }
     }
-
     await post.save();
-    return res.status(200).json({ msg: "Reaction successful" });
-  } catch (err) {
-    console.error(err.message);
-    return res.status(500).json({ msg: "Server error" });
+
+    return res.status(200).json(post);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while liking post");
   }
 });
 

@@ -10,10 +10,7 @@ const Reactions = ({ post }) => {
   const reactionsContainerRef = useRef(null);
 
   const handleReactionClick = (reaction) => {
-    console.log(reaction);
-    console.log(user._id);
-
-    dispatch(reactToPost({ postId: post._id, reaction: `"${reaction}"`, user: user._id }));
+    dispatch(reactToPost({postId: post._id, reaction}));
     setReactBtnClicked(false);
   }
 
