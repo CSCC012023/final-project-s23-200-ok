@@ -1,9 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { linkOverwatch } from "../features/profile/profileSlice";
 
 const OverwatchGameForm = ({ closeModal }) => {
+  // Get profileId from the profile slice
+  const { profileId } = useSelector((state) => state.profile);
+
   const [form, setForm] = useState({
     username: "",
     tagline: "",
@@ -20,7 +23,7 @@ const OverwatchGameForm = ({ closeModal }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(linkOverwatch({ profileId: "648a307ad4f77bff86785f2a", overwatchData: form }))
+    dispatch(linkOverwatch({ profileId: profileId, overwatchData: form }))
         .then((res) => {
             if (res.type === "profile/linkOverwatch/fulfilled") {
                 setMessage("Overwatch account linked successfully!");

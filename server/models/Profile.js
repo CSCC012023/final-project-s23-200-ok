@@ -8,15 +8,27 @@ const gameSchema = new mongoose.Schema({
 });
 
 const ProfileSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-    unique: true,
+  user_id: { type: String, required: true },
+  userName: { type: String, required: true },
+  bio: { 
+    type: String,
+    required: false,
+    minlength: 1,
+    maxlength: 1000,
+    default: "I love gaming!"
   },
-  bio: { type: String, required: false, minlength: 1, maxlength: 1000 },
-  profilePic: { type: String, required: false },
-  location: { type: String, required: false, minlength: 1, maxlength: 1000 },
+  profilePicture: { 
+    type: String,
+    required: false,
+    default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+  },
+  location: { 
+    type: String,
+    required: false,
+    minlength: 1,
+    maxlength: 1000,
+    default: "Earth"
+  },
   games: {
     type: [gameSchema],
     required: false,

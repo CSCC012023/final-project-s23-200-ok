@@ -2,34 +2,78 @@ import axios from "axios";
 
 const API_URL = "/api/profile/";
 
-// Get profile
-const getProfile = async (profileId) => {
-  const response = await axios.get(API_URL + profileId);
+// Create profile
+const createProfile = async (token) => {
+  const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.post(API_URL, {}, config);
+
   return response.data;
 };
 
-const linkValorant = async (profileId, valorantData) => {
+// Get profile
+const getProfile = async (token) => {
+  const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL, config);
+
+  return response.data;
+};
+
+// Link Valorant
+const linkValorant = async (profileId, valorantData, token) => {
+  const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+  };
+  
   const response = await axios.post(
     API_URL + profileId + "/games/valorant",
-    valorantData
+    valorantData,
+    config
   );
   return response.data;
 };
 
-const linkOverwatch = async (profileId, overwatchData) => {
+// Link Overwatch
+const linkOverwatch = async (profileId, overwatchData, token) => {
+  const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+  };
+
   const response = await axios.post(
     API_URL + profileId + "/games/overwatch",
-    overwatchData
+    overwatchData,
+    config
   );
   return response.data;
 };
 
-const updateProfile = async (profileId, profileData) => {
-  const response = await axios.put(API_URL + profileId, profileData);
+// Update profile
+const updateProfile = async (profileData, token) => {
+  const config = {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(API_URL, profileData, config);
   return response.data;
 };
 
 const profileService = {
+  createProfile,
   getProfile,
   linkValorant,
   linkOverwatch,

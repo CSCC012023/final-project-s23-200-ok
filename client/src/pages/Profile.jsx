@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import "../styles/Profile.css";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProfile,
-  reset,
   updateProfile,
+  reset
 } from "../features/profile/profileSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
@@ -16,18 +16,22 @@ import { readAndCompressImage } from "browser-image-resizer";
 import Socials from "../components/Socials";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Select necessary state from the store
+  // Get and destructure the auth slice
+  const { user } = useSelector((state) => state.auth);
+  // Get and destructure the profile slice
   const {
+    userName,
     bio,
-    name,
     profilePicture,
-    socials,
+    location,
     games,
-    isError,
-    message,
+    socials,    
     isLoading,
+    isError,
+    message    
   } = useSelector((state) => state.profile);
 
   const [edit, setEdit] = useState(false);
@@ -42,37 +46,20 @@ const Profile = () => {
     setEditPicture(profilePicture);
   };
 
-  const handleModalGameChange = (game) => {
-    setModalGame(game);
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const confirmEdit = () => {
     const profileData = {
       bio: editBio,
       profilePicture: editPicture,
-      name: name,
-      socials: socials,
+      location: location,
       games: games,
+      socials: socials,
     };
 
     dispatch(
-      updateProfile({ profileId: "648a307ad4f77bff86785f2a", profileData })
+      updateProfile({ profileData })
     );
     setEdit(false);
   };
-
-  useEffect(() => {
-    setEditBio(bio);
-    setEditPicture(profilePicture);
-  }, [bio, profilePicture]);
 
   const handleBioChange = (e) => {
     setEditBio(e.target.value);
@@ -92,11 +79,6 @@ const Profile = () => {
     setEditPicture(base64);
   };
 
-  useEffect(() => {
-    if (edit === true) {
-    }
-  }, [edit]);
-
   // convert image into base 64 format
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -111,14 +93,37 @@ const Profile = () => {
     });
   }
 
-  useEffect(() => {
-    dispatch(getProfile("648a307ad4f77bff86785f2a"));
+  const handleModalGameChange = (game) => {
+    setModalGame(game);
+  };
 
-    // Clear the state when the component unmounts
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+
+    //If no user is logged in redirect to the login page
+    if (!user) {
+      navigate("/login");
+    }
+
+    dispatch(getProfile());
+
+    setEditBio(bio);
+    setEditPicture(profilePicture);
+
     return () => {
       dispatch(reset());
-    };
-  }, [dispatch, isModalOpen]);
+    };  
+  }, [user, isError, message, navigate, dispatch, isModalOpen]);
 
   // Render an error message if there was an error
   if (isError) {
@@ -133,16 +138,15 @@ const Profile = () => {
     <div className="profile-container">
       <div className="pic-name-bio-section">
         <div className="profile-picture-section">
-          <img
-            src={
-              editPicture ||
-              "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            }
-            alt="Profile"
-            className="profile-picture"
-          />
           {edit ? (
             <>
+              <img
+                src={
+                  editPicture
+                }
+                alt="Profile"
+                className="profile-picture"
+              />
               <input
                 className="file-upload"
                 type="file"
@@ -150,12 +154,20 @@ const Profile = () => {
               />
             </>
           ) : (
-            <></>
+            <>
+              <img
+                src={
+                  profilePicture
+                }
+                alt="Profile"
+                className="profile-picture"
+              />
+            </>
           )}
         </div>
 
         <div className="name-bio-section">
-          <h1 className="name-section">name</h1>
+          <h1 className="name-section">{userName}</h1>
           <p className="bio-section">
             {edit ? (
               <div className="bio-input">
@@ -167,6 +179,16 @@ const Profile = () => {
           </p>
         </div>
       </div>
+
+      {edit === false ? (
+        <button className="edit-button" onClick={editProfile}>
+          Edit Profile
+        </button>
+      ) : (
+        <button className="edit-button" onClick={confirmEdit}>
+          Confirm
+        </button>
+      )}
 
       <button className="edit-button" onClick={openModal}>
         Link Account
@@ -258,16 +280,6 @@ const Profile = () => {
           </p>
         ))} */}
       </div>
-
-      {edit === false ? (
-        <button className="edit-button" onClick={editProfile}>
-          Edit Profile
-        </button>
-      ) : (
-        <button className="edit-button" onClick={confirmEdit}>
-          Confirm
-        </button>
-      )}
     </div>
   );
 };

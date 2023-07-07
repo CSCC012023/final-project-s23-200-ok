@@ -109,6 +109,7 @@ h3 {
     border-radius: 5px;
     margin-bottom: 10px;
     font-family: inherit;
+    resize: none;
 }
 
 .form-group label {
@@ -414,5 +415,138 @@ h3 {
 }
 
 
+.lfg-post {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid #ff6363;
+  color: #ff6363;
+  font-family: 'Poppins', sans-serif;
+  height: 120px;
+}
+
+.lfg-post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.lfg-post-header > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lfg-post-user-id {
+  font-weight: bold;
+}
+
+.lfg-post-status {
+  margin-left: auto;
+}
 
 
+.lfg-post-status-open {
+  color: #77c277;
+}
+
+.lfg-post-status-closed {
+  color: #ff6363;
+}
+
+.lfg-post-status-almost-full {
+  color: #ffe44d;
+}
+
+
+
+.lfg-post-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.edit-image {
+  width: 5px;
+  height: 5px;
+}
+
+.lfg-post-notes-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.lfg-post-notes {
+  color: #fff;
+}
+
+.lfg-post-game,
+.lfg-post-server,
+.lfg-post-players,
+.lfg-post-rank {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.lfg-post-game-icon,
+.lfg-post-server-icon,
+.lfg-post-players-icon,
+.lfg-post-rank-icon {
+  color: #ff6363;
+}
+
+.lfg-post-game,
+.lfg-post-server,
+.lfg-post-players,
+.lfg-post-rank {
+  color: #ff6363;
+  font-weight: 400;
+}
+
+.post-card {
+  background-color: #282a36;
+  margin: 20px auto;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid #333;
+  max-width: 600px; /* Adjust as needed */
+  width: 100%;
+}
+
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ff6363;
+}
+
+.post-user-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.post-date {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.post-body {
+  padding: 15px;
+}
+
+.post-image {
+  width: 25%;
+  height: auto;
+}
+
+.post-content {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
