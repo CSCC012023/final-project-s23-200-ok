@@ -8,8 +8,6 @@ const SocialLinkForm = ({ closeSocialsModal, submittedLinks, setSubmittedLinks }
         url: "",
     });
 
-    
-
     const handleFormChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value }); 
     };
