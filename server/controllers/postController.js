@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import Post from "../models/Post.js";
 
 //@route  POST api/posts
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
@@ -43,22 +44,16 @@ const getPosts = asyncHandler(async (req, res) => {
 //@route   GET api/posts/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getPost = asyncHandler(async (req, res) => {
-
-});
+const getPost = asyncHandler(async (req, res) => {});
 
 //@route PUT api/posts/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const updatePost = asyncHandler(async (req, res) => {
-    
-});
+const updatePost = asyncHandler(async (req, res) => {});
 
 //@route DELETE api/posts/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const deletePost = asyncHandler(async (req, res) => {
-    
-});
+const deletePost = asyncHandler(async (req, res) => {});
 
 export { createPost, getPosts, getPost, updatePost, deletePost };
