@@ -54,11 +54,11 @@ function Dashboard() {
     dispatch(createPost({ ...newPost, user_id: user._id,
       userName: user.userName, }));
 
-
     setNewPost({
       content: "",
       image: "",
     });
+
     };
 
   function convertToBase64(file) {
