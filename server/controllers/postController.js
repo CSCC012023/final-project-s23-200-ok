@@ -3,43 +3,47 @@ import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 //@route  POST api/posts
-//@desc   [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@desc   Create a new post
+//@access Private
 const createPost = asyncHandler(async (req, res) => {
   try {
-    const { user_id, userName, content, image } = req.body;
-    console.log("\n\n\n\nreq.body\n\n");
-    console.log(req.body);
+    // User id and userName set in authentication middleware
+    const { user_id, userName, text, image } = req.body;
 
-    const post = new Post({
+    // Create post
+    const post = await Post.create({
       user_id,
       userName,
-      content,
-      image,
-      date: new Date(),
-      likes: [],
+      text,
+      image
     });
 
-    const createdPost = await post.save();
-
-    if (!createdPost) {
+    if (post) {
+      res.status(201).json(post);
+    } 
+    else {
       res.status(400);
       throw new Error("Invalid post data");
-    } else {
-      res.status(201).json(createdPost);
     }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server Error While Creating Post" });
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while creating post");
   }
 });
 
 //@route   GET api/posts
-//@desc    [DESCRIPTION OF WHAT ROUTE DOES]
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@desc    TODO: Get all posts created by logged in user or their friends, all posts for now
+//@access  Private
 const getPosts = asyncHandler(async (req, res) => {
+  // Check for user (set in authentication middleware)
+  if (!req.user) {
+    res.status(400);
+    throw new Error("Invalid user");
+  }
+
   const posts = await Post.find({});
-  res.json(posts);
+  res.status(200).json(posts);
 });
 
 //@route   GET api/posts/:id
@@ -75,4 +79,10 @@ const deletePost = asyncHandler(async (req, res) => {
     
 });
 
-export { createPost, getPosts, getPost, updatePost, deletePost };
+export { 
+  createPost,
+  getPosts,
+  getPost,
+  updatePost,
+  deletePost
+};
