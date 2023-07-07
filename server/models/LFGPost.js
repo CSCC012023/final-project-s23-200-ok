@@ -4,7 +4,7 @@ const LFGPostSchema = new mongoose.Schema({
   user_id: { type: String, required: true },
   userName: { type: String, required: true },
   game: { type: String, required: true },
-  date: { type: Date, required: true },
+  date: { type: Date, default: Date.now },
   notes: { type: String, required: false, minlength: 1, maxlength: 1000 },
   server: { type: String, required: true },
   status: { type: String, required: true },

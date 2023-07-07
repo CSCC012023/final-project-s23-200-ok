@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPosts, createPost } from "../features/posts/postSlice";
+import { getPosts, createPost, deletePost } from "../features/posts/postSlice";
 import { readAndCompressImage } from "browser-image-resizer";
 import Spinner from "../components/Spinner";
 import Post from "../components/Post";
@@ -14,7 +14,7 @@ function Dashboard() {
   const { user } = useSelector((state) => state.auth);
 
   const [newPost, setNewPost] = useState({
-    content : "",
+    text : "",
     image : "",
   });
 
@@ -44,22 +44,21 @@ function Dashboard() {
   };
 
   const handlePostSubmit = (e) => {
-
     e.preventDefault();
-
-    console.log(newPost);
-    console.log(user._id);
-    console.log(user.userName);
 
     dispatch(createPost({ ...newPost, user_id: user._id,
       userName: user.userName, }));
 
     setNewPost({
-      content: "",
+      text: "",
       image: "",
     });
 
     };
+
+  const handleDelete = (id) => {
+    dispatch(deletePost(id));
+  }
 
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -93,9 +92,9 @@ function Dashboard() {
           <section className="create-post">
             <form onSubmit={handlePostSubmit} className="form-group">
               <textarea
-                name="content"
+                name="text"
                 placeholder="What's on your mind?"
-                value={newPost.content}
+                value={newPost.text}
                 onChange={handleInputChange}
                 required
               />
@@ -111,7 +110,7 @@ function Dashboard() {
           </section>
 
           {posts && posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <Post key={post._id} post={post} handleDelete={handleDelete}/>
           ))}
         </>
       ) : (
