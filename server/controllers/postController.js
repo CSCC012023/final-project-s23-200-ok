@@ -61,12 +61,14 @@ const updatePost = asyncHandler(async (req, res) => {});
 const deletePost = asyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id);
 
+    // the user is authorized to delete it. 
     if (post) {
       await post.deleteOne({ _id: req.params.id });
-      res.json({ message: "Post removed" });
-    } else {
+      res.json({ "_id": req.params.id });
+    } else { // post not available
       res.status(404);
       throw new Error("Post not found");
+
     }
     
 });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPosts, createPost } from "../features/posts/postSlice";
+import { getPosts, createPost, deletePost } from "../features/posts/postSlice";
 import { readAndCompressImage } from "browser-image-resizer";
 import Spinner from "../components/Spinner";
 import Post from "../components/Post";
@@ -56,6 +56,10 @@ function Dashboard() {
 
     };
 
+  const handleDelete = (id) => {
+    dispatch(deletePost(id));
+  }
+
   function convertToBase64(file) {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
@@ -106,7 +110,7 @@ function Dashboard() {
           </section>
 
           {posts && posts.map((post) => (
-            <Post key={post._id} post={post} />
+            <Post key={post._id} post={post} handleDelete={handleDelete}/>
           ))}
         </>
       ) : (
