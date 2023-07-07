@@ -1,5 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createLFGPost,
@@ -15,12 +16,18 @@ import Spinner from "../components/Spinner";
 import { getProfile } from "../features/profile/profileSlice";
 
 const Lfg = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { posts, isLoading, isError, message } = useSelector(
     (state) => state.lfg
   );
   const { user } = useSelector((state) => state.auth);
   const { games } = useSelector((state) => state.profile);
+
+  const handleDelete = (id) => {
+    dispatch(deleteLFGPost(id));
+  }
 
   console.log("games", games);
   console.log("valorant", games[0]);
@@ -132,10 +139,22 @@ const Lfg = () => {
   useEffect(() => {
     dispatch(getProfile());
     dispatch(getLFGPosts());
-
+    
+    return () => {
+      dispatch(reset());
+    }
   }, [dispatch]);
 
   useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+
+    //If no user is logged in redirect to the login page
+    if (!user) {
+      navigate("/login");
+    }
+
     if (isEditing) {
       posts.find((post) => post._id === isEditing && setNewPost(post));
     }
@@ -268,6 +287,7 @@ const Lfg = () => {
           post={post}
           setIsEditing={setIsEditing}
           isEditing={isEditing}
+          handleDelete={handleDelete}
         />
       ))}
     </div>

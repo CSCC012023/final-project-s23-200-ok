@@ -61,14 +61,14 @@ const linkOverwatch = async (profileId, overwatchData, token) => {
 };
 
 // Update profile
-const updateProfile = async (profileId, profileData, token) => {
+const updateProfile = async (profileData, token) => {
   const config = {
     headers: {
         Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.put(API_URL + profileId, profileData, config);
+  const response = await axios.put(API_URL, profileData, config);
   return response.data;
 };
 

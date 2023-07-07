@@ -18,7 +18,6 @@ function Header() {
       <div className="logo">
         <Link to="/">playbook</Link>
       </div>
-
       <ul>
         {user ? (
           <>

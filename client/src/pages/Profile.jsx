@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProfile,
-  reset,
   updateProfile,
+  reset
 } from "../features/profile/profileSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
@@ -23,7 +23,7 @@ const Profile = () => {
   const { user } = useSelector((state) => state.auth);
   // Get and destructure the profile slice
   const {
-    profileId,
+    userName,
     bio,
     profilePicture,
     location,
@@ -56,7 +56,7 @@ const Profile = () => {
     };
 
     dispatch(
-      updateProfile({ profileId: profileId, profileData })
+      updateProfile({ profileData })
     );
     setEdit(false);
   };
@@ -110,16 +110,19 @@ const Profile = () => {
       console.log(message);
     }
 
-    //If no user is logged in redirect to the dashboard
+    //If no user is logged in redirect to the login page
     if (!user) {
-      navigate("/");
+      navigate("/login");
     }
 
     dispatch(getProfile());
 
     setEditBio(bio);
     setEditPicture(profilePicture);
-  
+
+    return () => {
+      dispatch(reset());
+    };  
   }, [user, isError, message, navigate, dispatch, isModalOpen]);
 
   // Render an error message if there was an error
@@ -164,7 +167,7 @@ const Profile = () => {
         </div>
 
         <div className="name-bio-section">
-          <h1 className="name-section">name</h1>
+          <h1 className="name-section">{userName}</h1>
           <p className="bio-section">
             {edit ? (
               <div className="bio-input">

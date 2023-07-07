@@ -3,6 +3,7 @@ import profileService from "./profileService";
 
 const initialState = {
   profileId: null,
+  userName: "",
   bio: "",
   profilePicture: "",
   location: "",
@@ -39,10 +40,10 @@ export const getProfile = createAsyncThunk(
 // Update profile
 export const updateProfile = createAsyncThunk(
   "profile/updateProfile",
-  async ({ profileId, profileData }, thunkAPI) => {
+  async ({ profileData }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await profileService.updateProfile(profileId, profileData, token);
+      return await profileService.updateProfile(profileData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -97,7 +98,12 @@ export const profileSlice = createSlice({
   name: "profile",
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    reset: (state) => {
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.isError = false;
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -108,6 +114,7 @@ export const profileSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.profileId = action.payload._id;
+        state.userName = action.payload.userName;
         state.bio = action.payload.bio;
         state.profilePicture = action.payload.profilePicture;
         state.location = action.payload.location;

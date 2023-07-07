@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localeEn from 'dayjs/locale/en'
+import { deleteLFGPost } from '../features/lfg/lfgSlice'
 
-const LfgPost = ({ post, setIsEditing, isEditing }) => {
+const LfgPost = ({ post, setIsEditing, isEditing, handleDelete }) => {
     const { user } = useSelector((state) => state.auth);
     // for delete posts we can add allow the user to delete their own posts by checking if the user id matches the post user id
     // then we can dispatch the delete action
+    const dispatch = useDispatch();
 
+    const handleDeletePost = () => {
+      handleDelete(post._id)
+    };
+    
     const calculateTime = (date) => {
         dayjs.extend(relativeTime).locale(localeEn);
         return dayjs(date).fromNow();
@@ -33,15 +39,20 @@ const LfgPost = ({ post, setIsEditing, isEditing }) => {
         </div>
 
         {post.user_id === user._id && (
-            // edit button
-            <button className='btn' onClick={() => {
-                if (isEditing) {
-                    setIsEditing("")
-                } else {
-                    setIsEditing(post._id)
-                }
-            }}>Edit</button>
+          // edit button
+          <button className='btn' onClick={() => {
+              if (isEditing) {
+                  setIsEditing("")
+              } else {
+                  setIsEditing(post._id)
+              }
+          }}>Edit</button>
         )}
+        {post.user_id === user._id && (
+          // delete button
+          <button className='btn' onClick={handleDeletePost}>Delete</button>
+        )}
+
         </div>
       </div>
     );
