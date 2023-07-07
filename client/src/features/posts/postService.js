@@ -16,14 +16,8 @@ const createPost = async (postData, token) => {
 };
 
 // Get posts
-const getPosts = async (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
-  const response = await axios.get(API_URL, config);
+const getPosts = async () => {
+  const response = await axios.get(API_URL);
   return response.data;
 };
 

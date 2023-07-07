@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { getPosts, createPost } from "../features/posts/postSlice";
 import { readAndCompressImage } from "browser-image-resizer";
 import Spinner from "../components/Spinner";
@@ -12,6 +12,11 @@ function Dashboard() {
 
   const {posts, isLoading, isError, message} = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
+
+
+  useEffect(() => {
+    dispatch(getPosts());
+  }, [dispatch]);
 
   const [newPost, setNewPost] = useState({
     text : "",
@@ -69,53 +74,43 @@ function Dashboard() {
     });
   }
 
-  useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-
-    dispatch(getPosts());
-  }, [dispatch]);
-
   if (isLoading) {
     return <Spinner />;
   }
 
+  if (isError) {
+    return <div>Error: {message}</div>;
+  }
+
+
   return(
     <>
-      {user ? (
-        <>
-          <section className="create-post">
-            <form onSubmit={handlePostSubmit} className="form-group">
-              <textarea
-                name="text"
-                placeholder="What's on your mind?"
-                value={newPost.text}
-                onChange={handleInputChange}
-                required
-              />
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                className="file-upload"
-                onChange={handleImageChange}
-              />
-              <button type="submit" className="btn">Post</button>
-            </form>
-          </section>
-
-          {posts && posts.map((post) => (
-            <Post key={post._id} post={post} />
-          ))}
-        </>
-      ) : (
-        <section className="heading">
-          <p><u><Link to="/login">Login</Link></u> and see what your fellow gamers are up to!</p>
-          <p>OR</p>
-          <p><u><Link to="/register">Sign up</Link></u> to start using Playbook!</p>
+      <section className="heading">Dashboard</section>
+      {user && (
+        <section className="create-post">
+          <form onSubmit={handlePostSubmit} className="form-group">
+            <textarea
+              name="content"
+              placeholder="What's on your mind?"
+              value={newPost.content}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              className="file-upload"
+              onChange={handleImageChange}
+            />
+            <button type="submit" className="btn">Post</button>
+          </form>
         </section>
-      ) }
+      )}
+      {posts &&  posts.map((post) => (
+        <Post key={post._id} post={post} />
+      ))}
+
     </> 
   );
 }
