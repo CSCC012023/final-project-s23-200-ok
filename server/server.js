@@ -7,11 +7,25 @@ import profileRoutes from "./routes/profileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import LFGPostRoutes from "./routes/LFGPostRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+const httpServer = createServer(app);
+
+const io = new Server(httpServer);
+
+io.on("connection", (socket) => {
+  console.log(`New websocket connection: ${socket.id}`);
+
+  socket.on("disconnect", () => {
+    console.log(`Socket disconnected: ${socket.id}`);
+  });
+});
 
 app.use(cors());
 app.use(express.json());
@@ -37,6 +51,7 @@ app.use("/api/lfg", LFGPostRoutes);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+// Make sure to call httpServer.listen, NOT app.listen!
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
