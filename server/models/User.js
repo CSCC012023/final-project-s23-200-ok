@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const FriendSchema = new mongoose.Schema({
+  user_id: { type: String, required: true },
+  userName: { type: String, required: true },
+});
+
 const UserSchema = new mongoose.Schema({
   userName: {
     type: String,
@@ -19,7 +24,9 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
   },
   profile: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" },
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  friends: {
+    type: [FriendSchema]
+  },
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   lfgposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "LFGPost" }],
   picture: { type: String },

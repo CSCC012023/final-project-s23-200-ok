@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const gameSchema = new mongoose.Schema({
+const GameSchema = new mongoose.Schema({
   name: { type: String, default: "" },
   ign: { type: String, default: "" },
   rank: { type: String, default: "" },
   stats: [{ type: String, default: "" }],
 });
 
-const socialSchema = new mongoose.Schema({
+const SocialSchema = new mongoose.Schema({
   social: { type: String, default: ""},
   url: { type: String, default: ""},
 })
@@ -35,7 +35,7 @@ const ProfileSchema = new mongoose.Schema({
     default: "Earth"
   },
   games: {
-    type: [gameSchema],
+    type: [GameSchema],
     required: false,
     default: [
       { name: "Valorant", ign: "", rank: "", stats: [] },
@@ -43,7 +43,7 @@ const ProfileSchema = new mongoose.Schema({
     ],
   },
   socials: {
-    type: [socialSchema]
+    type: [SocialSchema]
   }
 
 });

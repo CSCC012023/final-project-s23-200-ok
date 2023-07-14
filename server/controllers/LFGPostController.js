@@ -153,4 +153,11 @@ const deleteLFGPost = asyncHandler(async (req, res) => {
   }
 });
 
-export { createLFGPost, getLFGPosts, getLFGPost, getLFGPostsFiltered, updateLFGPost, deleteLFGPost };
+export {
+  createLFGPost,
+  getLFGPosts,
+  getLFGPost,
+  getLFGPostsFiltered,
+  updateLFGPost,
+  deleteLFGPost
+};
