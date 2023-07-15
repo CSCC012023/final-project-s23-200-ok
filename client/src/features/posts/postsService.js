@@ -66,7 +66,7 @@ const reactToPost = async (postId, reaction, token) => {
   return response.data;
 }
 
-const postService = {
+const postsService = {
   createPost,
   getPosts,
   updatePost,
@@ -74,4 +74,4 @@ const postService = {
   reactToPost,
 };
 
-export default postService;
+export default postsService;
