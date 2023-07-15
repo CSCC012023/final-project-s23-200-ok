@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
 
-//@route POST api/friendrequests/:recipient_user_id
+//@route POST api/friendrequests/:recipientUserId
 //@desc Create a new friend request
 //@access Private
 const createFriendRequest = asyncHandler(async (req, res) => {
@@ -28,6 +28,8 @@ const createFriendRequest = asyncHandler(async (req, res) => {
 
   // Duplicate friend request
   const existingFriendRequest = await FriendRequest.findOne({
+    sender_user_id: sender._id,
+    sender_userName: sender.userName,
     recipient_user_id: recipient._id,
     recipient_userName: recipient.userName
   });
@@ -54,8 +56,8 @@ const createFriendRequest = asyncHandler(async (req, res) => {
   }
 });
 
-//@route PATCH api/friendrequests/:friendRequest_id
-//@desc Accept a friend request
+//@route PATCH api/friendrequests/:friendRequestId
+//@desc Respond to a friend request, befriend if accepted
 //@access Private
 const respondToFriendRequest = asyncHandler(async (req, res) => {
   const { newStatus } = req.body;
@@ -113,7 +115,29 @@ const respondToFriendRequest = asyncHandler(async (req, res) => {
   res.status(200).json(friendRequest);
 });
 
+//@route GET api/friendrequests/incoming
+//@desc Get all incoming friend requests
+//@access Private
+const getIncomingFriendRequests = asyncHandler(async (req, res) => {
+  // User id set in authentication middleware
+  const incomingFriendRequests = await FriendRequest.find({ recipient_user_id: req.user._id });
+
+  res.status(200).json(incomingFriendRequests);
+});
+
+//@route GET api/friendrequests/outgoing
+//@desc Get all outgoing friend requests
+//@access Private
+const getOutgoingFriendRequests = asyncHandler(async (req, res) => {
+  // User id set in authentication middleware
+  const outgoingFriendRequests = await FriendRequest.find({ sender_user_id: req.user._id });
+
+  res.status(200).json(outgoingFriendRequests);
+});
+
 export {
   createFriendRequest,
-  respondToFriendRequest
+  respondToFriendRequest,
+  getIncomingFriendRequests,
+  getOutgoingFriendRequests
 };
