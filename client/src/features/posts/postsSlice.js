@@ -9,9 +9,9 @@ const initialState = {
   message: "",
 };
 
-// create post
+// Create post
 export const createPost = createAsyncThunk(
-  "post/createPost",
+  "posts/createPost",
   async (postData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
@@ -28,9 +28,9 @@ export const createPost = createAsyncThunk(
   }
 );
 
-//get post
+// Get posts
 export const getPosts = createAsyncThunk(
-  "post/getPosts",
+  "posts/getPosts",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
@@ -47,9 +47,9 @@ export const getPosts = createAsyncThunk(
   }
 );
 
-//update post
+// Update post
 export const updatePost = createAsyncThunk(
-  "post/updatePost",
+  "posts/updatePost",
   async ({ postId, postData }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
@@ -66,22 +66,28 @@ export const updatePost = createAsyncThunk(
   }
 );
 
-//delete post
+// Delete post
 export const deletePost = createAsyncThunk(
-  "post/deletePost",
+  "posts/deletePost",
   async (postId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
       return await postsService.deletePost(postId, token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-//update reaction
+// React to post
 export const reactToPost = createAsyncThunk(
-  "post/reactToPost",
+  "posts/reactToPost",
   async ({ postId, reaction }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
@@ -207,7 +213,7 @@ export const postsSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-      });
+      })
   },
 });
 
