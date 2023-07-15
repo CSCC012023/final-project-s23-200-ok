@@ -100,7 +100,7 @@ export const reactToPost = createAsyncThunk(
 );
 
 export const postsSlice = createSlice({
-  name: "post",
+  name: "posts",
   initialState,
   reducers: {
     reset: (state) => initialState,
