@@ -91,7 +91,15 @@ const loginUser = asyncHandler(async (req, res) => {
 //@route   GET api/users
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getUsers = asyncHandler(async (req, res) => {});
+const getUsers = asyncHandler(async (req, res) => {
+  // if (!req.user) {
+  //   res.status(400);
+  //   throw new Error("Invalid user");
+  // }
+
+  const users = await User.find({});
+  res.status(200).json(users);
+});
 
 //@route   GET api/users/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
@@ -106,7 +114,19 @@ const updateUser = asyncHandler(async (req, res) => {});
 //@route DELETE api/users/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const deleteUser = asyncHandler(async (req, res) => {});
+const deleteUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    // the user is authorized to delete it. 
+    if (user) {
+      await user.deleteOne({ _id: req.params.id });
+      res.json({ "_id": req.params.id });
+    } else { // post not available
+      res.status(404);
+      throw new Error("User not found");
+
+    }
+});
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
