@@ -9,28 +9,33 @@ import mongoose from "mongoose";
 //@access Private
 const createPost = asyncHandler(async (req, res) => {
   try {
-<<<<<<< HEAD
-=======
 
-    // console.log(req);
->>>>>>> 707a7ac (display video complete)
     // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
-    const file = req.file.id;
-    console.log(req.file);
-    // const file_id = file.id
-    // console.log(file_id);
-    // console.log(file_id);
-    // console.log(file_id.substring(15,-2));
+    let file = req.file;
+    console.log(file);
 
     // Create post
-    const post = await Post.create({
-      user_id,
-      userName,
-      text,
-      image,
-      file,
-    });
+    let post;
+    if (req.file){
+      post = await Post.create({
+        user_id,
+        userName,
+        text,
+        image,
+        file:file.id 
+      });
+    }
+    else{
+      post = await Post.create({
+        user_id,
+        userName,
+        text,
+        image,
+        file
+      });
+    }
+
 
     if (post) {
       res.status(201).json(post);
