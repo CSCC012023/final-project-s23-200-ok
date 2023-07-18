@@ -29,6 +29,25 @@ export const createFriendRequest = createAsyncThunk(
   }
 );
 
+// Respond to friend request
+export const respondToFriendRequest = createAsyncThunk(
+  "friendRequests/respondToFriendRequest",
+  async ({ friendRequestId, newStatus }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await friendRequestsService.respondToFriendRequest(friendRequestId, newStatus, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Get incoming friend requests
 export const getIncomingFriendRequests = createAsyncThunk(
   "friendRequests/getIncomingFriendRequests",
@@ -75,6 +94,7 @@ export const friendRequestsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Create
       .addCase(createFriendRequest.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -91,7 +111,26 @@ export const friendRequestsSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-
+      // Respond to
+      .addCase(respondToFriendRequest.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(respondToFriendRequest.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.incomingFriendRequests = state.incomingFriendRequests.filter(friendRequest => {
+          return friendRequest._id !== action.payload._id;
+        });
+      })
+      .addCase(respondToFriendRequest.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // Get incoming
       .addCase(getIncomingFriendRequests.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -101,14 +140,16 @@ export const friendRequestsSlice = createSlice({
       .addCase(getIncomingFriendRequests.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.incomingFriendRequests = action.payload.reverse();
+        state.incomingFriendRequests = action.payload.filter(friendRequest => {
+          return friendRequest.status === "pending";
+        }).reverse();
       })
       .addCase(getIncomingFriendRequests.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
       })
-
+      // Get outgoing
       .addCase(getOutgoingFriendRequests.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -118,7 +159,9 @@ export const friendRequestsSlice = createSlice({
       .addCase(getOutgoingFriendRequests.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.outgoingFriendRequests = action.payload.reverse();
+        state.outgoingFriendRequests = action.payload.filter(friendRequest => {
+          return friendRequest.status === "pending";
+        }).reverse();
       })
       .addCase(getOutgoingFriendRequests.rejected, (state, action) => {
         state.isLoading = false;

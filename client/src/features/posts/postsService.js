@@ -62,8 +62,8 @@ const reactToPost = async (postId, reaction, token) => {
   const response = await axios.patch(
     API_URL + postId + "/react", 
     {"reaction": reaction},
-    config
-  );
+    config);
+    
   return response.data;
 }
 

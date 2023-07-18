@@ -202,7 +202,6 @@ const Profile = () => {
       <h2> </h2>
       <div className="socials-section">
         <h2>Socials</h2>
-        {/* <Socials /> */}
         {edit ? (
           <div className="update-socials-button">
             <button className="edit-button" onClick={openSocialsModal}>

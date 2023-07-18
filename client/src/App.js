@@ -4,10 +4,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-//import Profile from "./pages/MyProfile";
-import Profile from "./pages/Profile";
 import Login from "./pages/Login";
-import Lfg from "./pages/Lfg.jsx";
+import Profile from "./pages/Profile";
+import Lfg from "./pages/Lfg";
+import Notifications from "./pages/Notifications";
 
 function App() {
   return (
@@ -18,9 +18,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/lfg" element={<Lfg />} />
+            <Route path="/notifications" element={<Notifications />} />
           </Routes>
         </div>
       </Router>

@@ -15,6 +15,22 @@ const createFriendRequest = async (recipientUserId, token) => {
   return response.data;
 };
 
+// // Respond to friend request
+const respondToFriendRequest = async (friendRequestId, newStatus, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.patch(
+    API_URL + friendRequestId,
+    {"newStatus": newStatus},
+    config);
+
+  return response.data;
+};
+
 // Get incoming friend requests
 const getIncomingFriendRequests = async (token) => {
   const config = {
@@ -43,6 +59,7 @@ const getOutgoingFriendRequests = async (token) => {
 
 const friendRequestsService = {
   createFriendRequest,
+  respondToFriendRequest,
   getIncomingFriendRequests,
   getOutgoingFriendRequests
 };

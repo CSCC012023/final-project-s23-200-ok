@@ -244,7 +244,6 @@ h3 {
   overflow: hidden;
 }
 
-
 .edit-button {
   padding: 10px 20px;
   margin-bottom: 20px;
@@ -265,6 +264,12 @@ h3 {
   display: flex;
   flex-direction: horizontal;
 }
+
+.socials {
+  display: flex;
+  flex-direction: row;
+}
+
 .games-section {
   padding-bottom: 10px;
   width: 80%;
@@ -334,7 +339,6 @@ h3 {
   justify-self: center;
   gap: 10px;
 }
-
 
 .modal{
   position: absolute;
@@ -413,6 +417,11 @@ h3 {
   transition: background 0.3s ease;
 }
 
+.edit-image {
+  width: 5px;
+  height: 5px;
+}
+
 .lfg-post {
   display: flex;
   flex-direction: column;
@@ -447,24 +456,6 @@ h3 {
   margin-left: auto;
 }
 
-.reactionsContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #282a36;
-  margin-bottom: 10px;
-  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
-}
-
-.reactionsContainer > img {
-  width: 40px;
-  height: 40px;
-  margin-left: 5px;
-  margin-right: 5px;
-}
-
 .lfg-post-status-open {
   color: #77c277;
 }
@@ -481,10 +472,6 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-.edit-image {
-  width: 5px;
-  height: 5px;
 }
 
 .lfg-post-notes-container{
@@ -531,7 +518,6 @@ h3 {
   width: 100%;
 }
 
-
 .post-header {
   display: flex;
   justify-content: space-between;
@@ -564,7 +550,54 @@ h3 {
   font-size: 0.9rem;
 }
 
-.socials {
+.reactionsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #282a36;
+  margin-bottom: 10px;
+  box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.reactionsContainer > img {
+  width: 40px;
+  height: 40px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.friend-request {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.friend-request-user-details {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.friend-request-pfp {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+}
+
+.friend-request-pfp img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.friend-request-buttons {
+  display: flex;
+  gap: 8px;
 }

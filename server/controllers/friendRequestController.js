@@ -38,6 +38,18 @@ const createFriendRequest = asyncHandler(async (req, res) => {
     throw new Error("Cannot send another friend request to this recipient");
   }
 
+  // Incoming friend request from desired recipient
+  const incomingFriendRequest = await FriendRequest.findOne({
+    sender_user_id: recipient._id,
+    sender_userName: recipient.userName,
+    recipient_user_id: sender._id,
+    recipient_userName: sender.userName
+  });
+  if (incomingFriendRequest && incomingFriendRequest.status !== "rejected") {
+    res.status(400);
+    throw new Error("Respond to request from this recipient first");
+  }
+
   // Create friend request
   const friendRequest = await FriendRequest.create({
     // User id and userName set in authentication middleware
