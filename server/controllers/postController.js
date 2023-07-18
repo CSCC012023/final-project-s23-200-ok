@@ -13,6 +13,7 @@ const createPost = asyncHandler(async (req, res) => {
     // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
     let file = req.file;
+    console.log("is file comin? ");
     console.log(file);
 
     // Create post

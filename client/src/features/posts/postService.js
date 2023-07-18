@@ -11,10 +11,10 @@ const createPost = async (postData, token) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  // if (postData instanceof FormData){
-  //   config.headers["Content-Type"] = "multipart/form-data";
-  // }
-  console.log(config);
+  if (postData instanceof FormData){
+    config.headers["Content-Type"] = "multipart/form-data";
+  }
+  console.log(config.headers);
 
   const response = await axios.post(API_URL, postData, config);
 

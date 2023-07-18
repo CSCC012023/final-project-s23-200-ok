@@ -58,11 +58,13 @@ function Dashboard() {
         console.log(key+" "+newPost[key]);
         if (key === "file"){
           console.log(123);
-          form.append(key, file);
+          form.append("PostFile", file);
           continue;
         }
         form.append(key, newPost[key])
       }
+
+      // print form
       for (var pair of form.entries()) {
         console.log(pair[0]+ ', ' + pair[1]); 
     }
@@ -70,20 +72,21 @@ function Dashboard() {
     }
   };
 
-  const handlePostSubmit = (e) => {
+  const handlePostSubmit = async (e) => {
     e.preventDefault();
     console.log(newPost);
+    for (var pair of newPost?.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+  }
     var form = newPost;
     if (form instanceof FormData){
       // let form = newPost;
       form.append("user_id", user._id);
       form.append("userName", user.userName);
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
       
       const headers= {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjZkZTkwY2U4NzdkMDhkNTIxYjhkYSIsImlhdCI6MTY4OTg3ODQ1OCwiZXhwIjoxNjg5OTA4NDU4fQ.WFnDSS7DblMlDcQ8YVu_KEA9unkI9S5Rr0Ae1TKuzuo`
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjZkZTkwY2U4NzdkMDhkNTIxYjhkYSIsImlhdCI6MTY4OTcxMDY4OSwiZXhwIjoxNjg5NzQwNjg5fQ.IzlNkYkSYrtE8xCc6iX76BN1MD5gAYuIoCLZkBYm4sw`,
+
       }
 
       console.log("ready form");
@@ -91,27 +94,25 @@ function Dashboard() {
         console.log(pair[0]+ ', ' + pair[1]); 
     }
 
-      await fetch("http://localhost:5000/api/posts/", {
+      await fetch("http://localhost:3000/api/posts/", {
         method: 'post',
         headers,
         body: form,
       });
->>>>>>> 707a7ac (display video complete)
     }
     else{
       form = { ...form, user_id: user._id,userName: user.userName,}
     }
     console.log(form);
 
-=======
     }
     else{
       form = { ...form, user_id: user._id,userName: user.userName,}
     }
-    console.log(form);
-
->>>>>>> f6dc35d (prep for backend file)
     dispatch(createPost(form));
+
+
+    // dispatch(createPost(form));
 
     setNewPost({
       text: "",
