@@ -79,6 +79,7 @@ function Dashboard() {
       form.append("user_id", user._id);
       form.append("userName", user.userName);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       
       const headers= {
@@ -102,6 +103,14 @@ function Dashboard() {
     }
     console.log(form);
 
+=======
+    }
+    else{
+      form = { ...form, user_id: user._id,userName: user.userName,}
+    }
+    console.log(form);
+
+>>>>>>> f6dc35d (prep for backend file)
     dispatch(createPost(form));
 
     setNewPost({

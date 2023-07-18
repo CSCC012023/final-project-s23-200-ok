@@ -12,11 +12,15 @@ import { postFileUpload }from "../middleware/fileMiddleware.js"
 
 const router = Router(); 
 
+<<<<<<< HEAD
 router.route("/")
     .post(protect, postFileUpload().single('PostFile'), createPost)
     .get(
       protect, 
       getPosts);
+=======
+router.route("/").post(protect, postFileUpload().single('PostFile'), createPost).get(protect, getPosts);
+>>>>>>> f6dc35d (prep for backend file)
 router.route("/:id/react").patch(protect, reactToPost);
 router.route("/:id").delete(protect, deletePost);
 // router
