@@ -8,13 +8,20 @@ const createPost = asyncHandler(async (req, res) => {
   try {
     // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
+    const file = req.file.id;
+    console.log(req.file);
+    // const file_id = file.id
+    // console.log(file_id);
+    // console.log(file_id);
+    // console.log(file_id.substring(15,-2));
 
     // Create post
     const post = await Post.create({
       user_id,
       userName,
       text,
-      image
+      image,
+      file,
     });
 
     if (post) {

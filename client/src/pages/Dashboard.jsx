@@ -15,7 +15,7 @@ function Dashboard() {
 
   const [newPost, setNewPost] = useState({
     text : "",
-    image : "",
+    file : "",
   });
 
   const handleInputChange = (e) => {  
@@ -25,7 +25,8 @@ function Dashboard() {
     });
   };
 
-  const handleImageChange =  async (e) => {
+  const handleFileChange =  async (e) => {
+
     const file = e.target.files[0];
     const config = {
       quality: 0.5,
@@ -33,21 +34,57 @@ function Dashboard() {
       maxHeight: 500,
     };
 
-    const resizedImage = await readAndCompressImage(file, config);
+    const allowFiles=["image/jpeg", "image/png", "image/gif", "video/mp4"];
+    console.log(file.type);
+    if (!allowFiles.includes(file?.type)  ){
+        console.log("invalid type " + file.type);
+        return;
+    }
 
-    const base64 = await convertToBase64(resizedImage);
+    if (file.type.substring(0,5) === "image"){
+      const resizedImage = await readAndCompressImage(file, config);
 
-    setNewPost({
-      ...newPost,
-      image: base64,
-    });
+      const base64 = await convertToBase64(resizedImage);
+
+      setNewPost({
+        ...newPost,
+        image: base64,
+      });
+    }
+    else{
+      console.log(newPost);
+      let form = new FormData();
+      for (var key in newPost){
+        console.log(key+" "+newPost[key]);
+        if (key === "file"){
+          console.log(123);
+          form.append(key, file);
+          continue;
+        }
+        form.append(key, newPost[key])
+      }
+      for (var pair of form.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }
+      setNewPost(form);
+    }
   };
 
   const handlePostSubmit = (e) => {
     e.preventDefault();
+    console.log(newPost);
+    var form = newPost;
+    if (form instanceof FormData){
+      // let form = newPost;
+      form.append("user_id", user._id);
+      form.append("userName", user.userName);
+    }
+    else{
+      form = { ...form, user_id: user._id,userName: user.userName,}
+    }
+    console.log(form);
 
-    dispatch(createPost({ ...newPost, user_id: user._id,
-      userName: user.userName, }));
+    dispatch(createPost(form));
 
     setNewPost({
       text: "",
@@ -100,11 +137,13 @@ function Dashboard() {
               />
               <input
                 type="file"
-                name="image"
-                accept="image/*"
+                // name="image"
+                // accept="image/*"
                 className="file-upload"
-                onChange={handleImageChange}
+                onChange={handleFileChange}
               />
+
+
               <button type="submit" className="btn">Post</button>
             </form>
           </section>
@@ -113,6 +152,7 @@ function Dashboard() {
             <Post key={post._id} post={post} handleDelete={handleDelete}/>
           ))}
         </>
+        
       ) : (
         <section className="heading">
           <p><u><Link to="/login">Login</Link></u> and see what your fellow gamers are up to!</p>

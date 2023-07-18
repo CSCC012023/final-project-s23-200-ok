@@ -1,14 +1,20 @@
 import axios from "axios";
+import { Form } from "react-router-dom";
 
 const API_URL = "/api/posts/";
 
 // Create post
 const createPost = async (postData, token) => {
-  const config = {
+
+  var config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
+  // if (postData instanceof FormData){
+  //   config.headers["Content-Type"] = "multipart/form-data";
+  // }
+  console.log(config);
 
   const response = await axios.post(API_URL, postData, config);
 
