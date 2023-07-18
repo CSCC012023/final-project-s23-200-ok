@@ -1,12 +1,16 @@
 import React from "react";
 
-const FriendRequest = ({ friendRequest, isOutgoing, handleAccept, handleDecline }) => {
+const FriendRequest = ({ friendRequest, isOutgoing, handleAccept, handleDecline, handleCancel }) => {
   const handleAcceptRequest = () => {
     handleAccept(friendRequest._id);
   };
 
   const handleDeclineRequest = () => {
     handleDecline(friendRequest._id);
+  };
+
+  const handleCancelRequest = () => {
+    handleCancel(friendRequest._id);
   };
 
   return (
@@ -22,7 +26,7 @@ const FriendRequest = ({ friendRequest, isOutgoing, handleAccept, handleDecline 
       </div>
       <div className="friend-request-buttons">
         {isOutgoing ? (
-          <button className="btn">Cancel</button>
+          <button className="btn" onClick={handleCancelRequest}>Cancel</button>
         ) : (
           <>
             <button className="btn" onClick={handleAcceptRequest}>Accept</button>

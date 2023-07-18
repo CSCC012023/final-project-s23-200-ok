@@ -57,11 +57,27 @@ const getOutgoingFriendRequests = async (token) => {
   return response.data;
 };
 
+// Delete friend request
+const deleteFriendRequest = async (friendRequestId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.delete(
+    API_URL + friendRequestId,
+    config);
+
+  return response.data;
+};
+
 const friendRequestsService = {
   createFriendRequest,
   respondToFriendRequest,
   getIncomingFriendRequests,
-  getOutgoingFriendRequests
+  getOutgoingFriendRequests,
+  deleteFriendRequest
 };
 
 export default friendRequestsService;

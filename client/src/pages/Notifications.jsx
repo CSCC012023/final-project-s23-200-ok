@@ -8,6 +8,7 @@ import {
   respondToFriendRequest,
   getIncomingFriendRequests,
   getOutgoingFriendRequests,
+  deleteFriendRequest,
   reset
 } from "../features/friendRequests/friendRequestsSlice";
 
@@ -37,6 +38,10 @@ const Notifications = () => {
       friendRequestId: id,
       newStatus: "rejected"
     }));
+  };
+
+  const handleCancel = (id) => {
+    dispatch(deleteFriendRequest(id));
   };
 
   useEffect(() => {
@@ -82,6 +87,7 @@ const Notifications = () => {
           key={outgoingFriendRequest._id}
           friendRequest={outgoingFriendRequest}
           isOutgoing={true}
+          handleCancel={handleCancel}
         />
       ))}
     </>

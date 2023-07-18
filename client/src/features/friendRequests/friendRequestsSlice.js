@@ -86,6 +86,25 @@ export const getOutgoingFriendRequests = createAsyncThunk(
   }
 );
 
+// Delete friend request
+export const deleteFriendRequest = createAsyncThunk(
+  "friendRequests/deleteFriendRequest",
+  async (friendRequestId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await friendRequestsService.deleteFriendRequest(friendRequestId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const friendRequestsSlice = createSlice({
   name: "friendRequests",
   initialState,
@@ -164,6 +183,25 @@ export const friendRequestsSlice = createSlice({
         }).reverse();
       })
       .addCase(getOutgoingFriendRequests.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // Delete
+      .addCase(deleteFriendRequest.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(deleteFriendRequest.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.outgoingFriendRequests = state.outgoingFriendRequests.filter(friendRequest => {
+          return friendRequest._id !== action.payload._id;
+        });
+      })
+      .addCase(deleteFriendRequest.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

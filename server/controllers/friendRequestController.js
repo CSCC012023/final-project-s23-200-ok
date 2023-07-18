@@ -3,7 +3,7 @@ import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
 
 //@route POST api/friendrequests/:recipientUserId
-//@desc Create a new friend request
+//@desc Create (send) a friend request
 //@access Private
 const createFriendRequest = asyncHandler(async (req, res) => {
 
@@ -17,6 +17,7 @@ const createFriendRequest = asyncHandler(async (req, res) => {
   }
 
   // Recipient already friend or is the sender themselves
+  // User id set in authentication middleware
   const sender = await User.findById(req.user._id);
   if (sender._id.toString() === recipient._id.toString()
     || sender.friends.some(friend => {
@@ -147,9 +148,38 @@ const getOutgoingFriendRequests = asyncHandler(async (req, res) => {
   res.status(200).json(outgoingFriendRequests);
 });
 
+//@route DELETE api/friendrequests/:friendRequestId
+//@desc Delete (cancel) a friend request
+//@access Private
+const deleteFriendRequest = asyncHandler(async (req, res) => {
+  const friendRequest = await FriendRequest.findById(req.params.friendRequestId);
+
+  if (!friendRequest) {
+    res.status(404);
+    throw new Error("Friend request not found");
+  }
+
+  // Only allow the sender to delete/cancel the request (not any logged in user)
+  // User id set in authentication middleware
+  if (req.user._id.toString() !== friendRequest.sender_user_id) {
+    res.status(403);
+    throw new Error("You do not have permission to cancel this friend request");
+  }
+
+  // Friend request cannot be cancelled once it's been accepted/rejected
+  if (friendRequest.status !== "pending") {
+    res.status(400);
+    throw new Error("You can no longer cancel this friend request");
+  }
+
+  await friendRequest.deleteOne();
+  res.status(200).json({ "_id": req.params.friendRequestId });
+});
+
 export {
   createFriendRequest,
   respondToFriendRequest,
   getIncomingFriendRequests,
-  getOutgoingFriendRequests
+  getOutgoingFriendRequests,
+  deleteFriendRequest
 };
