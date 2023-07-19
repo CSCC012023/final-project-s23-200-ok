@@ -27,34 +27,20 @@ const ChatView = ({ chat }) => {
     divRef.current.scrollIntoView({ behavior: "instant" });
   };
 
-  // useEffect(() => {
-  //   dispatch(getMessages(chat._id));
-  //   setLocalMessages(messages);
-  //   socketRef.current = socket;
 
-  //   const firstUser = chat.user_ids_names[0];
-  //   const secondUser = chat.user_ids_names[1];
-  //   let user2Id;
+  const getOtherUser = () => {
+    const firstUser = chat.user_ids_names[0];
+    const secondUser = chat.user_ids_names[1];
+    let user2Id;
 
-  //   if (firstUser.user_id === user._id) {
-  //     user2Id = secondUser.user_id;
-  //   } else {
-  //     user2Id = firstUser.user_id;
-  //   }
+    if (firstUser.user_id === user._id) {
+      user2Id = secondUser.user_id;
+    } else {
+      user2Id = firstUser.user_id;
+    }
 
-  //   socketRef.current.emit("joinRoom", { user1Id: user._id, user2Id }); // Replace 'chat.otherUserId' with actual other user's ID
-
-  //   socketRef.current.on("receiveMessage", (message) => {
-  //     setLocalMessages((prevMessages) => [...prevMessages, message]);
-
-  //     scrollToBottom();
-  //   });
-
-  //   return () => {
-  //     socketRef.current.off("receiveMessage");
-  //   };
-
-  // }, [dispatch, chat, messages]);
+    return user2Id;
+  };
 
 
   useEffect(() => {
@@ -66,19 +52,13 @@ const ChatView = ({ chat }) => {
     scrollToBottom();
   }, [messages]);
 
+
+
   // socket useEffect
   useEffect(() => {
     socketRef.current = socket;
 
-    const firstUser = chat.user_ids_names[0];
-    const secondUser = chat.user_ids_names[1];
-    let user2Id;
-
-    if (firstUser.user_id === user._id) {
-      user2Id = secondUser.user_id;
-    } else {
-      user2Id = firstUser.user_id;
-    }
+    const user2Id = getOtherUser();
 
     socketRef.current.emit("joinRoom", { user1Id: user._id, user2Id });
 
@@ -106,15 +86,7 @@ const ChatView = ({ chat }) => {
       chatId: chat._id,
     };
 
-    const firstUser = chat.user_ids_names[0];
-    const secondUser = chat.user_ids_names[1];
-    let user2Id;
-
-    if (firstUser.user_id === user._id) {
-      user2Id = secondUser.user_id;
-    } else {
-      user2Id = firstUser.user_id;
-    }
+    const user2Id = getOtherUser();
 
     dispatch(createMessage({ message }));
 

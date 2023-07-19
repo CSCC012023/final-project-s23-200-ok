@@ -23,11 +23,28 @@ const Chat = () => {
     dispatch(createChat(chat));
   };
 
+  const getOtherUserName = (chat) => {
+    if (chat){
+    const firstUser = chat.user_ids_names[0];
+    const secondUser = chat.user_ids_names[1];
+    let user2;
+
+    if (firstUser.user_id === user._id) {
+      user2 = secondUser;
+    } else {
+      user2 = firstUser;
+    }
+
+    return user2.user_name;
+  }
+  };
+
 
 
   useEffect(() => {
     dispatch(getChats(user._id));
   }, [dispatch]);
+
 
   return (
     <>
@@ -41,7 +58,7 @@ const Chat = () => {
             className={`chat-item ${chat.id === selectedChat?.id ? 'active' : ''}`}
             onClick={() => setSelectedChat(chat)}
           >
-            {chat._id}
+            {getOtherUserName(chat)}
           </div>
         ))}
       </div>
