@@ -2,6 +2,9 @@ import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import Post from "../models/Post.js";
+import Profile from "../models/Profile.js";
+import LFGPost from "../models/LFGPost.js";
 
 //@route  POST api/users
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
@@ -89,9 +92,12 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 //@route   GET api/users
-//@desc    [DESCRIPTION OF WHAT ROUTE DOES]
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getUsers = asyncHandler(async (req, res) => {});
+//@desc    Get all users
+//@access  Private
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.status(200).json(users);
+});
 
 //@route   GET api/users/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
@@ -104,9 +110,24 @@ const getUser = asyncHandler(async (req, res) => {});
 const updateUser = asyncHandler(async (req, res) => {});
 
 //@route DELETE api/users/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const deleteUser = asyncHandler(async (req, res) => {});
+//@desc  Deletes the user account
+//@access Private
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  // the user is authorized to delete it. 
+  if (user) {
+    await Post.deleteMany({ user_id: req.params.id });
+    await LFGPost.deleteMany({ user_id: req.params.id });
+    await Profile.deleteOne({ user_id: req.params.id });
+    //await Profile.deleteOne({ user_id: req.params.id }) add this profile delete after logging out the user so not here
+    await user.deleteOne({ _id: req.params.id });
+    res.json({ message: "User has been deleted." });
+  } else { // user not available
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {

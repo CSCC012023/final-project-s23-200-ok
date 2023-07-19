@@ -136,8 +136,8 @@ const updateProfile = asyncHandler(async (req, res) => {
 });
 
 //@route DELETE api/profile/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@desc  Delete user profile
+//@access Private
 const deleteProfile = asyncHandler(async (req, res) => {});
 
 //@route POST api/profile/:id/games/valorant

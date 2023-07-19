@@ -6,6 +6,7 @@ import {
   updateProfile,
   reset,
 } from "../features/profile/profileSlice";
+import { deleteUserAccount, logout } from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
 import Modal from "react-modal";
@@ -13,7 +14,6 @@ import ValorantGameForm from "../components/ValorantGameForm";
 import OverwatchGameForm from "../components/OverwatchGameForm";
 import Spinner from "../components/Spinner";
 import { readAndCompressImage } from "browser-image-resizer";
-import Socials from "../components/Socials";
 import SocialLinkForm from "../components/SocialLinkForm";
 import InstagramIcon from "../assets/InstagramIcon.png";
 import TwitterIcon from "../assets/TwitterIcon.png";
@@ -45,10 +45,9 @@ const Profile = () => {
   const [editPicture, setEditPicture] = useState(profilePicture);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSocialsModalOpen, setIsSocialsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [submittedLinks, setSubmittedLinks] = useState(socials);
   const [modalGame, setModalGame] = useState("");
-
-
 
   const editProfile = () => {
     setEdit(true);
@@ -65,13 +64,9 @@ const Profile = () => {
       socials: submittedLinks,
     };
 
-  
-
     dispatch(updateProfile({ profileData }));
     setEdit(false);
   };
-
-
 
   const handleBioChange = (e) => {
     setEditBio(e.target.value);
@@ -109,6 +104,12 @@ const Profile = () => {
     setModalGame(game);
   };
 
+  const handleDeleteUser = async () => {
+    setIsDeleteModalOpen(false);
+    await dispatch(deleteUserAccount(user._id));
+    dispatch(logout());
+  }
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -117,6 +118,10 @@ const Profile = () => {
     setIsSocialsModalOpen(true);
   };
 
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  }
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -124,6 +129,10 @@ const Profile = () => {
   const closeSocialsModal = () => {
     setIsSocialsModalOpen(false);
   };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+  }
 
   useEffect(() => {
     if (isError) {
@@ -244,8 +253,7 @@ const Profile = () => {
                     <a
                       className="YouTube-link"
                       href={social.url}
-                      target="_blank"
->
+                      target="_blank">
                       <img src={YoutubeIcon} alt="Youtube" />
                     </a>
                   )}
@@ -267,7 +275,6 @@ const Profile = () => {
           onRequestClose={closeSocialsModal}
           className="modal-dialog"
           overlayClassName="modal-overlay"
-          // contentLabel="Update Socials">
         >
           <SocialLinkForm
             socials={socials}
@@ -370,6 +377,20 @@ const Profile = () => {
               </div>
             ))}
         </div>
+      </div>
+
+      <div>
+        <button className="edit-button" onClick={openDeleteModal}>Delete Account</button>
+        <Modal
+          isOpen={isDeleteModalOpen}
+          onRequestClose={closeDeleteModal}
+          className="modal"
+          overlayClassName="modal-overlay"
+        >
+          <h2>Are you sure?</h2>
+          <button className="edit-button" onClick={handleDeleteUser}>Yes</button>
+          <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>No</button>
+        </Modal>
       </div>
     </div>
   );
