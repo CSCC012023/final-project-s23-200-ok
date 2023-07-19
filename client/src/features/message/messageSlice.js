@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import messageService from "./messageService";
 
 const initialState = {
@@ -48,6 +48,8 @@ export const getMessages = createAsyncThunk(
   }
 );
 
+export const addMessage = createAction("message/addMessage");
+
 // Slice
 export const messageSlice = createSlice({
   name: "message",
@@ -70,7 +72,6 @@ export const messageSlice = createSlice({
       .addCase(createMessage.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.messages.push(action.payload);
       })
       .addCase(createMessage.rejected, (state, action) => {
         state.isLoading = false;
@@ -91,6 +92,11 @@ export const messageSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+
+      // addMessage
+      .addCase(addMessage, (state, action) => {
+        state.messages.push(action.payload);
       });
   },
 });

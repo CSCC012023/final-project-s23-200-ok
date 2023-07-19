@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
-import { getMessages, createMessage } from "../features/message/messageSlice";
+import { getMessages, createMessage, addMessage } from "../features/message/messageSlice";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
@@ -83,7 +83,7 @@ const ChatView = ({ chat }) => {
     socketRef.current.emit("joinRoom", { user1Id: user._id, user2Id });
 
     socketRef.current.on("receiveMessage", (message) => {
-      dispatch(getMessages(chat._id));
+      dispatch(addMessage(message));
 
       scrollToBottom();
     });
