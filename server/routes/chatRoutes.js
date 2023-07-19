@@ -11,3 +11,5 @@ const router = Router();
 
 router.route("/").get(protect, getChats).post(protect, createChat);
 router.route("/:id").get(protect, getChatById);
+
+export default router;

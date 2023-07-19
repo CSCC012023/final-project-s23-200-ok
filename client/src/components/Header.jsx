@@ -21,6 +21,12 @@ function Header() {
       <ul>
         {user ? (
           <>
+          <li>
+              {" "}
+              <div className="logo">
+                <Link to="/chat">Chat</Link>
+              </div>
+            </li>
             <li>
               <Link to="/profile">profile</Link>
             </li>
@@ -35,6 +41,7 @@ function Header() {
                 logout
               </button>
             </li>
+            
           </>
         ) : (
           <>
