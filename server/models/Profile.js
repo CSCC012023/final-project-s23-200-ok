@@ -15,14 +15,14 @@ const socialSchema = new mongoose.Schema({
 const ProfileSchema = new mongoose.Schema({
   user_id: { type: String, required: true },
   userName: { type: String, required: true },
-  bio: { 
+  bio: {
     type: String,
     required: false,
     minlength: 1,
     maxlength: 1000,
     default: "I love gaming!"
   },
-  profilePicture: { 
+  profilePicture: {
     type: String,
     required: false,
     default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"

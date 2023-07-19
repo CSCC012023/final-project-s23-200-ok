@@ -8,6 +8,7 @@ import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import Lfg from "./pages/Lfg.jsx";
+import Chat from "./pages/Chat";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/lfg" element={<Lfg />} />
+            <Route path="/chat" element={<Chat />} />
           </Routes>
         </div>
       </Router>
