@@ -14,6 +14,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = Router();
 
 router.route("/").post(protect, createProfile).get(protect, getProfileNoId).put(protect, updateProfileNoId);
+router.route("/:id").delete(protect, deleteProfile);
 //router.route("/:id").get(protect, getProfile).put(protect, updateProfile).delete(protect, deleteProfile);
 router.route("/:id/games/valorant").post(protect, linkValorant);
 router.route("/:id/games/overwatch").post(protect, linkOverwatch);
