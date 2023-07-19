@@ -105,9 +105,8 @@ const Profile = () => {
   };
 
   const handleDeleteUser = async () => {
-    console.log(user._id);  
-    dispatch(deleteUserAccount(user._id));
     setIsDeleteModalOpen(false);
+    await dispatch(deleteUserAccount(user._id));
     dispatch(logout());
   }
 

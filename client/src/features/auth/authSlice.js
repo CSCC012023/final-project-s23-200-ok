@@ -61,7 +61,7 @@ export const deleteUserAccount = createAsyncThunk("auth/delete", async (userId, 
       error.toString();
     return thunkAPI.rejectWithValue(message); // Return the error message if deletion fails
   }
-})
+});
 
 export const authSlice = createSlice({
   name: "auth",

@@ -31,25 +31,18 @@ const logout = async () => {
 
 // Delete user
 const deleteUser = async (userId, token) => {
-  console.log("delete user");
-  try {
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    console.log(config);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
-    const response = await axios.delete(API_URL + userId, config);
+  const response = await axios.delete(API_URL + userId, config);
 
-    localStorage.removeItem("user");
+  localStorage.removeItem("user");
 
-    return response.data;
-  } catch (error) {
-    // Handle error, e.g., display a message or log the error
-    console.error(error);
-    throw error;
-  }
+  return response.data;
+
 };
 
 const authService = {
