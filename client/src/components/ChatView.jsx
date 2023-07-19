@@ -12,7 +12,6 @@ const socket = io("http://localhost:5000");
 
 const ChatView = ({ chat }) => {
   const dispatch = useDispatch();
-  const [localMessages, setLocalMessages] = useState([]);
   const { messages } = useSelector((state) => state.message);
   const { user } = useSelector((state) => state.auth);
   const socketRef = useRef();
@@ -28,9 +27,47 @@ const ChatView = ({ chat }) => {
     divRef.current.scrollIntoView({ behavior: "instant" });
   };
 
+  // useEffect(() => {
+  //   dispatch(getMessages(chat._id));
+  //   setLocalMessages(messages);
+  //   socketRef.current = socket;
+
+  //   const firstUser = chat.user_ids_names[0];
+  //   const secondUser = chat.user_ids_names[1];
+  //   let user2Id;
+
+  //   if (firstUser.user_id === user._id) {
+  //     user2Id = secondUser.user_id;
+  //   } else {
+  //     user2Id = firstUser.user_id;
+  //   }
+
+  //   socketRef.current.emit("joinRoom", { user1Id: user._id, user2Id }); // Replace 'chat.otherUserId' with actual other user's ID
+
+  //   socketRef.current.on("receiveMessage", (message) => {
+  //     setLocalMessages((prevMessages) => [...prevMessages, message]);
+
+  //     scrollToBottom();
+  //   });
+
+  //   return () => {
+  //     socketRef.current.off("receiveMessage");
+  //   };
+
+  // }, [dispatch, chat, messages]);
+
+
   useEffect(() => {
     dispatch(getMessages(chat._id));
-    setLocalMessages(messages);
+  }, [dispatch, chat]);
+
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // socket useEffect
+  useEffect(() => {
     socketRef.current = socket;
 
     const firstUser = chat.user_ids_names[0];
@@ -43,10 +80,10 @@ const ChatView = ({ chat }) => {
       user2Id = firstUser.user_id;
     }
 
-    socketRef.current.emit("joinRoom", { user1Id: user._id, user2Id }); // Replace 'chat.otherUserId' with actual other user's ID
+    socketRef.current.emit("joinRoom", { user1Id: user._id, user2Id });
 
     socketRef.current.on("receiveMessage", (message) => {
-      setLocalMessages((prevMessages) => [...prevMessages, message]);
+      dispatch(getMessages(chat._id));
 
       scrollToBottom();
     });
@@ -54,15 +91,8 @@ const ChatView = ({ chat }) => {
     return () => {
       socketRef.current.off("receiveMessage");
     };
+  }, [chat, user]);
 
-  }, [dispatch, chat, messages]);
-
- 
-
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [localMessages]);
 
 
   const handleSendMessage = (event) => {
@@ -94,8 +124,6 @@ const ChatView = ({ chat }) => {
       message,
     });
 
-    setLocalMessages((prevMessages) => [...prevMessages, message]);
-
     event.target.elements.message.value = "";
 
   };
@@ -104,7 +132,7 @@ const ChatView = ({ chat }) => {
     <div className="chat-view-container">
       <h2 className="chat-header">{chat.name}</h2>
       <ul className="chat-view-list">
-        {localMessages.map((message, index) => (
+        {messages.map((message, index) => (
           <Message key={index} message={message} calculateTime={calculateTime} />
         ))}
         <div ref={divRef} />
