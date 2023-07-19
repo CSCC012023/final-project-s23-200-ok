@@ -24,17 +24,13 @@ const ChatView = ({ chat }) => {
   };
 
 
-  useEffect(() => {
-    dispatch(getMessages(chat._id));
-    setLocalMessages(messages);
-
-  }, [dispatch, chat]);
-
   const scrollToBottom = () => {
     divRef.current.scrollIntoView({ behavior: "instant" });
   };
 
   useEffect(() => {
+    dispatch(getMessages(chat._id));
+    setLocalMessages(messages);
     socketRef.current = socket;
 
     const firstUser = chat.user_ids_names[0];
@@ -59,12 +55,9 @@ const ChatView = ({ chat }) => {
       socketRef.current.off("receiveMessage");
     };
 
-  }, [chat]);
+  }, [dispatch, chat, messages]);
 
-  useEffect(() => {
-    setLocalMessages(messages);
-
-  }, [messages]);
+ 
 
 
   useEffect(() => {
@@ -100,6 +93,9 @@ const ChatView = ({ chat }) => {
       user2Id,
       message,
     });
+
+    setLocalMessages((prevMessages) => [...prevMessages, message]);
+
     event.target.elements.message.value = "";
 
   };
