@@ -66,9 +66,10 @@ const getFile = asyncHandler(async (req, res) => {
         console.log(1.25);
         console.log('Files: ', files);
       });
-    console.log(a);
+    // console.log(a);
+    
     console.log("here is b");
-    console.log(b);
+    console.log(b); 
 
     
     const readStream = gridBucket.openDownloadStream(id);

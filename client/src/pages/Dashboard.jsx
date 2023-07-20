@@ -78,6 +78,24 @@ function Dashboard() {
       // let form = newPost;
       form.append("user_id", user._id);
       form.append("userName", user.userName);
+<<<<<<< HEAD
+=======
+      
+      const headers= {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjZkZTkwY2U4NzdkMDhkNTIxYjhkYSIsImlhdCI6MTY4OTg3ODQ1OCwiZXhwIjoxNjg5OTA4NDU4fQ.WFnDSS7DblMlDcQ8YVu_KEA9unkI9S5Rr0Ae1TKuzuo`
+      }
+
+      console.log("ready form");
+      for (var pair of newPost?.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+    }
+
+      await fetch("http://localhost:5000/api/posts/", {
+        method: 'post',
+        headers,
+        body: form,
+      });
+>>>>>>> 707a7ac (display video complete)
     }
     else{
       form = { ...form, user_id: user._id,userName: user.userName,}

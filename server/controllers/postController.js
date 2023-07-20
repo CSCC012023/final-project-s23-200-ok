@@ -9,6 +9,11 @@ import mongoose from "mongoose";
 //@access Private
 const createPost = asyncHandler(async (req, res) => {
   try {
+<<<<<<< HEAD
+=======
+
+    // console.log(req);
+>>>>>>> 707a7ac (display video complete)
     // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
     const file = req.file.id;

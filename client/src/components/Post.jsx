@@ -9,6 +9,7 @@ import Reactions from "./Reactions";
 import { useEffect, useState } from "react";
 import { Player } from 'video-react'
 // import '~video-react/dist/video-react.css'; 
+import ReactPlayer from 'react-player'
 
 
 const Post = ({ post, handleDelete }) => {
@@ -29,7 +30,7 @@ const Post = ({ post, handleDelete }) => {
   const [videoUrl, setVideoUrl] = useState('');
 
   useEffect( ()=> {
-
+    console.log("useeffect called");
     const getVideo = async function () {
       if (post.file){
         let fileid =  post.file;
@@ -46,7 +47,7 @@ const Post = ({ post, handleDelete }) => {
     }
     getVideo();
 
-  })
+  }, [])
 
   return (
     <div className="post-card">
@@ -58,9 +59,15 @@ const Post = ({ post, handleDelete }) => {
         {post.image && <img src={post.image} alt="post" className="post-image" />}
         {post.file && 
 
-            <video controls>
-              <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
-            </video>
+
+              <ReactPlayer 
+                url={videoUrl} 
+                width='100%'
+                height='100%'
+                controls/>   
+            // <video controls>
+            //   <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
+            // </video>
           // <Player src={post.file} alt="post video" className="post-image">
           //   <source src={videoUrl} />
           // </Player>
