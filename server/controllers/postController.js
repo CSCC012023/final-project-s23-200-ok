@@ -10,6 +10,7 @@ import mongoose from "mongoose";
 const createPost = asyncHandler(async (req, res) => {
   try {
 
+    // console.log(req);
     // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
     let file = req.file;
