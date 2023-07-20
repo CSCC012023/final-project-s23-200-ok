@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const gameSchema = new mongoose.Schema({
+const GameSchema = new mongoose.Schema({
   name: { type: String, default: "" },
   ign: { type: String, default: "" },
   rank: { type: String, default: "" },
   stats: [{ type: String, default: "" }],
 });
 
-const socialSchema = new mongoose.Schema({
+const SocialSchema = new mongoose.Schema({
   social: { type: String, default: ""},
   url: { type: String, default: ""},
 })
@@ -15,14 +15,14 @@ const socialSchema = new mongoose.Schema({
 const ProfileSchema = new mongoose.Schema({
   user_id: { type: String, required: true },
   userName: { type: String, required: true },
-  bio: { 
+  bio: {
     type: String,
     required: false,
     minlength: 1,
     maxlength: 1000,
     default: "I love gaming!"
   },
-  profilePicture: { 
+  profilePicture: {
     type: String,
     required: false,
     default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -35,7 +35,7 @@ const ProfileSchema = new mongoose.Schema({
     default: "Earth"
   },
   games: {
-    type: [gameSchema],
+    type: [GameSchema],
     required: false,
     default: [
       { name: "Valorant", ign: "", rank: "", stats: [] },
@@ -43,7 +43,7 @@ const ProfileSchema = new mongoose.Schema({
     ],
   },
   socials: {
-    type: [socialSchema]
+    type: [SocialSchema]
   }
 
 });

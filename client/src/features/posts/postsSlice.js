@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import postService from "./postService";
+import postsService from "./postsService";
 
 const initialState = {
   posts: [],
@@ -9,13 +9,13 @@ const initialState = {
   message: "",
 };
 
-// create post
+// Create post
 export const createPost = createAsyncThunk(
-  "post/createPost",
+  "posts/createPost",
   async (postData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await postService.createPost(postData, token);
+      return await postsService.createPost(postData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -28,13 +28,13 @@ export const createPost = createAsyncThunk(
   }
 );
 
-//get post
+// Get posts
 export const getPosts = createAsyncThunk(
-  "post/getPosts",
+  "posts/getPosts",
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await postService.getPosts(token);
+      return await postsService.getPosts(token);
     } catch (error) {
       const message =
         (error.response &&
@@ -47,13 +47,13 @@ export const getPosts = createAsyncThunk(
   }
 );
 
-//update post
+// Update post
 export const updatePost = createAsyncThunk(
-  "post/updatePost",
+  "posts/updatePost",
   async ({ postId, postData }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await postService.updatePost(postId, postData, token);
+      return await postsService.updatePost(postId, postData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -66,26 +66,32 @@ export const updatePost = createAsyncThunk(
   }
 );
 
-//delete post
+// Delete post
 export const deletePost = createAsyncThunk(
-  "post/deletePost",
+  "posts/deletePost",
   async (postId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await postService.deletePost(postId, token);
+      return await postsService.deletePost(postId, token);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.message);
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-//update reaction
+// React to post
 export const reactToPost = createAsyncThunk(
-  "post/reactToPost",
+  "posts/reactToPost",
   async ({ postId, reaction }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      const response = await postService.reactToPost(postId, reaction, token);
+      const response = await postsService.reactToPost(postId, reaction, token);
       return response;
     } catch (error) {
       const message =
@@ -99,8 +105,8 @@ export const reactToPost = createAsyncThunk(
   }
 );
 
-export const postSlice = createSlice({
-  name: "post",
+export const postsSlice = createSlice({
+  name: "posts",
   initialState,
   reducers: {
     reset: (state) => initialState,
@@ -205,9 +211,9 @@ export const postSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-      });
+      })
   },
 });
 
-export const { reset } = postSlice.actions;
-export default postSlice.reducer;
+export const { reset } = postsSlice.actions;
+export default postsSlice.reducer;

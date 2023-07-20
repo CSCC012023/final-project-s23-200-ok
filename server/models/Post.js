@@ -9,11 +9,11 @@ const PostSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
       reaction: {
         type: String,
-        enum: ['like', 'heart', 'laugh', 'fire', 'sad', 'skull'],
+        enum: ["like", "heart", "laugh", "fire", "sad", "skull"],
         required: true,
       },
     },
