@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import Post from "../models/Post.js";
 import Profile from "../models/Profile.js";
 import LFGPost from "../models/LFGPost.js";
+import Chat from "../models/Chat.js";
+import Message from "../models/Message.js";
 
 //@route  POST api/users
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
@@ -149,8 +151,18 @@ const deleteUser = asyncHandler(async (req, res) => {
     await Post.deleteMany({ user_id: req.params.id });
     await LFGPost.deleteMany({ user_id: req.params.id });
     await Profile.deleteOne({ user_id: req.params.id });
-    //await Profile.deleteOne({ user_id: req.params.id }) add this profile delete after logging out the user so not here
-    await user.deleteOne({ _id: req.params.id });
+
+    const chats = await Chat.find({
+      "user_ids_names.user_id": req.params.id,
+    });
+
+    for (const chat of chats) {
+      await Message.deleteMany({ chat_id: chat._id });
+    }
+
+    await Chat.deleteMany({ "user_ids_names.user_id": req.params.id });
+    await User.deleteOne({ _id: req.params.id });
+
     res.json({ message: "User has been deleted." });
   } else { // user not available
     res.status(404);

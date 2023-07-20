@@ -54,6 +54,7 @@ const Profile = () => {
   // Linking games
   const [isGameModalOpen, setIsGameModalOpen] = useState(false);
   const [modalGame, setModalGame] = useState("");
+  const [inputText, setInputText] = useState("");
 
   // Sharing socials
   const [isSocialsModalOpen, setIsSocialsModalOpen] = useState(false);
@@ -141,10 +142,18 @@ const Profile = () => {
   }
 
   const handleDeleteUser = async () => {
-    setIsDeleteModalOpen(false);
-    await dispatch(deleteUserAccount(user._id));
-    dispatch(logout());
-  }
+    if(inputText != userName){
+      alert("Invalid username, try again.");
+    } else {
+      setIsDeleteModalOpen(false);
+      await dispatch(deleteUserAccount(user._id));
+      dispatch(logout());
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+  };
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -442,9 +451,14 @@ const Profile = () => {
           className="modal"
           overlayClassName="modal-overlay"
         >
-          <h2>Are you sure?</h2>
-          <button className="edit-button" onClick={handleDeleteUser}>Yes</button>
-          <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>No</button>
+          <h2>Please enter <b>{userName}</b> to delete your Playbook account:</h2>
+          <input
+                type="text"
+                value={inputText}
+                onChange={handleInputChange}
+          />
+          <button className="edit-button" onClick={handleDeleteUser}>Submit</button>
+          <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>Cancel</button>
         </Modal>
       </div>
     </div>
