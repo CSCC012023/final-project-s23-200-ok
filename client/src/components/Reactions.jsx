@@ -3,31 +3,17 @@ import { useDispatch } from "react-redux";
 import { reactionEmojis } from '../reactions/reactionEmojis';
 import { reactToPost } from "../features/posts/postSlice";
 
-const Reactions = ({ post, visible }) => {
+const Reactions = ({ post, visible, setUserReaction, userReaction }) => {
   const dispatch = useDispatch();
   const reactionsContainerRef = useRef(null);
 
   const handleReactionClick = (reaction) => {
     dispatch(reactToPost({postId: post._id, reaction}));
-  };
-/*
-  const handleOutsideClick = (e) => {
-    if (
-      reactionsContainerRef.current &&
-      !reactionsContainerRef.current.contains(e.target)
-    ) {
-      setReactBtnClicked(false);
-    }
+    if (reaction === userReaction) {
+      setUserReaction('React');
+    } else setUserReaction(reaction);
   };
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
-  }, []);
-*/
   return (
     <div>
       {visible && (
