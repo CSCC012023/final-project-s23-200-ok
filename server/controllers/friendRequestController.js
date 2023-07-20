@@ -47,7 +47,7 @@ const createFriendRequest = asyncHandler(async (req, res) => {
     recipient_user_id: sender._id,
     recipient_userName: sender.userName
   });
-  if (incomingFriendRequest && incomingFriendRequest.status !== "rejected") {
+  if (incomingFriendRequest && incomingFriendRequest.status === "pending") {
     res.status(400);
     throw new Error("Respond to request from this recipient first");
   }
