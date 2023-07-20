@@ -109,20 +109,10 @@ const Profile = () => {
     setInputText(e.target.value);
   };
 
-  const handleDeleteUser = async (e) => {
-    e.preventDefault();
-    var n = 0;
-    const inputParts = inputText.split(" ");
-    if (userName.endsWith(" ")) {
-      n = 1;
-    }
-    if (inputParts.length !== 2+n || inputParts[0].toLowerCase() !== "delete" || inputParts[1] !== userName.trim()) {
-      alert("Incorrect input format. Please enter 'delete' followed by your username exactly as it is.");
-    } else {
-      setIsDeleteModalOpen(false);
-      await dispatch(deleteUserAccount(user._id));
-      dispatch(logout());
-    }
+  const handleDeleteUser = async () => {
+    setIsDeleteModalOpen(false);
+    await dispatch(deleteUserAccount(user._id));
+    dispatch(logout());
   };
 
   const openModal = () => {
@@ -402,13 +392,13 @@ const Profile = () => {
           className="modal"
           overlayClassName="modal-overlay"
         >
-          <h2>Please enter 'delete username' to delete your Playbook account:</h2>
+          <h2>Please enter <b>{userName}</b> to delete your Playbook account:</h2>
           <input
                 type="text"
                 value={inputText}
                 onChange={handleInputChange}
           />
-          <button className="edit-button" onClick={handleDeleteUser}>Submit</button>
+          <button className="edit-button"  disabled={inputText !== userName} onClick={handleDeleteUser}>Submit</button>
           <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>Cancel</button>
         </Modal>
       </div>
