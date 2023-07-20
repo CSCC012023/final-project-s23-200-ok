@@ -109,6 +109,21 @@ const getUser = asyncHandler(async (req, res) => {});
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const updateUser = asyncHandler(async (req, res) => {});
 
+//@route   GET api/users/friends
+//@desc    Return list of logged in user's friends
+//@access  Private
+const getFriends = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.status(200).json(user.friends);
+});
+
+//@route   PATCH api/users/:friendUserId
+//@desc    Remove friend with user_id friendUserId from logged in user's friends array
+//@access  Private
+const unfriendFriend = asyncHandler(async (req, res) => {
+  
+});
+
 //@route DELETE api/users/:id
 //@desc  Deletes the user account
 //@access Private
@@ -141,5 +156,7 @@ export {
   getUsers,
   getUser,
   updateUser,
+  getFriends,
+  unfriendFriend,
   deleteUser
 };

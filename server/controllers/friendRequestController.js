@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
+import Profile from "../models/Profile.js";
 
 //@route POST api/friendrequests/:recipientUserId
 //@desc Create (send) a friend request
@@ -52,12 +53,17 @@ const createFriendRequest = asyncHandler(async (req, res) => {
   }
 
   // Create friend request
+  const sender_profilePicture = (await Profile.findOne({ user_id: sender._id })).profilePicture;
+  const recipient_profilePicture = (await Profile.findOne({ user_id: recipient._id })).profilePicture;
+
   const friendRequest = await FriendRequest.create({
     // User id and userName set in authentication middleware
     sender_user_id: req.user._id,
     sender_userName: req.user.userName,
+    sender_profilePicture: sender_profilePicture,
     recipient_user_id: recipient._id,
-    recipient_userName: recipient.userName
+    recipient_userName: recipient.userName,
+    recipient_profilePicture: recipient_profilePicture
   });
 
   if (friendRequest) {
@@ -114,12 +120,14 @@ const respondToFriendRequest = asyncHandler(async (req, res) => {
 
     sender.friends.push({
       user_id: recipient._id,
-      userName: recipient.userName
+      userName: recipient.userName,
+      profilePicture: friendRequest.recipient_profilePicture
     });
 
     recipient.friends.push({
       user_id: sender._id,
-      userName: sender.userName
+      userName: sender.userName,
+      profilePicture: friendRequest.sender_profilePicture
     });
 
     await sender.save();

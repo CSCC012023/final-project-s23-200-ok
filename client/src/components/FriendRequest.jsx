@@ -14,26 +14,41 @@ const FriendRequest = ({ friendRequest, isOutgoing, handleAccept, handleDecline,
   };
 
   return (
-    <div className={`friend-request ${isOutgoing ? "outgoing" : "incoming"}`}>
-      <div className="friend-request-user-details">
-        <img
-          className="friend-request-pfp"
-          src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-        />
-        <div className="friend-request-username">
-          Username
-        </div>
-      </div>
-      <div className="friend-request-buttons">
-        {isOutgoing ? (
-          <button className="btn" onClick={handleCancelRequest}>Cancel</button>
-        ) : (
-          <>
+    <div className={"friend-request"}>
+      {isOutgoing ? (
+        <>
+          <div className="friend-request-user-details">
+            <img
+              className="friend-request-pfp"
+              src={friendRequest.recipient_profilePicture}
+            />
+            <div className="friend-request-username">
+              {friendRequest.recipient_userName}
+            </div>
+          </div>
+
+          <div className="friend-request-buttons">
+            <button className="btn" onClick={handleCancelRequest}>Cancel</button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="friend-request-user-details">
+            <img
+              className="friend-request-pfp"
+              src={friendRequest.sender_profilePicture}
+            />
+            <div className="friend-request-username">
+              {friendRequest.sender_userName}
+            </div>
+          </div>
+
+          <div className="friend-request-buttons">
             <button className="btn" onClick={handleAcceptRequest}>Accept</button>
             <button className="btn" onClick={handleDeclineRequest}>Decline</button>
-          </>
-        )}
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

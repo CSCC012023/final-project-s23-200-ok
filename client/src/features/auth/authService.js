@@ -29,6 +29,19 @@ const logout = async () => {
   localStorage.removeItem("user");
 };
 
+// Get friends
+const getFriends = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "friends", config);
+
+  return response.data;
+};
+
 // Delete user
 const deleteUser = async (userId, token) => {
   const config = {
@@ -49,6 +62,7 @@ const authService = {
   register,
   login,
   logout,
+  getFriends,
   deleteUser,
 };
 

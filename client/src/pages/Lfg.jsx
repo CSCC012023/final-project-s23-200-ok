@@ -49,13 +49,11 @@ const Lfg = () => {
     else{
       res.sort((a,b) => a.date > b.date ? 1:-1)
     }
-    
-    console.log(res);
+
     return res;
   }
 
   const handleSort = ()=>{
-    console.log('sort clicked');
     if (latestSort){
       setLatestSort(0);
     }

@@ -3,6 +3,11 @@ import mongoose from "mongoose";
 const FriendSchema = new mongoose.Schema({
   user_id: { type: String, required: true, unique: true },
   userName: { type: String, required: true },
+  profilePicture: { 
+    type: String,
+    required: false,
+    default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+  }
 });
 
 const UserSchema = new mongoose.Schema({
