@@ -6,12 +6,18 @@ import {
   updateProfile,
   reset,
 } from "../features/profile/profileSlice";
-import { deleteUserAccount, logout } from "../features/auth/authSlice";
+import {
+  getFriends,
+  unfriend,
+  logout,
+  deleteUserAccount
+} from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
 import Modal from "react-modal";
 import ValorantGameForm from "../components/ValorantGameForm";
 import OverwatchGameForm from "../components/OverwatchGameForm";
+import Friend from "../components/Friend";
 import Spinner from "../components/Spinner";
 import { readAndCompressImage } from "browser-image-resizer";
 import SocialLinkForm from "../components/SocialLinkForm";
@@ -26,7 +32,7 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   // Get and destructure the auth slice
-  const { user } = useSelector((state) => state.auth);
+  const { user, friends } = useSelector((state) => state.auth);
   // Get and destructure the profile slice
   const {
     userName,
@@ -40,39 +46,30 @@ const Profile = () => {
     message,
   } = useSelector((state) => state.profile);
 
+  // Editing profile - bio, pfp
   const [edit, setEdit] = useState(false);
   const [editBio, setEditBio] = useState(bio);
   const [editPicture, setEditPicture] = useState(profilePicture);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSocialsModalOpen, setIsSocialsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [submittedLinks, setSubmittedLinks] = useState(socials);
+
+  // Linking games
+  const [isGameModalOpen, setIsGameModalOpen] = useState(false);
   const [modalGame, setModalGame] = useState("");
 
-  const editProfile = () => {
-    setEdit(true);
-    setEditBio(bio);
-    setEditPicture(profilePicture);
-  };
+  // Sharing socials
+  const [isSocialsModalOpen, setIsSocialsModalOpen] = useState(false);
+  const [submittedLinks, setSubmittedLinks] = useState(socials);
 
-  const confirmEdit = () => {
-    const profileData = {
-      bio: editBio,
-      profilePicture: editPicture,
-      location: location,
-      games: games,
-      socials: submittedLinks,
-    };
+  // Deleting profile 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-    dispatch(updateProfile({ profileData }));
-    setEdit(false);
-  };
+  // Viewing friends
+  const [isFriendsModalOpen, setIsFriendsModalOpen] = useState(false);
 
   const handleBioChange = (e) => {
     setEditBio(e.target.value);
   };
 
-  const handleChangePicture = async (e) => {
+  const handlePictureChange = async (e) => {
     const file = e.target.files[0];
     const config = {
       quality: 0.5,
@@ -100,9 +97,48 @@ const Profile = () => {
     });
   }
 
+  const editProfile = () => {
+    setEdit(true);
+    setEditBio(bio);
+    setEditPicture(profilePicture);
+  };
+
+  const confirmEdit = () => {
+    const profileData = {
+      bio: editBio,
+      profilePicture: editPicture,
+      location: location,
+      games: games,
+      socials: submittedLinks,
+    };
+
+    dispatch(updateProfile({ profileData }));
+    setEdit(false);
+  };
+
+  const openGameModal = () => {
+    setIsGameModalOpen(true);
+  };
+
   const handleModalGameChange = (game) => {
     setModalGame(game);
   };
+
+  const closeGameModal = () => {
+    setIsGameModalOpen(false);
+  };
+
+  const openSocialsModal = () => {
+    setIsSocialsModalOpen(true);
+  };
+
+  const closeSocialsModal = () => {
+    setIsSocialsModalOpen(false);
+  };
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  }
 
   const handleDeleteUser = async () => {
     setIsDeleteModalOpen(false);
@@ -110,29 +146,21 @@ const Profile = () => {
     dispatch(logout());
   }
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const openSocialsModal = () => {
-    setIsSocialsModalOpen(true);
-  };
-
-  const openDeleteModal = () => {
-    setIsDeleteModalOpen(true);
-  }
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeSocialsModal = () => {
-    setIsSocialsModalOpen(false);
-  };
-
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
   }
+
+  const openFriendsModal = () => {
+    setIsFriendsModalOpen(true);
+  };
+
+  const handleUnfriend = (id) => {
+    dispatch(unfriend(id));
+  };
+
+  const closeFriendsModal = () => {
+    setIsFriendsModalOpen(false);
+  };
 
   useEffect(() => {
     if (isError) {
@@ -145,6 +173,7 @@ const Profile = () => {
     }
 
     dispatch(getProfile());
+    dispatch(getFriends());
 
     setEditBio(bio);
     setEditPicture(profilePicture);
@@ -152,7 +181,7 @@ const Profile = () => {
     return () => {
       dispatch(reset());
     };
-  }, [user, isError, message, navigate, dispatch, isModalOpen]);
+  }, [user, isError, message, navigate, dispatch, isGameModalOpen]);
 
   useEffect(() => {
     setSubmittedLinks(socials);
@@ -181,7 +210,7 @@ const Profile = () => {
               <input
                 className="file-upload"
                 type="file"
-                onChange={handleChangePicture}
+                onChange={handlePictureChange}
               />
             </>
           ) : (
@@ -208,7 +237,6 @@ const Profile = () => {
           </p>
         </div>
       </div>
-      <h2> </h2>
       <div className="socials-section">
         <h2>Socials</h2>
         {edit ? (
@@ -297,47 +325,37 @@ const Profile = () => {
         </button>
       )}
 
-      <button className="edit-button" onClick={openModal}>
+      <div>
+        <button onClick={openFriendsModal}>
+          {friends.length} friend(s)
+        </button>
+        <Modal
+          isOpen={isFriendsModalOpen}
+          onRequestClose={closeFriendsModal}
+          className="modal"
+          overlayClassName="modal-overlay"
+          contentLabel="Friends">
+          <div className="modal-header">
+            <h2>Friends</h2>
+            <button className="edit-button" onClick={closeFriendsModal}>
+              Close
+            </button>
+          </div>
+          <>
+            {friends.map((friend) => (
+              <Friend 
+                key={friend._id}
+                friend={friend}
+                handleUnfriend={handleUnfriend}
+              />
+            ))}
+          </>
+        </Modal>
+      </div>
+
+      <button className="edit-button" onClick={openGameModal}>
         Link Account
       </button>
-
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        className="modal"
-        overlayClassName="modal-overlay"
-        contentLabel="Link Account">
-        <div className="modal-header">
-          <h2>Link Account</h2>
-          <button className="edit-button" onClick={closeModal}>
-            Close
-          </button>
-        </div>
-        <div className="game-options">
-          <div onClick={() => handleModalGameChange("Valorant")}>
-            <img
-              src={valorantLogos["Valorant"]}
-              alt="Valorant"
-              className="game-logo"
-            />
-            Valorant
-          </div>
-          <div onClick={() => handleModalGameChange("Overwatch")}>
-            <img
-              src={overwatchLogos["Overwatch"]}
-              alt="Overwatch"
-              className="game-logo"
-            />
-            Overwatch
-          </div>
-        </div>
-        {modalGame === "Valorant" ? (
-          <ValorantGameForm closeModal={closeModal} />
-        ) : null}
-        {modalGame === "Overwatch" ? (
-          <OverwatchGameForm closeModal={closeModal} />
-        ) : null}
-      </Modal>
 
       <div className="games-section">
         <h2>Games</h2>
@@ -377,6 +395,43 @@ const Profile = () => {
               </div>
             ))}
         </div>
+        <Modal
+          isOpen={isGameModalOpen}
+          onRequestClose={closeGameModal}
+          className="modal"
+          overlayClassName="modal-overlay"
+          contentLabel="Link Account">
+          <div className="modal-header">
+            <h2>Link Account</h2>
+            <button className="edit-button" onClick={closeGameModal}>
+              Close
+            </button>
+          </div>
+          <div className="game-options">
+            <div onClick={() => handleModalGameChange("Valorant")}>
+              <img
+                src={valorantLogos["Valorant"]}
+                alt="Valorant"
+                className="game-logo"
+              />
+              Valorant
+            </div>
+            <div onClick={() => handleModalGameChange("Overwatch")}>
+              <img
+                src={overwatchLogos["Overwatch"]}
+                alt="Overwatch"
+                className="game-logo"
+              />
+              Overwatch
+            </div>
+          </div>
+          {modalGame === "Valorant" ? (
+            <ValorantGameForm closeModal={closeGameModal} />
+          ) : null}
+          {modalGame === "Overwatch" ? (
+            <OverwatchGameForm closeModal={closeGameModal} />
+          ) : null}
+        </Modal>
       </div>
 
       <div>

@@ -31,6 +31,9 @@ function Header() {
               <Link to="/profile">profile</Link>
             </li>
             <li>
+              <Link to="/notifications">notifications</Link>
+            </li>
+            <li>
               {" "}
               <div className="logo">
                 <Link to="/lfg">Lfg</Link>

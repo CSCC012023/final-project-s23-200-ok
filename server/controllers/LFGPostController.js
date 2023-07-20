@@ -145,7 +145,7 @@ const deleteLFGPost = asyncHandler(async (req, res) => {
   const post = await LFGPost.findById(req.params.id);
 
   if (post) {
-    await post.deleteOne({ _id: req.params.id });
+    await post.deleteOne();
     res.status(200).json({ "_id": req.params.id });
   } else {
     res.status(404);
@@ -153,4 +153,11 @@ const deleteLFGPost = asyncHandler(async (req, res) => {
   }
 });
 
-export { createLFGPost, getLFGPosts, getLFGPost, getLFGPostsFiltered, updateLFGPost, deleteLFGPost };
+export {
+  createLFGPost,
+  getLFGPosts,
+  getLFGPost,
+  getLFGPostsFiltered,
+  updateLFGPost,
+  deleteLFGPost
+};

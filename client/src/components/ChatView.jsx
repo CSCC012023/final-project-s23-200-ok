@@ -8,7 +8,7 @@ import localeEn from "dayjs/locale/en";
 import Message from "../components/Message";
 
 
-const socket = io("http://localhost:5000");
+const socket = io("http://localhost:8080");
 
 const ChatView = ({ chat }) => {
   const dispatch = useDispatch();

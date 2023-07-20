@@ -8,6 +8,7 @@ import chatRoutes from "./routes/chatRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import LFGPostRoutes from "./routes/LFGPostRoutes.js";
+import friendRequestRoutes from "./routes/friendRequestRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -62,6 +63,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/lfg", LFGPostRoutes);
+app.use("/api/friendrequests", friendRequestRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
 

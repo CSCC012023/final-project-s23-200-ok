@@ -80,8 +80,7 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
   try {
     // User id set in authentication middleware
     const profile = await Profile.findOne({ user_id: req.user._id });
-    console.log(profile);
-    console.log(req.body);
+
     if (profile) {
       // Don't allow user to update user_id or userName
       const { bio, profilePicture, location, games, socials } = req.body;
@@ -123,8 +122,6 @@ const updateProfile = asyncHandler(async (req, res) => {
     profile.name = name;
     profile.socials = socials;
     profile.games = games;
-
-    console.log(profile);
 
     await profile.save();
 
