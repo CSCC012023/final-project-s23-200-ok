@@ -1,6 +1,9 @@
 import asyncHandler from "express-async-handler";
 import Post from "../models/Post.js";
 
+//temp removable
+import mongoose from "mongoose";
+
 //@route  POST api/posts
 //@desc   Create a new post
 //@access Private
@@ -48,8 +51,13 @@ const getPosts = asyncHandler(async (req, res) => {
     throw new Error("Invalid user");
   }
 
+  // res.status(200);
   const posts = await Post.find({});
-  res.status(200).json(posts);
+  for (let ind in posts){
+    console.log(posts[ind].file);
+    let fid = posts
+  }
+  // res.status(200).json(posts);
 });
 
 //@route   GET api/posts/:id

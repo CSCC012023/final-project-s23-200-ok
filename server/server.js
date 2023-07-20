@@ -6,6 +6,9 @@ import postRoutes from "./routes/postRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import LFGPostRoutes from "./routes/LFGPostRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js";
+import  Grid  from "gridfs-stream"
+import mongo from "mongodb"
 import errorHandler from "./middleware/errorMiddleware.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -27,6 +30,9 @@ io.on("connection", (socket) => {
   });
 });
 
+// new 
+global.mongoose = mongoose;
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,9 +41,26 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+export let gridBucket;
+export let gfs;
+export let gridfsBucket;
 const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
+  // console.log(mongoose.connection);
+  gridBucket = new mongoose.mongo.GridFSBucket(connection.db, {
+    bucketName: 'postFiles'})
+    console.log(gridBucket.s._filesCollection);
+
+  // let db = mongoose.connections[0].db;
+  // gridBucket = new mongoose.mongo.GridFSBucket(db, 
+  //   {bucketName: "postFiles"})
+  // gridBucket = Grid(connection.db, mongo);
+  // gfs = Grid(connection.db, mongo);
+  // gfs.collection('postFile');
+  // gridBucket.collection('postFile');
+  // console.log(gridBucket);
 });
 
 app.use(cors());
@@ -48,8 +71,11 @@ app.use("/api/users", userRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/lfg", LFGPostRoutes);
+app.use("/api/files", fileRoutes);
+
 
 app.use(errorHandler);
+
 
 // Make sure to call httpServer.listen, NOT app.listen!
 httpServer.listen(PORT, () => {
