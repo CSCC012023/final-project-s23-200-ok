@@ -48,6 +48,7 @@ const Profile = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [submittedLinks, setSubmittedLinks] = useState(socials);
   const [modalGame, setModalGame] = useState("");
+  const [inputText, setInputText] = useState("");
 
   const editProfile = () => {
     setEdit(true);
@@ -104,11 +105,25 @@ const Profile = () => {
     setModalGame(game);
   };
 
-  const handleDeleteUser = async () => {
-    setIsDeleteModalOpen(false);
-    await dispatch(deleteUserAccount(user._id));
-    dispatch(logout());
-  }
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+  };
+
+  const handleDeleteUser = async (e) => {
+    e.preventDefault();
+    var n = 0;
+    const inputParts = inputText.split(" ");
+    if (userName.endsWith(" ")) {
+      n = 1;
+    }
+    if (inputParts.length !== 2+n || inputParts[0].toLowerCase() !== "delete" || inputParts[1] !== userName.trim()) {
+      alert("Incorrect input format. Please enter 'delete' followed by your username exactly as it is.");
+    } else {
+      setIsDeleteModalOpen(false);
+      await dispatch(deleteUserAccount(user._id));
+      dispatch(logout());
+    }
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -387,9 +402,14 @@ const Profile = () => {
           className="modal"
           overlayClassName="modal-overlay"
         >
-          <h2>Are you sure?</h2>
-          <button className="edit-button" onClick={handleDeleteUser}>Yes</button>
-          <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>No</button>
+          <h2>Please enter 'delete username' to delete your Playbook account:</h2>
+          <input
+                type="text"
+                value={inputText}
+                onChange={handleInputChange}
+          />
+          <button className="edit-button" onClick={handleDeleteUser}>Submit</button>
+          <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>Cancel</button>
         </Modal>
       </div>
     </div>
