@@ -479,16 +479,28 @@ h3 {
   gap: 5px;
 }
 
-.reaction-value-hl {
+.like {
+  color: #1E90FF;
+}
+
+.heart {
+  color: #FF0080;
+}
+
+.laugh {
+  color: #FFD700;
+}
+
+.fire {
   color: #ff6363;
 }
 
-.reaction-value {
-  color: #fff;
+.sad {
+  color: #088F8F;
 }
 
-.reaction-highlight {
-  color: #ff6363;
+.skull {
+  color: #E5E4E2;
 }
 
 .lfg-post-status-open {

@@ -188,13 +188,11 @@ export const postSlice = createSlice({
 
       //update reaction
       .addCase(reactToPost.pending, (state) => {
-        state.isLoading = true;
         state.isSuccess = false;
         state.isError = false;
         state.message = "";
       })
       .addCase(reactToPost.fulfilled, (state, action) => {
-        state.isLoading = false;
         state.isSuccess = true;
         state.posts = state.posts.map((post) => {
           if (post._id === action.payload._id) {
