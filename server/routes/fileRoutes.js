@@ -3,6 +3,10 @@ import {
     getFile,
 } from "../controllers/fileController.js";
 import { protect } from "../middleware/authMiddleware.js";
+<<<<<<< HEAD
+=======
+import { postFileRetrieveAll, postFileRetrieveOne} from "../middleware/fileMiddleware.js"
+>>>>>>> f305e94 (video retrieve done, finally)
 // import { postFileUpload, postFileRetrieveAll }from "../middleware/fileMiddleware.js"
 
 const router = Router(); 

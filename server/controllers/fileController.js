@@ -66,16 +66,23 @@ const getFile = asyncHandler(async (req, res) => {
         console.log(1.25);
         console.log('Files: ', files);
       });
+<<<<<<< HEAD
     // console.log(a);
     
     console.log("here is b");
     console.log(b); 
+=======
+    console.log(a);
+    console.log("here is b");
+    console.log(b);
+>>>>>>> f305e94 (video retrieve done, finally)
 
     
     const readStream = gridBucket.openDownloadStream(id);
     console.log(1.5);
     readStream.pipe(res);
 
+<<<<<<< HEAD
     //   let file = await gridBucket.chunks.find({fileName: fileid});
     //   console.log(file);
       console.log(2);
@@ -99,18 +106,25 @@ const getFile = asyncHandler(async (req, res) => {
     //       }
     //   )
     // return res.status(200).send();
+=======
+
+>>>>>>> f305e94 (video retrieve done, finally)
       console.log(3);
 
 
   } catch (e){
       return res.status(400).send(e.message);
   }
+<<<<<<< HEAD
 //   const posts = await Post.find({});
 //   for (let ind in posts){
 //     console.log(posts[ind].file);
 //     let fid = posts
 //   }
   // res.status(200).json(posts);
+=======
+
+>>>>>>> f305e94 (video retrieve done, finally)
 });
 
 //@route   GET api/files/:id
