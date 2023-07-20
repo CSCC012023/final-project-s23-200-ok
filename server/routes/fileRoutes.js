@@ -3,7 +3,6 @@ import {
     getFile,
 } from "../controllers/fileController.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { postFileRetrieveAll, postFileRetrieveOne} from "../middleware/fileMiddleware.js"
 // import { postFileUpload, postFileRetrieveAll }from "../middleware/fileMiddleware.js"
 
 const router = Router(); 

@@ -8,7 +8,7 @@ import {
   reactToPost
 } from "../controllers/postController.js";
 import { protect } from "../middleware/authMiddleware.js";
-import { postFileUpload, postFileRetrieveAll }from "../middleware/fileMiddleware.js"
+import { postFileUpload }from "../middleware/fileMiddleware.js"
 
 const router = Router(); 
 
@@ -16,7 +16,6 @@ router.route("/")
     .post(protect, postFileUpload().single('PostFile'), createPost)
     .get(
       protect, 
-      postFileRetrieveAll, 
       getPosts);
 router.route("/:id/react").patch(protect, reactToPost);
 router.route("/:id").delete(protect, deletePost);

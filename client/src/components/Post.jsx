@@ -5,6 +5,12 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
 import Reactions from "./Reactions";
 
+// temp, change to redux stuff later i guess
+import { useEffect, useState } from "react";
+import { Player } from 'video-react'
+// import '~video-react/dist/video-react.css'; 
+
+
 const Post = ({ post, handleDelete }) => {
   const { user } = useSelector((state) => state.auth);
 
@@ -20,6 +26,28 @@ const Post = ({ post, handleDelete }) => {
     handleDelete(post._id)
   };
 
+  const [videoUrl, setVideoUrl] = useState('');
+
+  useEffect( ()=> {
+
+    const getVideo = async function () {
+      if (post.file){
+        let fileid =  post.file;
+        let url = "http://localhost:5000/api/files/".concat(fileid)
+        console.log(url)
+        let data = await fetch(url, 
+          {
+            method: 'GET',
+          }
+        );
+        console.log(data);
+        setVideoUrl(data.url)
+      }
+    }
+    getVideo();
+
+  })
+
   return (
     <div className="post-card">
       <div className="post-header">
@@ -28,6 +56,17 @@ const Post = ({ post, handleDelete }) => {
       </div>
       <div className="post-body">
         {post.image && <img src={post.image} alt="post" className="post-image" />}
+        {post.file && 
+
+            <video controls>
+              <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
+            </video>
+          // <Player src={post.file} alt="post video" className="post-image">
+          //   <source src={videoUrl} />
+          // </Player>
+          
+          }
+
         <div className="post-text">
           <p>{post.text}</p>
         </div>

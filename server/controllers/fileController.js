@@ -75,14 +75,41 @@ const getFile = asyncHandler(async (req, res) => {
     console.log(1.5);
     readStream.pipe(res);
 
-
+    //   let file = await gridBucket.chunks.find({fileName: fileid});
+    //   console.log(file);
+      console.log(2);
+    //   file.toArray(
+    //       (err, result)=> {
+    //           if (err){
+    //               console.log(1);
+    //               return res.status(400).send(err.message)
+    //           }
+    //           else{
+    //               if (!result || result.length==0){
+    //                   console.log(2);
+    //                   return res.status(201).send("File does not exists")
+    //               }
+    //               else {
+    //                   // gridBucket.openDownloadStream(ObjectId(fileid)).pipe(res)
+    //                   gridBucket.openDownloadStreamByName(fileid).pipe(res)
+                      
+    //               }
+    //           }
+    //       }
+    //   )
+    // return res.status(200).send();
       console.log(3);
 
 
   } catch (e){
       return res.status(400).send(e.message);
   }
-
+//   const posts = await Post.find({});
+//   for (let ind in posts){
+//     console.log(posts[ind].file);
+//     let fid = posts
+//   }
+  // res.status(200).json(posts);
 });
 
 //@route   GET api/files/:id
