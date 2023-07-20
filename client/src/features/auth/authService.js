@@ -42,6 +42,21 @@ const getFriends = async (token) => {
   return response.data;
 };
 
+// Unfriend
+const unfriend = async (friendUserId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  console.log(API_URL + friendUserId);
+
+  const response = await axios.patch(API_URL + friendUserId, {}, config);
+
+  return response.data;
+};
+
 // Delete user
 const deleteUser = async (userId, token) => {
   const config = {
@@ -55,7 +70,6 @@ const deleteUser = async (userId, token) => {
   localStorage.removeItem("user");
 
   return response.data;
-
 };
 
 const authService = {
@@ -63,6 +77,7 @@ const authService = {
   login,
   logout,
   getFriends,
+  unfriend,
   deleteUser,
 };
 

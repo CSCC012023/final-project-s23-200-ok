@@ -35,7 +35,7 @@ const createFriendRequest = asyncHandler(async (req, res) => {
     recipient_user_id: recipient._id,
     recipient_userName: recipient.userName
   });
-  if (existingFriendRequest && existingFriendRequest.status !== "rejected") {
+  if (existingFriendRequest && existingFriendRequest.status === "pending") {
     res.status(400);
     throw new Error("Cannot send another friend request to this recipient");
   }

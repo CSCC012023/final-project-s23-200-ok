@@ -8,6 +8,7 @@ import {
 } from "../features/profile/profileSlice";
 import {
   getFriends,
+  unfriend,
   logout,
   deleteUserAccount
 } from "../features/auth/authSlice";
@@ -154,7 +155,7 @@ const Profile = () => {
   };
 
   const handleUnfriend = (id) => {
-    
+    dispatch(unfriend(id));
   };
 
   const closeFriendsModal = () => {

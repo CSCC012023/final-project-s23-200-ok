@@ -59,18 +59,35 @@ export const logout = createAsyncThunk(
 export const getFriends = createAsyncThunk(
   "auth/getFriends",
   async (_, thunkAPI) => {
-    try {
-      const token = thunkAPI.getState().auth.user?.token;
-      return await authService.getFriends(token);
-    } catch (error) {
-      const message = (error.response &&
-        error.response.data &&
-        error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  });
+  try {
+    const token = thunkAPI.getState().auth.user?.token;
+    return await authService.getFriends(token);
+  } catch (error) {
+    const message = (error.response &&
+      error.response.data &&
+      error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
+
+// Unfriend
+export const unfriend = createAsyncThunk(
+  "auth/unFriend",
+  async (friendUserId, thunkAPI) => {
+  try {
+    const token = thunkAPI.getState().auth.user?.token;
+    return await authService.unfriend(friendUserId, token);
+  } catch (error) {
+    const message = (error.response &&
+      error.response.data &&
+      error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 // Delete user account
 export const deleteUserAccount = createAsyncThunk(
@@ -146,6 +163,20 @@ export const authSlice = createSlice({
         state.friends = action.payload;
       })
       .addCase(getFriends.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // unfriend
+      .addCase(unfriend.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(unfriend.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.friends = action.payload;
+      })
+      .addCase(unfriend.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

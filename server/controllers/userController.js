@@ -121,7 +121,21 @@ const getFriends = asyncHandler(async (req, res) => {
 //@desc    Remove friend with user_id friendUserId from logged in user's friends array
 //@access  Private
 const unfriendFriend = asyncHandler(async (req, res) => {
-  
+  // No such friend
+  const friend = await User.findById(req.params.friendUserId);
+  if (!friend) {
+    res.status(404);
+    throw new Error("Friend not found");
+  }
+
+  const user = await User.findById(req.user._id);
+  user.friends = user.friends.filter(friend => friend.user_id.toString() !== req.params.friendUserId);
+  user.save();
+
+  friend.friends = friend.friends.filter(friend => friend.user_id.toString() !== user._id.toString());
+  friend.save();
+
+  res.status(200).json(user.friends);
 });
 
 //@route DELETE api/users/:id

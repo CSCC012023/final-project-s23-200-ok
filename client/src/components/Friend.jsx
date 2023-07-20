@@ -2,7 +2,7 @@ import React from "react";
 
 const Friend = ({ friend, handleUnfriend }) => {
   const handleUnfriendFriend = () => {
-    handleUnfriend(friend._id);
+    handleUnfriend(friend.user_id);
   };
 
   return (
