@@ -9,7 +9,10 @@ import Reactions from "./Reactions";
 import { useEffect, useState } from "react";
 import { Player } from 'video-react'
 // import '~video-react/dist/video-react.css'; 
+<<<<<<< HEAD
 import ReactPlayer from 'react-player'
+=======
+>>>>>>> e369e78 (connect frontned with video stream)
 
 
 const Post = ({ post, handleDelete }) => {
@@ -30,7 +33,11 @@ const Post = ({ post, handleDelete }) => {
   const [videoUrl, setVideoUrl] = useState('');
 
   useEffect( ()=> {
+<<<<<<< HEAD
     console.log("useeffect called");
+=======
+
+>>>>>>> e369e78 (connect frontned with video stream)
     const getVideo = async function () {
       if (post.file){
         let fileid =  post.file;
@@ -47,7 +54,11 @@ const Post = ({ post, handleDelete }) => {
     }
     getVideo();
 
+<<<<<<< HEAD
   }, [])
+=======
+  })
+>>>>>>> e369e78 (connect frontned with video stream)
 
   return (
     <div className="post-card">
@@ -59,6 +70,7 @@ const Post = ({ post, handleDelete }) => {
         {post.image && <img src={post.image} alt="post" className="post-image" />}
         {post.file && 
 
+<<<<<<< HEAD
 
               <ReactPlayer 
                 url={videoUrl} 
@@ -68,6 +80,11 @@ const Post = ({ post, handleDelete }) => {
             // <video controls>
             //   <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
             // </video>
+=======
+            <video controls>
+              <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
+            </video>
+>>>>>>> e369e78 (connect frontned with video stream)
           // <Player src={post.file} alt="post video" className="post-image">
           //   <source src={videoUrl} />
           // </Player>

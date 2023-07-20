@@ -83,6 +83,9 @@ const getFile = asyncHandler(async (req, res) => {
     readStream.pipe(res);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e369e78 (connect frontned with video stream)
     //   let file = await gridBucket.chunks.find({fileName: fileid});
     //   console.log(file);
       console.log(2);
@@ -106,9 +109,12 @@ const getFile = asyncHandler(async (req, res) => {
     //       }
     //   )
     // return res.status(200).send();
+<<<<<<< HEAD
 =======
 
 >>>>>>> f305e94 (video retrieve done, finally)
+=======
+>>>>>>> e369e78 (connect frontned with video stream)
       console.log(3);
 
 
@@ -116,15 +122,21 @@ const getFile = asyncHandler(async (req, res) => {
       return res.status(400).send(e.message);
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e369e78 (connect frontned with video stream)
 //   const posts = await Post.find({});
 //   for (let ind in posts){
 //     console.log(posts[ind].file);
 //     let fid = posts
 //   }
   // res.status(200).json(posts);
+<<<<<<< HEAD
 =======
 
 >>>>>>> f305e94 (video retrieve done, finally)
+=======
+>>>>>>> e369e78 (connect frontned with video stream)
 });
 
 //@route   GET api/files/:id

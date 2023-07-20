@@ -64,11 +64,7 @@ const getPosts = asyncHandler(async (req, res) => {
 
   // res.status(200);
   const posts = await Post.find({});
-  for (let ind in posts){
-    console.log(posts[ind].file);
-    let fid = posts
-  }
-  // res.status(200).json(posts);
+  res.status(200).json(posts);
 });
 
 //@route   GET api/posts/:id
