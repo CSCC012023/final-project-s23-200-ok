@@ -30,19 +30,18 @@ const Post = ({ post, handleDelete }) => {
       skull: 0
     };
 
-    const checkUserReaction = (i) => {
-      if (post.likes[i].user.toString() === user._id) {
-        setUserReaction(post.likes[i].reaction);
+    const checkUserReaction = (usrReaction) => {
+      if (usrReaction.user.toString() === user._id) {
+        setUserReaction(usrReaction.reaction);
       }
     };
 
-    for (var i = 0; i < post.likes.length; i++) {
-      var reaction = post.likes[i].reaction;
-      reactionCount[reaction]++;
+    post.likes.forEach((usrReaction) => {
+      reactionCount[usrReaction.reaction]++;
       if (userReaction === '') {
-        checkUserReaction(i);
+        checkUserReaction(usrReaction);
       }
-    }
+    });
 
     return reactionCount;
   }, [post, user, userReaction]);
@@ -55,25 +54,40 @@ const Post = ({ post, handleDelete }) => {
     }
   };
 
+  const checkUserReacted = (reaction) => {
+    if (reaction === userReaction) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const generateReactionCount = () => {
     const reactions = ['like', 'heart', 'laugh', 'fire', 'sad', 'skull'];
-
-    const checkUserReaction = (reaction) => {
-      if (reaction === userReaction) {
-        return true;
-      } else {
-        return false;
-      }
-    };
 
     const reactionElements = reactions.map(reaction => (
       <div key={reaction} className={"reaction-count-container"}>
         <img src={reactionEmojis[reaction]} alt={reaction} />
-        <span className={`${checkUserReaction(reaction) ? 'reaction-value-hl' : 'reaction-value'}`}>{reactionCounter[reaction]}</span>
+        <span className={`${checkUserReacted(reaction) ? reaction : 'reaction-value'}`}>
+          {reactionCounter[reaction]}
+        </span>
       </div>
     ));
   
     return reactionElements;
+  };
+
+  const reactButtonContents = () => {
+    if (userReaction === '') {
+      return <button className='btn' onClick={() => handleReactionButtonClick()}>React</button>;
+    } else {
+      const buttonElement = (
+        <button className='btn' onClick={() => handleReactionButtonClick()}>
+          {userReaction}
+        </button>
+      );
+      return buttonElement;
+    }
   };
 
   return (
@@ -94,14 +108,15 @@ const Post = ({ post, handleDelete }) => {
       </div>
 
       <div className="post-footer"> 
-        <button className='btn' onClick={() => handleReactionButtonClick()}>React</button>
-        <Reactions key={post._id} post={post} visible={reactBtnClicked} />
+        {reactButtonContents()}
         {post.user_id === user._id && (
           // delete button
           <button className='btn' onClick={handleDeletePost}>Delete</button>
         )}
       </div>
+      <Reactions key={post._id} post={post} visible={reactBtnClicked} setUserReaction={setUserReaction} userReaction={userReaction} />
     </div>
   );
 };
+
 export default Post;
