@@ -46,6 +46,8 @@ function Register() {
 
     if (password.toString() !== confirmPassword.toString()) {
       toast.error("Passwords do not match");
+    } else if (userName.length > 20){
+      toast.error("username is too long, please use less than 20 characters")
     }
     else {
       const userData = {
@@ -53,7 +55,6 @@ function Register() {
         email,
         password
       };
-
       dispatch(register(userData));
     }
   };

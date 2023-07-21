@@ -80,8 +80,7 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
   try {
     // User id set in authentication middleware
     const profile = await Profile.findOne({ user_id: req.user._id });
-    console.log(profile);
-    console.log(req.body);
+
     if (profile) {
       // Don't allow user to update user_id or userName
       const { bio, profilePicture, location, games, socials } = req.body;
@@ -124,8 +123,6 @@ const updateProfile = asyncHandler(async (req, res) => {
     profile.socials = socials;
     profile.games = games;
 
-    console.log(profile);
-
     await profile.save();
 
     return res.status(200).json(profile);
@@ -136,8 +133,8 @@ const updateProfile = asyncHandler(async (req, res) => {
 });
 
 //@route DELETE api/profile/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
+//@desc  Delete user profile
+//@access Private
 const deleteProfile = asyncHandler(async (req, res) => {});
 
 //@route POST api/profile/:id/games/valorant

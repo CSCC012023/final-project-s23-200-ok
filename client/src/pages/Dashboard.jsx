@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPosts, createPost, deletePost } from "../features/posts/postSlice";
+import { getPosts, createPost, deletePost } from "../features/posts/postsSlice";
 import { readAndCompressImage } from "browser-image-resizer";
 import Spinner from "../components/Spinner";
 import Post from "../components/Post";

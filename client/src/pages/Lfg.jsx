@@ -50,13 +50,11 @@ const Lfg = () => {
     else{
       res.sort((a,b) => a.date > b.date ? 1:-1)
     }
-    
-    console.log(res);
+
     return res;
   }
 
   const handleSort = ()=>{
-    console.log('sort clicked');
     if (latestSort){
       setLatestSort(0);
     }
@@ -169,7 +167,7 @@ const Lfg = () => {
     
     return () => {
       dispatch(reset());
-    }
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -257,57 +255,57 @@ const Lfg = () => {
       
       <h1>Looking For Group</h1>
       <form className="form-group" onSubmit={handleFilter}>
-            <select
-              name="game"
-              value={newFilter.game}
-              onChange={handleFilterChange}
-              required>
-              <option value="">Select a game</option>
-              {games.map((game) => (
-                true ? <option value={game.name}>{game.name}</option> : null
-              ))}
-            </select>
-            <select
-              name="status"
-              value={newFilter.status}
-              onChange={handleFilterChange}
-              required>
-              <option value="">Select a status</option>
-              <option value="Open">Open</option>
-              <option value="Closed">Closed</option>
-              <option value="Almost Full">Almost Full</option>
-            </select>
-            <input
-              type="text"
-              name="server"
-              value={newFilter.server}
-              onChange={handleFilterChange}
-              placeholder="Server"
-              required
-            />
+        <select
+          name="game"
+          value={newFilter.game}
+          onChange={handleFilterChange}
+          required>
+          <option value="">Select a game</option>
+          {games.map((game) => (
+            true ? <option value={game.name}>{game.name}</option> : null
+          ))}
+        </select>
+        <select
+          name="status"
+          value={newFilter.status}
+          onChange={handleFilterChange}
+          required>
+          <option value="">Select a status</option>
+          <option value="Open">Open</option>
+          <option value="Closed">Closed</option>
+          <option value="Almost Full">Almost Full</option>
+        </select>
+        <input
+          type="text"
+          name="server"
+          value={newFilter.server}
+          onChange={handleFilterChange}
+          placeholder="Server"
+          required
+        />
 
-            <input
-              type="number"
-              name="numberOfPlayers"
-              value={newFilter.numberOfPlayers}
-              onChange={handleFilterChange}
-              placeholder="Number of Players"
-              required
-            />
-            {/* <textarea
-              name="notes"
-              value={newPost.notes}
-              onChange={handleInputChange}
-              placeholder="Notes"
-            /> */}
+        <input
+          type="number"
+          name="numberOfPlayers"
+          value={newFilter.numberOfPlayers}
+          onChange={handleFilterChange}
+          placeholder="Number of Players"
+          required
+        />
+        {/* <textarea
+          name="notes"
+          value={newPost.notes}
+          onChange={handleInputChange}
+          placeholder="Notes"
+        /> */}
 
-            <button className="btn" type="submit">
-              {"Filter"}
-            </button>
-            <button onClick={filterReset} className="btn" type="submit">
-              {"Reset"}
-            </button>
-          </form>
+        <button className="btn" type="submit">
+          {"Filter"}
+        </button>
+        <button onClick={filterReset} className="btn" type="submit">
+          {"Reset"}
+        </button>
+      </form>
 
       <div className="lfg-buttons"></div>
       <div style={{display:'flex', justifyContent:'space-between', alignItems:"center"}}>
