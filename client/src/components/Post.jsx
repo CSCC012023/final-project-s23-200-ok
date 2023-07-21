@@ -1,15 +1,13 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
-import Reactions from "./Reactions";
 import { reactionEmojis } from '../reactions/reactionEmojis';
 import { reactToPost } from "../features/posts/postsSlice";
 
 // temp, change to redux stuff later i guess
-import { useEffect, useState } from "react";
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player';
 
 
 const Post = ({ post, handleDelete }) => {
@@ -33,7 +31,7 @@ const Post = ({ post, handleDelete }) => {
     const getVideo = async function () {
       if (post.file){
         let fileid =  post.file;
-        let url = "http://localhost:5000/api/files/".concat(fileid)
+        let url = "http://localhost:8080/api/files/".concat(fileid)
         let data = await fetch(url, 
           {
             method: 'GET',

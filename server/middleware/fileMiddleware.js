@@ -1,5 +1,5 @@
 import multer from "multer";
-import GridFsStorage from 'multer-gridfs-storage';
+import GridFsStorage from "multer-gridfs-storage";
 import { gridBucket } from "../server.js";
 
 function postFileUpload(){
