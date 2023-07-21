@@ -141,7 +141,6 @@ export const postsSlice = createSlice({
       .addCase(getPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log(action.payload);
         state.posts = action.payload.reverse();
       })
       .addCase(getPosts.rejected, (state, action) => {

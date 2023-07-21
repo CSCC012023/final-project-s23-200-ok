@@ -5,9 +5,6 @@ import jwt from "jsonwebtoken";
 const protect = asyncHandler(async (req, res, next) => {
   let token;
 
-  console.log("call protect"); 
-  console.log(JSON.stringify(req));
-
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
