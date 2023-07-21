@@ -1,15 +1,17 @@
 import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
 import Reactions from "./Reactions";
 import { reactionEmojis } from '../reactions/reactionEmojis';
+import { reactToPost } from "../features/posts/postsSlice";
 
 const Post = ({ post, handleDelete }) => {
   const { user } = useSelector((state) => state.auth);
   const [reactBtnClicked, setReactBtnClicked] = useState(false),
         [userReaction, setUserReaction] = useState('');
+  const dispatch = useDispatch();
 
   const calculateTime = (date) => {
     dayjs.extend(relativeTime).locale(localeEn);
@@ -54,6 +56,13 @@ const Post = ({ post, handleDelete }) => {
     }
   };
 
+  const handleReactionClick = (reaction) => {
+    dispatch(reactToPost({postId: post._id, reaction}));
+    if (reaction === userReaction) {
+      setUserReaction('React');
+    } else setUserReaction(reaction);
+  };
+
   const checkUserReacted = (reaction) => {
     if (reaction === userReaction) {
       return true;
@@ -66,7 +75,7 @@ const Post = ({ post, handleDelete }) => {
     const reactions = ['like', 'heart', 'laugh', 'fire', 'sad', 'skull'];
 
     const reactionElements = reactions.map(reaction => (
-      <div key={reaction} className={"reaction-count-container"}>
+      <div key={reaction} className={"reaction-count-container"} onClick={() => handleReactionClick(reaction)}>
         <img src={reactionEmojis[reaction]} alt={reaction} />
         <span className={`${checkUserReacted(reaction) ? reaction : 'reaction-value'}`}>
           {reactionCounter[reaction]}
@@ -103,18 +112,16 @@ const Post = ({ post, handleDelete }) => {
         </div>
       </div>
 
-      <div className="reaction-count-container">
+      <div className="reaction-count-wrapper">
         {generateReactionCount()}
       </div>
 
       <div className="post-footer"> 
-        {reactButtonContents()}
         {post.user_id === user._id && (
           // delete button
           <button className='btn' onClick={handleDeletePost}>Delete</button>
         )}
       </div>
-      <Reactions key={post._id} post={post} visible={reactBtnClicked} setUserReaction={setUserReaction} userReaction={userReaction} />
     </div>
   );
 };
