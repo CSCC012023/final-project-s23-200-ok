@@ -160,7 +160,6 @@ export const lfgSlice = createSlice({
       .addCase(getLFGPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        console.log("action payload: " + action.payload);
         state.message = action.payload;
       })
 
@@ -218,7 +217,6 @@ export const lfgSlice = createSlice({
       .addCase(deleteLFGPost.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log("Delete payload: " + action.payload);
         state.posts = state.posts.filter((post) => post._id !== action.payload._id);
       })
       .addCase(deleteLFGPost.rejected, (state, action) => {

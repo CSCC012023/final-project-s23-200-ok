@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { reactionEmojis } from '../reactions/reactionEmojis';
-import { reactToPost } from "../features/posts/postSlice";
+import { reactToPost } from "../features/posts/postsSlice";
 
 const Reactions = ({ post }) => {
   const dispatch = useDispatch();

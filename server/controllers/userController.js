@@ -4,6 +4,11 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer"; 
 import mailgen from "mailgen";
+import Post from "../models/Post.js";
+import Profile from "../models/Profile.js";
+import LFGPost from "../models/LFGPost.js";
+import Chat from "../models/Chat.js";
+import Message from "../models/Message.js";
 
 //@route  POST api/users
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
@@ -154,9 +159,12 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 //@route   GET api/users
-//@desc    [DESCRIPTION OF WHAT ROUTE DOES]
-//@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getUsers = asyncHandler(async (req, res) => {});
+//@desc    Get all users
+//@access  Private
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.status(200).json(users);
+});
 
 //@route   GET api/users/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
@@ -168,10 +176,64 @@ const getUser = asyncHandler(async (req, res) => {});
 //@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
 const updateUser = asyncHandler(async (req, res) => {});
 
+//@route   GET api/users/friends
+//@desc    Return list of logged in user's friends
+//@access  Private
+const getFriends = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  res.status(200).json(user.friends);
+});
+
+//@route   PATCH api/users/:friendUserId
+//@desc    Remove friend with user_id friendUserId from logged in user's friends array
+//@access  Private
+const unfriendFriend = asyncHandler(async (req, res) => {
+  // No such friend
+  const friend = await User.findById(req.params.friendUserId);
+  if (!friend) {
+    res.status(404);
+    throw new Error("Friend not found");
+  }
+
+  const user = await User.findById(req.user._id);
+  user.friends = user.friends.filter(friend => friend.user_id.toString() !== req.params.friendUserId);
+  user.save();
+
+  friend.friends = friend.friends.filter(friend => friend.user_id.toString() !== user._id.toString());
+  friend.save();
+
+  res.status(200).json(user.friends);
+});
+
 //@route DELETE api/users/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const deleteUser = asyncHandler(async (req, res) => {});
+//@desc  Deletes the user account
+//@access Private
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  // the user is authorized to delete it. 
+  if (user) {
+    await Post.deleteMany({ user_id: req.params.id });
+    await LFGPost.deleteMany({ user_id: req.params.id });
+    await Profile.deleteOne({ user_id: req.params.id });
+
+    const chats = await Chat.find({
+      "user_ids_names.user_id": req.params.id,
+    });
+
+    for (const chat of chats) {
+      await Message.deleteMany({ chat_id: chat._id });
+    }
+
+    await Chat.deleteMany({ "user_ids_names.user_id": req.params.id });
+    await User.deleteOne({ _id: req.params.id });
+
+    res.json({ message: "User has been deleted." });
+  } else { // user not available
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 const verifyEmail = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
@@ -186,4 +248,14 @@ const generateToken = (id) => {
   });
 };
 
-export { registerUser, loginUser, getUsers, getUser, updateUser, deleteUser, verifyEmail };
+export { 
+  registerUser,
+  loginUser,
+  getUsers,
+  getUser,
+  updateUser,
+  getFriends,
+  unfriendFriend,
+  deleteUser,
+  verifyEmail
+};

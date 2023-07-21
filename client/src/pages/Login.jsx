@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { login, reset } from "../features/auth/authSlice";
-import { Link } from "react-router-dom";
-import { getProfile } from "../features/profile/profileSlice";
 import Spinner from "../components/Spinner";
+import { login, reset } from "../features/auth/authSlice";
+import { getProfile } from "../features/profile/profileSlice";
+import { getIncomingFriendRequests, getOutgoingFriendRequests } from "../features/friendRequests/friendRequestsSlice";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -28,6 +28,8 @@ function Login() {
 
     if (isSuccess || user) {
       dispatch(getProfile());
+      dispatch(getIncomingFriendRequests());
+      dispatch(getOutgoingFriendRequests());
       navigate("/");
     }
 

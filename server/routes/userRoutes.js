@@ -5,6 +5,8 @@ import {
   getUsers,
   getUser,
   updateUser,
+  getFriends,
+  unfriendFriend,
   deleteUser,
   verifyEmail
 } from "../controllers/userController.js";
@@ -14,10 +16,12 @@ const router = Router();
 
 router.route("/").post(registerUser).get(protect, getUsers);
 router.route("/verify/:id").get(verifyEmail); 
+router.route("/login").post(loginUser);
+router.route("/friends").get(protect, getFriends);
+router.route("/:friendUserId").patch(protect, unfriendFriend);
 router.route("/:id")
   .get(protect, getUser)
   .put(protect, updateUser)
   .delete(protect, deleteUser);
-router.route("/login").post(loginUser);
 
 export default router;
