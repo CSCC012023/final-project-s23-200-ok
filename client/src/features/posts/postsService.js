@@ -30,7 +30,7 @@ const getPosts = async (token) => {
   return response.data;
 };
 
-// update post
+// Update post
 const updatePost = async (postId, postData, token) => {
   const config = {
     headers: {
@@ -54,6 +54,7 @@ const deletePost = async (postId, token) => {
   return response.data;
 };
 
+// React to post
 const reactToPost = async (postId, reaction, token) => {
   const config = {
     headers: {
@@ -64,12 +65,12 @@ const reactToPost = async (postId, reaction, token) => {
   const response = await axios.patch(
     API_URL + postId + "/react", 
     {"reaction": reaction},
-    config
-  );
+    config);
+    
   return response.data;
 }
 
-const postService = {
+const postsService = {
   createPost,
   getPosts,
   updatePost,
@@ -77,4 +78,4 @@ const postService = {
   reactToPost,
 };
 
-export default postService;
+export default postsService;

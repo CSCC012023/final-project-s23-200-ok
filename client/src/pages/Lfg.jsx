@@ -13,6 +13,7 @@ import {
 import LfgPost from "../components/LfgPost";
 import Spinner from "../components/Spinner";
 import { getProfile } from "../features/profile/profileSlice";
+import Comments from "../components/LFGComments";
 
 const Lfg = () => {
   const navigate = useNavigate();
@@ -49,13 +50,11 @@ const Lfg = () => {
     else{
       res.sort((a,b) => a.date > b.date ? 1:-1)
     }
-    
-    console.log(res);
+
     return res;
   }
 
   const handleSort = ()=>{
-    console.log('sort clicked');
     if (latestSort){
       setLatestSort(0);
     }
@@ -64,6 +63,17 @@ const Lfg = () => {
       setLatestSort(1);
     }
   }
+
+  const [viewComment, setViewComment] = useState("");
+    // const toggleComment = () => {
+    //   if (viewComment){
+    //     setViewComment("");
+    //   }
+    //   else{
+    //     setViewComment(1);
+    //   }
+    // }
+
 
   const [newFilter, setNewFilter] = useState({
     game: "",
@@ -157,7 +167,7 @@ const Lfg = () => {
     
     return () => {
       dispatch(reset());
-    }
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -173,7 +183,7 @@ const Lfg = () => {
     if (isEditing) {
       posts.find((post) => post._id === isEditing && setNewPost(post));
     }
-  }, [isEditing, posts]);
+  }, [isEditing, posts, viewComment]);
 
 
   if (isLoading) {
@@ -245,57 +255,57 @@ const Lfg = () => {
       
       <h1>Looking For Group</h1>
       <form className="form-group" onSubmit={handleFilter}>
-            <select
-              name="game"
-              value={newFilter.game}
-              onChange={handleFilterChange}
-              required>
-              <option value="">Select a game</option>
-              {games.map((game) => (
-                true ? <option value={game.name}>{game.name}</option> : null
-              ))}
-            </select>
-            <select
-              name="status"
-              value={newFilter.status}
-              onChange={handleFilterChange}
-              required>
-              <option value="">Select a status</option>
-              <option value="Open">Open</option>
-              <option value="Closed">Closed</option>
-              <option value="Almost Full">Almost Full</option>
-            </select>
-            <input
-              type="text"
-              name="server"
-              value={newFilter.server}
-              onChange={handleFilterChange}
-              placeholder="Server"
-              required
-            />
+        <select
+          name="game"
+          value={newFilter.game}
+          onChange={handleFilterChange}
+          required>
+          <option value="">Select a game</option>
+          {games.map((game) => (
+            true ? <option value={game.name}>{game.name}</option> : null
+          ))}
+        </select>
+        <select
+          name="status"
+          value={newFilter.status}
+          onChange={handleFilterChange}
+          required>
+          <option value="">Select a status</option>
+          <option value="Open">Open</option>
+          <option value="Closed">Closed</option>
+          <option value="Almost Full">Almost Full</option>
+        </select>
+        <input
+          type="text"
+          name="server"
+          value={newFilter.server}
+          onChange={handleFilterChange}
+          placeholder="Server"
+          required
+        />
 
-            <input
-              type="number"
-              name="numberOfPlayers"
-              value={newFilter.numberOfPlayers}
-              onChange={handleFilterChange}
-              placeholder="Number of Players"
-              required
-            />
-            {/* <textarea
-              name="notes"
-              value={newPost.notes}
-              onChange={handleInputChange}
-              placeholder="Notes"
-            /> */}
+        <input
+          type="number"
+          name="numberOfPlayers"
+          value={newFilter.numberOfPlayers}
+          onChange={handleFilterChange}
+          placeholder="Number of Players"
+          required
+        />
+        {/* <textarea
+          name="notes"
+          value={newPost.notes}
+          onChange={handleInputChange}
+          placeholder="Notes"
+        /> */}
 
-            <button className="btn" type="submit">
-              {"Filter"}
-            </button>
-            <button onClick={filterReset} className="btn" type="submit">
-              {"Reset"}
-            </button>
-          </form>
+        <button className="btn" type="submit">
+          {"Filter"}
+        </button>
+        <button onClick={filterReset} className="btn" type="submit">
+          {"Reset"}
+        </button>
+      </form>
 
       <div className="lfg-buttons"></div>
       <div style={{display:'flex', justifyContent:'space-between', alignItems:"center"}}>
@@ -305,14 +315,24 @@ const Lfg = () => {
          <button style={{marginLeft:'auto',width:"7rem"}} className="btn" onClick={()=>handleSort()}>{latestSort===1? "Latest":"Earliest"}</button>
         {/* </div> */}
       </div>
+      
       {sortByDate(posts).map((post) => (
-        <LfgPost
+        <><LfgPost
           key={post._id}
           post={post}
           setIsEditing={setIsEditing}
           isEditing={isEditing}
           handleDelete={handleDelete}
+          setViewComment={setViewComment}
+          viewComment={viewComment}
         />
+        
+        <div 
+        // className={viewComment ? "showComment" : "hideComment"}
+        >
+          {viewComment === post._id && <Comments post_id={post._id} user_id={user._id} userName={user.userName}/>}
+        </div>
+        </>
       ))}
     </div>
   );

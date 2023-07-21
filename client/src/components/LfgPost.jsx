@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import localeEn from 'dayjs/locale/en'
 
-const LfgPost = ({ post, setIsEditing, isEditing, handleDelete }) => {
+const LfgPost = ({ post, setIsEditing, isEditing, handleDelete, setViewComment, viewComment }) => {
     const { user } = useSelector((state) => state.auth);
     // for delete posts we can add allow the user to delete their own posts by checking if the user id matches the post user id
     // then we can dispatch the delete action
@@ -49,7 +49,8 @@ const LfgPost = ({ post, setIsEditing, isEditing, handleDelete }) => {
           // delete button
           <button className='btn' onClick={handleDeletePost}>Delete</button>
         )}
-
+        <button style={{marginLeft:'10px'}} className="btn" onClick={()=>{viewComment === post._id? setViewComment(""):setViewComment(post._id)}}>{viewComment === post._id? "Hide Comments":"View Comments"}</button>
+        
         </div>
       </div>
     );
