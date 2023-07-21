@@ -1,21 +1,42 @@
 import asyncHandler from "express-async-handler";
 import Post from "../models/Post.js";
 
+//temp removable
+import mongoose from "mongoose";
+
 //@route  POST api/posts
 //@desc   Create a new post
 //@access Private
 const createPost = asyncHandler(async (req, res) => {
   try {
+
     // User id and userName set in authentication middleware
     const { user_id, userName, text, image } = req.body;
+    let file = req.file;
+    console.log("is file comin? ");
+    console.log(file);
 
     // Create post
-    const post = await Post.create({
-      user_id,
-      userName,
-      text,
-      image
-    });
+    let post;
+    if (req.file){
+      post = await Post.create({
+        user_id,
+        userName,
+        text,
+        image,
+        file:file.id 
+      });
+    }
+    else{
+      post = await Post.create({
+        user_id,
+        userName,
+        text,
+        image,
+        file
+      });
+    }
+
 
     if (post) {
       res.status(201).json(post);
@@ -41,6 +62,7 @@ const getPosts = asyncHandler(async (req, res) => {
     throw new Error("Invalid user");
   }
 
+  // res.status(200);
   const posts = await Post.find({});
   res.status(200).json(posts);
 });

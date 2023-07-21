@@ -13,46 +13,92 @@ function Dashboard() {
   const {posts, isLoading, isError, message} = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
 
-  const [newPost, setNewPost] = useState({
-    text : "",
-    image : "",
-  });
+  const [text, setText] = useState("");
+  const [file, setFile] = useState();
+  const [isVideo, setIsVideo] = useState(false);
+
 
   const handleInputChange = (e) => {  
-    setNewPost({
-      ...newPost,
-      [e.target.name]: e.target.value,
-    });
+    setText(e.target.value);
   };
 
-  const handleImageChange =  async (e) => {
-    const file = e.target.files[0];
+  const handleFileChange =  async (e) => {
+
+    const newfile = e.target.files[0];
+    if (!newfile){
+      setFile(null);
+      setIsVideo(false);
+      return;
+    }
+
     const config = {
       quality: 0.5,
       maxWidth: 500,
       maxHeight: 500,
     };
 
-    const resizedImage = await readAndCompressImage(file, config);
+    const allowFiles=["image/jpeg", "image/png", "image/gif", "video/mp4"];
+    // console.log(file.type);
+    if (!allowFiles.includes(newfile?.type)  ){
+        console.log("invalid type " + newfile.type);
+        return;
+    }
 
-    const base64 = await convertToBase64(resizedImage);
+    if (newfile.type.substring(0,5) === "image"){
+      const resizedImage = await readAndCompressImage(newfile, config);
 
-    setNewPost({
-      ...newPost,
-      image: base64,
-    });
+      const base64 = await convertToBase64(resizedImage);
+
+      setFile(base64);
+      setIsVideo(false);
+    }
+    else{
+      // console.log(newPost);
+      setFile(newfile);
+      setIsVideo(true);
+      // let form = new FormData();
+      // form.append("text",text);
+      // form.append("file",newfile);
+
+      // for (var key in newPost){
+      //   console.log(key+" "+newPost[key]);
+      //   if (key === "file"){
+      //     console.log(123);
+      //     form.append("PostFile", file);
+      //     continue;
+      //   }
+      //   form.append(key, newPost[key])
+      // }
+
+      // print form
+      // for (var pair of form.entries()) {
+      //   console.log(pair[0]+ ', ' + pair[1]); 
+      // }
+      // setNewPost(form);
+    }
   };
 
-  const handlePostSubmit = (e) => {
+  const handlePostSubmit = async (e) => {
     e.preventDefault();
+    console.log(file);
 
-    dispatch(createPost({ ...newPost, user_id: user._id,
-      userName: user.userName, }));
+    var form = new FormData;
 
-    setNewPost({
-      text: "",
-      image: "",
-    });
+    // requet using fetch, 
+    if (isVideo){
+      form.append("user_id", user._id);
+      form.append("userName", user.userName);
+      form.append("PostFile", file);
+      form.append("text", text);
+    }
+    else{ // request normally
+      form = { text, image: file, user_id: user._id,userName: user.userName,}
+    }
+    console.log(form);
+    dispatch(createPost(form));
+
+    setText("");
+    setFile();
 
     };
 
@@ -94,17 +140,19 @@ function Dashboard() {
               <textarea
                 name="text"
                 placeholder="What's on your mind?"
-                value={newPost.text}
+                value={text}
                 onChange={handleInputChange}
                 required
               />
               <input
                 type="file"
-                name="image"
-                accept="image/*"
+                // name="image"
+                // accept="image/*"
                 className="file-upload"
-                onChange={handleImageChange}
+                onChange={handleFileChange}
               />
+
+
               <button type="submit" className="btn">Post</button>
             </form>
           </section>
@@ -113,6 +161,7 @@ function Dashboard() {
             <Post key={post._id} post={post} handleDelete={handleDelete}/>
           ))}
         </>
+        
       ) : (
         <section className="heading">
           <p><u><Link to="/login">Login</Link></u> and see what your fellow gamers are up to!</p>

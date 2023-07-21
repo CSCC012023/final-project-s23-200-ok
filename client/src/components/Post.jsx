@@ -1,11 +1,14 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
-import Reactions from "./Reactions";
 import { reactionEmojis } from '../reactions/reactionEmojis';
 import { reactToPost } from "../features/posts/postsSlice";
+
+// temp, change to redux stuff later i guess
+import ReactPlayer from 'react-player';
+
 
 const Post = ({ post, handleDelete }) => {
   const { user } = useSelector((state) => state.auth);
@@ -22,6 +25,25 @@ const Post = ({ post, handleDelete }) => {
     handleDelete(post._id)
   };
 
+  const [videoUrl, setVideoUrl] = useState('');
+
+  useEffect( ()=> {
+    const getVideo = async function () {
+      if (post.file){
+        let fileid =  post.file;
+        let url = "http://localhost:8080/api/files/".concat(fileid)
+        let data = await fetch(url, 
+          {
+            method: 'GET',
+          }
+        );
+        // console.log(data);
+        setVideoUrl(data.url)
+      }
+    }
+    getVideo();
+
+  }, [])
   const reactionCounter = useMemo(() => {
     const reactionCount = {
       like: 0,
@@ -107,6 +129,14 @@ const Post = ({ post, handleDelete }) => {
       </div>
       <div className="post-body">
         {post.image && <img src={post.image} alt="post" className="post-image" />}
+        {post.file && 
+              <ReactPlayer 
+                url={videoUrl} 
+                width='100%'
+                height='100%'
+                controls/>             
+          }
+
         <div className="post-text">
           <p>{post.text}</p>
         </div>
