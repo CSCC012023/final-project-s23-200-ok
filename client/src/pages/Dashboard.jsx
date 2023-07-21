@@ -13,26 +13,21 @@ function Dashboard() {
   const {posts, isLoading, isError, message} = useSelector((state) => state.posts);
   const { user } = useSelector((state) => state.auth);
 
-  const [newPost, setNewPost] = useState({
-    text : "",
-    file : "",
-  });
+  const [text, setText] = useState("");
+  const [file, setFile] = useState();
+  const [isVideo, setIsVideo] = useState(false);
+
 
   const handleInputChange = (e) => {  
-    setNewPost({
-      ...newPost,
-      [e.target.name]: e.target.value,
-    });
+    setText(e.target.value);
   };
 
   const handleFileChange =  async (e) => {
 
-    const file = e.target.files[0];
-    if (!file){
-      setNewPost({
-        ...newPost,
-        image: "",
-      });
+    const newfile = e.target.files[0];
+    if (!newfile){
+      setFile(null);
+      setIsVideo(false);
       return;
     }
 
@@ -44,86 +39,66 @@ function Dashboard() {
 
     const allowFiles=["image/jpeg", "image/png", "image/gif", "video/mp4"];
     // console.log(file.type);
-    if (!allowFiles.includes(file?.type)  ){
-        console.log("invalid type " + file.type);
+    if (!allowFiles.includes(newfile?.type)  ){
+        console.log("invalid type " + newfile.type);
         return;
     }
 
-    if (file.type.substring(0,5) === "image"){
-      const resizedImage = await readAndCompressImage(file, config);
+    if (newfile.type.substring(0,5) === "image"){
+      const resizedImage = await readAndCompressImage(newfile, config);
 
       const base64 = await convertToBase64(resizedImage);
 
-      setNewPost({
-        ...newPost,
-        image: base64,
-      });
+      setFile(base64);
+      setIsVideo(false);
     }
     else{
-      console.log(newPost);
-      let form = new FormData();
-      for (var key in newPost){
-        console.log(key+" "+newPost[key]);
-        if (key === "file"){
-          console.log(123);
-          form.append("PostFile", file);
-          continue;
-        }
-        form.append(key, newPost[key])
-      }
+      // console.log(newPost);
+      setFile(newfile);
+      setIsVideo(true);
+      // let form = new FormData();
+      // form.append("text",text);
+      // form.append("file",newfile);
+
+      // for (var key in newPost){
+      //   console.log(key+" "+newPost[key]);
+      //   if (key === "file"){
+      //     console.log(123);
+      //     form.append("PostFile", file);
+      //     continue;
+      //   }
+      //   form.append(key, newPost[key])
+      // }
 
       // print form
-      for (var pair of form.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]); 
-    }
-      setNewPost(form);
+      // for (var pair of form.entries()) {
+      //   console.log(pair[0]+ ', ' + pair[1]); 
+      // }
+      // setNewPost(form);
     }
   };
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    console.log(newPost);
-    // for (var pair of newPost?.entries()) {
-    //   console.log(pair[0]+ ', ' + pair[1]); 
-    // }
+    console.log(file);
 
-    var form = newPost;
+    var form = new FormData;
 
     // requet using fetch, 
-    if (form instanceof FormData){
-      
-      // let form = newPost;
+    if (isVideo){
       form.append("user_id", user._id);
       form.append("userName", user.userName);
-      
-      // const headers= {
-      //   Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjZkZTkwY2U4NzdkMDhkNTIxYjhkYSIsImlhdCI6MTY4OTg3ODQ1OCwiZXhwIjoxNjg5OTA4NDU4fQ.WFnDSS7DblMlDcQ8YVu_KEA9unkI9S5Rr0Ae1TKuzuo`
-      // }
-
-      // only debug purpose
-      console.log("ready form");
-      for (var pair of newPost?.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]); 
-    }
-
-      // await fetch("http://localhost:5000/api/posts/", {
-      //   method: 'post',
-      //   headers,
-      //   body: form,
-      // });
+      form.append("PostFile", file);
+      form.append("text", text);
     }
     else{ // request normally
-      form = { ...form, user_id: user._id,userName: user.userName,}
-      // dispatch(createPost(form));
-
+      form = { text, image: file, user_id: user._id,userName: user.userName,}
     }
     console.log(form);
     dispatch(createPost(form));
 
-    setNewPost({
-      text: "",
-      image: "",
-    });
+    setText("");
+    setFile();
 
     };
 
@@ -165,7 +140,7 @@ function Dashboard() {
               <textarea
                 name="text"
                 placeholder="What's on your mind?"
-                value={newPost.text}
+                value={text}
                 onChange={handleInputChange}
                 required
               />

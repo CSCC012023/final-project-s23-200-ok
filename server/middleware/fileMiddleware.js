@@ -1,28 +1,6 @@
 import multer from "multer";
 import GridFsStorage from 'multer-gridfs-storage';
-import mongoose, { mongo } from "mongoose"
-import MongoClient from "mongodb"
 import { gridBucket } from "../server.js";
-import asyncHandler from "express-async-handler";
-
-
-// import dotenv from "dotenv";
-// dotenv.config();
-// let mongoose 
-// var gfs;
-// // mongoose.connect(process.env.MONGO_URI, {
-// //     useNewUrlParser: true,
-// //     useUnifiedTopology: true,
-// // });
-// const connect = await mongoose.connection;
-// connect.once("open", () => {
-//     gfs = new mongoose.mongo.GridFSBucket(connect.db,{
-//         bucketName: "postFiles"
-//     })
-//     console.log(gfs.find());
-// });
-
-
 
 function postFileUpload(){
 

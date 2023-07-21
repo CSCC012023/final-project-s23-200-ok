@@ -7,8 +7,6 @@ import profileRoutes from "./routes/profileRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import LFGPostRoutes from "./routes/LFGPostRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
-import  Grid  from "gridfs-stream"
-import mongo from "mongodb"
 import errorHandler from "./middleware/errorMiddleware.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -48,19 +46,9 @@ export let gridfsBucket;
 const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
-  // console.log(mongoose.connection);
   gridBucket = new mongoose.mongo.GridFSBucket(connection.db, {
     bucketName: 'postFiles'})
-    console.log(gridBucket.s._filesCollection);
-
-  // let db = mongoose.connections[0].db;
-  // gridBucket = new mongoose.mongo.GridFSBucket(db, 
-  //   {bucketName: "postFiles"})
-  // gridBucket = Grid(connection.db, mongo);
-  // gfs = Grid(connection.db, mongo);
-  // gfs.collection('postFile');
-  // gridBucket.collection('postFile');
-  // console.log(gridBucket);
+    // console.log(gridBucket.s._filesCollection);
 });
 
 app.use(cors());

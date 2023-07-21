@@ -15,10 +15,5 @@ const router = Router();
 router.route("/").post(protect, postFileUpload().single('PostFile'), createPost).get(protect, getPosts);
 router.route("/:id/react").patch(protect, reactToPost);
 router.route("/:id").delete(protect, deletePost);
-// router
-//   .route("/:id")
-//   .get(protect, getPost)
-//   .put(protect, updatePost)
-//   .delete(protect, deletePost);
 
 export default router;
