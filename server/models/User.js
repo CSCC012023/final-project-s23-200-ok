@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   lfgposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "LFGPost" }],
   picture: { type: String },
+  isverified: { type: Boolean, default: false }, 
 });
 
 const User = mongoose.model("User", UserSchema);

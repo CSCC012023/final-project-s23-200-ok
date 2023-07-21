@@ -9,7 +9,7 @@ import LFGPostRoutes from "./routes/LFGPostRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 
 dotenv.config();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 9000;
 
 const app = express();
 
