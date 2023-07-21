@@ -42,12 +42,6 @@ function postFileUpload(){
     return multer({ storage });
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-export { postFileUpload } ;
-=======
 function postFileRetrieveAll(req, res, next) {
     // gfs.
     gfs.find().toArray((err,files) => {
@@ -142,13 +136,8 @@ async function postFileRetrieveOne(req, res)  {
         return res.status(400).send(e.message);
     }
 //    return res.status(500).send("unknown err");
-=======
->>>>>>> e369e78 (connect frontned with video stream)
 
+    // next();
+};
 
-<<<<<<< HEAD
 export { postFileUpload, postFileRetrieveAll, postFileRetrieveOne } ;
->>>>>>> f305e94 (video retrieve done, finally)
-=======
-export { postFileUpload } ;
->>>>>>> e369e78 (connect frontned with video stream)

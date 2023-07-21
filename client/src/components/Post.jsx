@@ -9,14 +9,7 @@ import Reactions from "./Reactions";
 import { useEffect, useState } from "react";
 import { Player } from 'video-react'
 // import '~video-react/dist/video-react.css'; 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import ReactPlayer from 'react-player'
-=======
->>>>>>> e369e78 (connect frontned with video stream)
-=======
-import ReactPlayer from 'react-player'
->>>>>>> 707a7ac (display video complete)
 
 
 const Post = ({ post, handleDelete }) => {
@@ -37,15 +30,7 @@ const Post = ({ post, handleDelete }) => {
   const [videoUrl, setVideoUrl] = useState('');
 
   useEffect( ()=> {
-<<<<<<< HEAD
-<<<<<<< HEAD
     console.log("useeffect called");
-=======
-
->>>>>>> e369e78 (connect frontned with video stream)
-=======
-    console.log("useeffect called");
->>>>>>> 707a7ac (display video complete)
     const getVideo = async function () {
       if (post.file){
         let fileid =  post.file;
@@ -62,15 +47,7 @@ const Post = ({ post, handleDelete }) => {
     }
     getVideo();
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   }, [])
-=======
-  })
->>>>>>> e369e78 (connect frontned with video stream)
-=======
-  }, [])
->>>>>>> 707a7ac (display video complete)
 
   return (
     <div className="post-card">
@@ -82,10 +59,6 @@ const Post = ({ post, handleDelete }) => {
         {post.image && <img src={post.image} alt="post" className="post-image" />}
         {post.file && 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 707a7ac (display video complete)
 
               <ReactPlayer 
                 url={videoUrl} 
@@ -95,14 +68,6 @@ const Post = ({ post, handleDelete }) => {
             // <video controls>
             //   <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
             // </video>
-<<<<<<< HEAD
-=======
-            <video controls>
-              <source src={videoUrl} type="video/mp4" /> {/* Adjust the video type if necessary */}
-            </video>
->>>>>>> e369e78 (connect frontned with video stream)
-=======
->>>>>>> 707a7ac (display video complete)
           // <Player src={post.file} alt="post video" className="post-image">
           //   <source src={videoUrl} />
           // </Player>
