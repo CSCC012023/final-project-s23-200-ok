@@ -4,7 +4,6 @@ const API_URL = "/api/profile/";
 
 // Create profile
 const createProfile = async (token) => {
-  console.log("createProfile");
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

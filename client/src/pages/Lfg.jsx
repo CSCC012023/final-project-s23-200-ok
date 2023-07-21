@@ -50,7 +50,6 @@ const Lfg = () => {
     else{
       res.sort((a,b) => a.date > b.date ? 1:-1)
     }
-
     return res;
   }
 
@@ -65,15 +64,6 @@ const Lfg = () => {
   }
 
   const [viewComment, setViewComment] = useState("");
-    // const toggleComment = () => {
-    //   if (viewComment){
-    //     setViewComment("");
-    //   }
-    //   else{
-    //     setViewComment(1);
-    //   }
-    // }
-
 
   const [newFilter, setNewFilter] = useState({
     game: "",
@@ -292,12 +282,6 @@ const Lfg = () => {
           placeholder="Number of Players"
           required
         />
-        {/* <textarea
-          name="notes"
-          value={newPost.notes}
-          onChange={handleInputChange}
-          placeholder="Notes"
-        /> */}
 
         <button className="btn" type="submit">
           {"Filter"}
@@ -311,27 +295,24 @@ const Lfg = () => {
       <div style={{display:'flex', justifyContent:'space-between', alignItems:"center"}}>
         <div style={{width:"7rem"}}></div>
         <h1 style={{flex:1}}>Looking For Group</h1>
-        {/* <div> */}
          <button style={{marginLeft:'auto',width:"7rem"}} className="btn" onClick={()=>handleSort()}>{latestSort===1? "Latest":"Earliest"}</button>
-        {/* </div> */}
       </div>
       
       {sortByDate(posts).map((post) => (
-        <><LfgPost
-          key={post._id}
-          post={post}
-          setIsEditing={setIsEditing}
-          isEditing={isEditing}
-          handleDelete={handleDelete}
-          setViewComment={setViewComment}
-          viewComment={viewComment}
-        />
-        
-        <div 
-        // className={viewComment ? "showComment" : "hideComment"}
-        >
-          {viewComment === post._id && <Comments post_id={post._id} user_id={user._id} userName={user.userName}/>}
-        </div>
+        <>
+          <LfgPost
+            key={post._id}
+            post={post}
+            setIsEditing={setIsEditing}
+            isEditing={isEditing}
+            handleDelete={handleDelete}
+            setViewComment={setViewComment}
+            viewComment={viewComment}
+          />
+          
+          <div>
+            {viewComment === post._id && <Comments post_id={post._id} user_id={user._id} userName={user.userName}/>}
+          </div>
         </>
       ))}
     </div>

@@ -252,4 +252,15 @@ const deleteLFGComment = asyncHandler(async (req, res) => {
   }
 });
 
-export { createLFGPost, createLFGComment, getLFGPosts, getLFGPost, getLFGComments, getLFGPostsFiltered, updateLFGPost, updateLFGComment, deleteLFGPost, deleteLFGComment };
+export {
+  createLFGPost,
+  createLFGComment,
+  getLFGPosts,
+  getLFGPost,
+  getLFGComments,
+  getLFGPostsFiltered,
+  updateLFGPost,
+  updateLFGComment,
+  deleteLFGPost,
+  deleteLFGComment
+};

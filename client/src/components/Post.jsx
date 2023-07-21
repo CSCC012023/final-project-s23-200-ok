@@ -155,5 +155,4 @@ const Post = ({ post, handleDelete }) => {
     </div>
   );
 };
-
 export default Post;
