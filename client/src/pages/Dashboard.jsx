@@ -28,6 +28,14 @@ function Dashboard() {
   const handleFileChange =  async (e) => {
 
     const file = e.target.files[0];
+    if (!file){
+      setNewPost({
+        ...newPost,
+        image: "",
+      });
+      return;
+    }
+
     const config = {
       quality: 0.5,
       maxWidth: 500,
@@ -35,7 +43,7 @@ function Dashboard() {
     };
 
     const allowFiles=["image/jpeg", "image/png", "image/gif", "video/mp4"];
-    console.log(file.type);
+    // console.log(file.type);
     if (!allowFiles.includes(file?.type)  ){
         console.log("invalid type " + file.type);
         return;
@@ -75,43 +83,42 @@ function Dashboard() {
   const handlePostSubmit = async (e) => {
     e.preventDefault();
     console.log(newPost);
-    for (var pair of newPost?.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
-  }
+    // for (var pair of newPost?.entries()) {
+    //   console.log(pair[0]+ ', ' + pair[1]); 
+    // }
+
     var form = newPost;
+
+    // requet using fetch, 
     if (form instanceof FormData){
+      
       // let form = newPost;
       form.append("user_id", user._id);
       form.append("userName", user.userName);
       
-      const headers= {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjZkZTkwY2U4NzdkMDhkNTIxYjhkYSIsImlhdCI6MTY4OTg3ODQ1OCwiZXhwIjoxNjg5OTA4NDU4fQ.WFnDSS7DblMlDcQ8YVu_KEA9unkI9S5Rr0Ae1TKuzuo`
-      }
+      // const headers= {
+      //   Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjZkZTkwY2U4NzdkMDhkNTIxYjhkYSIsImlhdCI6MTY4OTg3ODQ1OCwiZXhwIjoxNjg5OTA4NDU4fQ.WFnDSS7DblMlDcQ8YVu_KEA9unkI9S5Rr0Ae1TKuzuo`
+      // }
 
+      // only debug purpose
       console.log("ready form");
       for (var pair of newPost?.entries()) {
         console.log(pair[0]+ ', ' + pair[1]); 
     }
 
-      await fetch("http://localhost:5000/api/posts/", {
-        method: 'post',
-        headers,
-        body: form,
-      });
+      // await fetch("http://localhost:5000/api/posts/", {
+      //   method: 'post',
+      //   headers,
+      //   body: form,
+      // });
     }
-    else{
+    else{ // request normally
       form = { ...form, user_id: user._id,userName: user.userName,}
+      // dispatch(createPost(form));
+
     }
     console.log(form);
-
-    }
-    else{
-      form = { ...form, user_id: user._id,userName: user.userName,}
-    }
     dispatch(createPost(form));
-
-
-    // dispatch(createPost(form));
 
     setNewPost({
       text: "",

@@ -15,7 +15,7 @@ const getFile = asyncHandler(async (req, res) => {
 //     throw new Error("Invalid user");
 //   }
 
-  console.log(10);
+//   console.log(10);
 
   console.log(req.params.id);
   // gfs.
@@ -51,7 +51,7 @@ const getFile = asyncHandler(async (req, res) => {
       //     })
       // })
       let fileid = req.params.id;
-      console.log(1)
+    //   console.log(1)
     //   console.log(gridBucket);
     //   var readstream = gfs.createReadStream({_id:fileid});
     //   readstream.pipe(res);
@@ -63,13 +63,14 @@ const getFile = asyncHandler(async (req, res) => {
         if (error) {
           return console.error('Error! ', error);
         }
-        console.log(1.25);
-        console.log('Files: ', files);
+        // console.log(1.25);
+        // console.log('Files: ', files);
       });
 <<<<<<< HEAD
 <<<<<<< HEAD
     // console.log(a);
     
+<<<<<<< HEAD
     console.log("here is b");
     console.log(b); 
 =======
@@ -83,6 +84,10 @@ const getFile = asyncHandler(async (req, res) => {
     console.log("here is b");
     console.log(b); 
 >>>>>>> 707a7ac (display video complete)
+=======
+    // console.log("here is b");
+    // console.log(b); 
+>>>>>>> 5ad9000 (complete load with redux)
 
     
     const readStream = gridBucket.openDownloadStream(id);
