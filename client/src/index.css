@@ -417,6 +417,15 @@ h3 {
   transition: background 0.3s ease;
 }
 
+.hideComment {
+  display: hidden;
+
+}
+
+.showComment {
+  display: show;
+}
+
 .edit-image {
   width: 5px;
   height: 5px;

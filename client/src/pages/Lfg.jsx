@@ -13,6 +13,7 @@ import {
 import LfgPost from "../components/LfgPost";
 import Spinner from "../components/Spinner";
 import { getProfile } from "../features/profile/profileSlice";
+import Comments from "../components/LFGComments";
 
 const Lfg = () => {
   const navigate = useNavigate();
@@ -62,6 +63,17 @@ const Lfg = () => {
       setLatestSort(1);
     }
   }
+
+  const [viewComment, setViewComment] = useState("");
+    // const toggleComment = () => {
+    //   if (viewComment){
+    //     setViewComment("");
+    //   }
+    //   else{
+    //     setViewComment(1);
+    //   }
+    // }
+
 
   const [newFilter, setNewFilter] = useState({
     game: "",
@@ -171,7 +183,7 @@ const Lfg = () => {
     if (isEditing) {
       posts.find((post) => post._id === isEditing && setNewPost(post));
     }
-  }, [isEditing, posts]);
+  }, [isEditing, posts, viewComment]);
 
 
   if (isLoading) {
@@ -303,14 +315,24 @@ const Lfg = () => {
          <button style={{marginLeft:'auto',width:"7rem"}} className="btn" onClick={()=>handleSort()}>{latestSort===1? "Latest":"Earliest"}</button>
         {/* </div> */}
       </div>
+      
       {sortByDate(posts).map((post) => (
-        <LfgPost
+        <><LfgPost
           key={post._id}
           post={post}
           setIsEditing={setIsEditing}
           isEditing={isEditing}
           handleDelete={handleDelete}
+          setViewComment={setViewComment}
+          viewComment={viewComment}
         />
+        
+        <div 
+        // className={viewComment ? "showComment" : "hideComment"}
+        >
+          {viewComment === post._id && <Comments post_id={post._id} user_id={user._id} userName={user.userName}/>}
+        </div>
+        </>
       ))}
     </div>
   );
