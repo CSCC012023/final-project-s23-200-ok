@@ -49,7 +49,7 @@ const LfgPost = ({ post, setIsEditing, isEditing, handleDelete }) => {
           // delete button
           <button className='btn' onClick={handleDeletePost}>Delete</button>
         )}
-
+        
         </div>
       </div>
     );
