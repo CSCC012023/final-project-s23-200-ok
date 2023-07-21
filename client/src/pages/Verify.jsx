@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 function Verify() {
     const {id} = useParams();
     useEffect(() => {
-        axios.get("/api/users/verify" + id); 
+        axios.get("/api/users/verify/" + id); 
     }, [])  
     return (<h1> Email verified </h1>)
 }
