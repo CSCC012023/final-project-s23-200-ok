@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer"; 
+import nodemailer from "nodemailer";
 import mailgen from "mailgen";
 import Post from "../models/Post.js";
 import Profile from "../models/Profile.js";
@@ -40,7 +40,6 @@ const registerUser = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  
   // Create user
   const user = await User.create({
     userName: userName,
@@ -48,77 +47,71 @@ const registerUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
   });
 
-
   if (user) {
-      // email verification config 
+    // email verification config
     let config = {
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        user: process.env.EMAIL, 
-        pass: process.env.PASSWORD
-      }
-    }
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
 
-    // transporter to send mail 
-    let transporter = nodemailer.createTransport(config); 
+    // transporter to send mail
+    let transporter = nodemailer.createTransport(config);
     let MailGenerator = new mailgen({
       theme: "default",
-      product : {
+      product: {
         name: "Playbook",
-        link: "http://localhost:3000"
-      }
-    })
+        link: "http://localhost:3000",
+      },
+    });
 
-    let response = { 
+    let response = {
       body: {
-        name: user.userName, 
-        intro: 'Welcome to Playbook! We\'re very excited to have you on board.',
-          action: {
-              instructions: 'To get started with Playbook, please click here:',
-              button: {
-                  color: '#22BC66', // action button color
-                  text: 'Verify Your Account',
-                  link: "http://localhost:3000/verify/"+user._id,
-              }
+        name: user.userName,
+        intro: "Welcome to Playbook! We're very excited to have you on board.",
+        action: {
+          instructions: "To get started with Playbook, please click here:",
+          button: {
+            color: "#22BC66", // action button color
+            text: "Verify Your Account",
+            link: "http://localhost:3000/verify/" + user._id,
           },
-          outro: 'Happy Gaming.'
-        
-      }
-    }
-    let mail = MailGenerator.generate(response); 
+        },
+        outro: "Happy Gaming.",
+      },
+    };
+    let mail = MailGenerator.generate(response);
 
     let message = {
       from: "lovelyasunaa@gmail.com",
       to: user.email,
-      subject: "Playbook Verification Link", 
+      subject: "Playbook Verification Link",
       text: "Welcome to Playbook. Please verify your account by clicking link below. Happy Gaming.",
       html: mail,
-    }
+    };
 
     try {
       transporter.sendMail(message);
-
-    } catch( error ) {
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
-    if (user.isverified===false) {
+    if (user.isverified === false) {
       res.status(403);
       throw new Error("Email not verified");
     }
-     
+
     res.status(201).json({
       _id: user.id, // "id" is the string version of "_id"
       userName: user.userName,
       email: user.email,
       token: generateToken(user.id),
     });
-
-
   } else {
     res.status(400);
     throw new Error("Invalid user data");
   }
-
 });
 
 //@route   POST /login
@@ -134,16 +127,13 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error("Please enter all fields");
   }
 
-  
-
   // Check for user email
   const user = await User.findOne({ email });
 
-  if (user.isverified===false) {
+  if (user.isverified === false) {
     res.status(403);
     throw new Error("Email not verified");
   }
-
 
   if (user && (await bcrypt.compare(password, user.password))) {
     res.status(200).json({
@@ -196,10 +186,14 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findById(req.user._id);
-  user.friends = user.friends.filter(friend => friend.user_id.toString() !== req.params.friendUserId);
+  user.friends = user.friends.filter(
+    (friend) => friend.user_id.toString() !== req.params.friendUserId
+  );
   user.save();
 
-  friend.friends = friend.friends.filter(friend => friend.user_id.toString() !== user._id.toString());
+  friend.friends = friend.friends.filter(
+    (friend) => friend.user_id.toString() !== user._id.toString()
+  );
   friend.save();
 
   res.status(200).json(user.friends);
@@ -211,7 +205,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
 const deleteUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
-  // the user is authorized to delete it. 
+  // the user is authorized to delete it.
   if (user) {
     await Post.deleteMany({ user_id: req.params.id });
     await LFGPost.deleteMany({ user_id: req.params.id });
@@ -229,7 +223,8 @@ const deleteUser = asyncHandler(async (req, res) => {
     await User.deleteOne({ _id: req.params.id });
 
     res.json({ message: "User has been deleted." });
-  } else { // user not available
+  } else {
+    // user not available
     res.status(404);
     throw new Error("User not found");
   }
@@ -238,8 +233,9 @@ const deleteUser = asyncHandler(async (req, res) => {
 const verifyEmail = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   user.isverified = true;
-  await user.save(); 
-  res.status(200); 
+  await user.save();
+  await createProfileWithUserId(user);
+  await res.status(200);
 });
 
 const generateToken = (id) => {
@@ -248,7 +244,29 @@ const generateToken = (id) => {
   });
 };
 
-export { 
+const createProfileWithUserId = async (user) => {
+  console.log("createProfileWithUserId");
+  // Check if this user already has a profile
+  const userHasProfile = await Profile.findOne({ user_id: user._id });
+
+  if (userHasProfile) {
+    throw new Error("User already has a profile");
+  }
+
+  // Create profile
+  const profile = await Profile.create({
+    user_id: user._id,
+    userName: user.userName,
+  });
+
+  if (profile) {
+    return profile;
+  } else {
+    throw new Error("Creating profile failed");
+  }
+};
+
+export {
   registerUser,
   loginUser,
   getUsers,
@@ -257,5 +275,5 @@ export {
   getFriends,
   unfriendFriend,
   deleteUser,
-  verifyEmail
+  verifyEmail,
 };
