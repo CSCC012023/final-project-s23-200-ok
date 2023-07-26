@@ -816,3 +816,14 @@ h3 {
   justify-self: flex-end;
   align-self: flex-end;
 }
+
+.badge {
+  display: inline-block;
+  font-size: x-small;
+  background-color: red;
+  color: white;
+  padding: 1px 6px;
+  text-align: center;
+  border-radius: 5px;
+  margin-left: 5px;
+}

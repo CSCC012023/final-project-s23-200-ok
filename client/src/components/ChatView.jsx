@@ -8,13 +8,12 @@ import localeEn from "dayjs/locale/en";
 import Message from "../components/Message";
 
 
-const socket = io("http://localhost:8080");
 
-const ChatView = ({ chat }) => {
+
+const ChatView = ({ chat, chatAlert, setChatAlert, socketRef }) => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.message);
   const { user } = useSelector((state) => state.auth);
-  const socketRef = useRef();
   const divRef = useRef(null);
 
   const calculateTime = (date) => {
@@ -45,6 +44,7 @@ const ChatView = ({ chat }) => {
 
   useEffect(() => {
     dispatch(getMessages(chat._id));
+    setChatAlert(false)
   }, [dispatch, chat]);
 
 
@@ -56,7 +56,6 @@ const ChatView = ({ chat }) => {
 
   // socket useEffect
   useEffect(() => {
-    socketRef.current = socket;
 
     const user2Id = getOtherUser();
 
@@ -64,7 +63,6 @@ const ChatView = ({ chat }) => {
 
     socketRef.current.on("receiveMessage", (message) => {
       dispatch(addMessage(message));
-
       scrollToBottom();
     });
 

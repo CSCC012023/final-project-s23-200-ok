@@ -5,7 +5,7 @@ import { getChats, createChat } from '../features/chat/chatSlice'; // path to yo
 
 
 
-const Chat = () => {
+const Chat = ({chatAlert, setChatAlert, socketRef}) => {
   const dispatch = useDispatch();
   const [selectedChat, setSelectedChat] = useState(null);
   const { chats } = useSelector(state => state.chat);
@@ -63,7 +63,9 @@ const Chat = () => {
         ))}
       </div>
       <div className="chat-view">
-        {selectedChat ? <ChatView chat={selectedChat} /> : "Select a chat"}
+        {selectedChat ? <ChatView chat={selectedChat}  chatAlert={chatAlert}
+                  setChatAlert={setChatAlert}
+                  socketRef={socketRef}/> : "Select a chat"}
       </div>
     </div>
     </>

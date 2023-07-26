@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, reset } from "../features/auth/authSlice";
 
-function Header() {
+function Header({chatAlert}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -14,7 +14,7 @@ function Header() {
   };
 
   return (
-    <header className="header">
+    <header className="header" >
       <div className="logo">
         <Link to="/">playbook</Link>
       </div>
@@ -23,15 +23,15 @@ function Header() {
           <>
           <li>
               {" "}
-              <div className="logo">
-                <Link to="/chat">Chat</Link>
-              </div>
+          
+                <Link to="/chat">Chat {chatAlert && <span class="badge">New</span>}</Link>
+              
             </li>
             <li>
-              <Link to="/profile">profile</Link>
+              <Link to="/profile">Profile</Link>
             </li>
             <li>
-              <Link to="/notifications">notifications</Link>
+              <Link to="/notifications">Notifications</Link>
             </li>
             <li>
               {" "}
@@ -41,7 +41,7 @@ function Header() {
             </li>
             <li>
               <button className="btn" onClick={onLogout}>
-                logout
+                Logout
               </button>
             </li>
             
