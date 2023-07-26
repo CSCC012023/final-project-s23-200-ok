@@ -15,7 +15,7 @@ const createFriendRequest = async (recipientUserId, token) => {
   return response.data;
 };
 
-// // Respond to friend request
+// Respond to friend request
 const respondToFriendRequest = async (friendRequestId, newStatus, token) => {
   const config = {
     headers: {
@@ -70,6 +70,17 @@ const deleteFriendRequest = async (friendRequestId, token) => {
     config);
 
   return response.data;
+};
+
+// Get non friend users
+const getNonFriendUsers = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get("/api/users");
 };
 
 const friendRequestsService = {

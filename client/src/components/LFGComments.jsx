@@ -1,16 +1,13 @@
 import {useState, useEffect} from "react";
-// import {createComment, getComments,updateComment} from "../features/lfg/CommentService";
 import {createLFGComment, getLFGComments, updateLFGComment, deleteLFGComment} from "../features/lfg/CommentSlice";
 import { useDispatch } from "react-redux";
 import Comment from "../components/LFGComment";
 import CommentForm from "../components/LFGCommentForm";
 import "../styles/LFGComment.css"
-// import { set } from "mongoose";
 
 const LFGComments = ({post_id, user_id, userName}) => {
     const [backendComments, setBackendComments] = useState([]);
-    const [activeComment, setActiveComment] = useState(null)
-    // sorting? reverse ? 15:30 ish?
+    const [activeComment, setActiveComment] = useState(null);
     const getReplies = (commentid) => {
         return backendComments.filter(backendComments=>backendComments.parent_comment_id === commentid).sort(
             (a,b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -30,11 +27,7 @@ const LFGComments = ({post_id, user_id, userName}) => {
             parent_comment_id = "null";
         }
         const date = new Date();
-        var data = dispatch(createLFGComment({user_id, userName, post_id, parent_comment_id, text})
-        // .then(comment => {
-        //     setBackendComments([comment, ...backendComments]);
-        // })
-        );
+        var data = dispatch(createLFGComment({user_id, userName, post_id, parent_comment_id, text}));
         data.arg.Date = date;
         setBackendComments([...backendComments, data.arg]);
         setActiveComment(null);
@@ -42,10 +35,7 @@ const LFGComments = ({post_id, user_id, userName}) => {
 
     const deleteComment = (comment_id) => {
         if(window.confirm("Are you sure you want to remove this comment?")){
-            var data = dispatch(deleteLFGComment({post_id, comment_id})
-            // .then(() => {
-            //     console.log("testing??");})
-            );
+            var data = dispatch(deleteLFGComment({post_id, comment_id}));
             const updatedDeleteComments = backendComments.filter((backendComment) =>
                 backendComment._id !== data.arg.comment_id
             );

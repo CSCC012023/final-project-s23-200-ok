@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import axios from "axios";
+import mongoose from "mongoose";
 import Profile from "../models/Profile.js";
+import User from "../models/User.js";
 
 //@route  POST api/profile
 //@desc   [DESCRIPTION OF WHAT ROUTE DOES]
@@ -15,24 +17,18 @@ const createProfile = asyncHandler(async (req, res) => {
   }
 
   // Create profile
-  try {
-    const profile = await Profile.create({
-      // User id and userName set in authentication middleware
-      user_id: req.user._id,
-      userName: req.user.userName
-    });
+  const profile = await Profile.create({
+    // User id and userName set in authentication middleware
+    user_id: req.user._id,
+    userName: req.user.userName
+  });
 
-    if (profile) {
-      res.status(201).json(profile);
-    } 
-    else {
-      res.status(400);
-      throw new Error("Invalid profile data");
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    throw new Error("Error while creating profile");
+  if (profile) {
+    res.status(201).json(profile);
+  }
+  else {
+    res.status(400);
+    throw new Error("Invalid profile data");
   }
 });
 
@@ -77,30 +73,31 @@ const getProfile = asyncHandler(async (req, res) => {
 //@desc    update profile WITHOUT id (assume there's only 1 per user)
 //@access  Private
 const updateProfileNoId = asyncHandler(async (req, res) => {
-  try {
-    // User id set in authentication middleware
-    const profile = await Profile.findOne({ user_id: req.user._id });
-    if (profile) {
-      // Don't allow user to update user_id or userName
-      const { bio, profilePicture, location, games, socials } = req.body;
-      
-      // Update profile
-      profile.bio = bio;
-      profile.profilePicture = profilePicture;
-      profile.location = location;
-      profile.games = games;
-      profile.socials = socials;
-      await profile.save();
-      
-      res.status(200).json(profile);
-    }
-    else {
-      res.status(400);
-      throw new Error("Invalid user");
-    }
-  } catch (error) {
-    res.status(500).json({ msg: "Server error" });
+  // User id set in authentication middleware
+  const profile = await Profile.findOne({ user_id: req.user._id });
+
+  if (!profile) {
+    res.status(400);
+    throw new Error("Invalid user: profile not found");
   }
+
+  // Don't allow user to update user_id or userName
+  const { bio, profilePicture, location, games, socials } = req.body;
+    
+  // Update profile
+  profile.bio = bio;
+  profile.profilePicture = profilePicture;
+  profile.location = location;
+  profile.games = games;
+  profile.socials = socials;
+  await profile.save();
+
+  // Update user profile picture
+  const user = await User.findById(req.user._id);
+  user.profilePicture = profilePicture;
+  await user.save();
+  
+  res.status(200).json(profile);
 });
 
 //@route PUT api/profile/:id
@@ -108,27 +105,30 @@ const updateProfileNoId = asyncHandler(async (req, res) => {
 //@access Public
 const updateProfile = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  const { bio, profilePicture, name, socials, games } = req.body;
-  try {
-    let profile = await Profile.findById(id);
-    if (!profile) {
-      return res.status(404).json({ msg: "Profile not found" });
-    }
+  const profile = await Profile.findById(id);
 
-    // update profile
-    profile.bio = bio;
-    profile.profilePicture = profilePicture;
-    profile.name = name;
-    profile.socials = socials;
-    profile.games = games;
-
-    await profile.save();
-
-    return res.status(200).json(profile);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ msg: "Server error" });
+  if (!profile) {
+    res.status(400);
+    throw new Error("Invalid user: profile not found");
   }
+
+  // Don't allow user to update user_id or userName
+  const { bio, profilePicture, location, games, socials } = req.body;
+    
+  // Update profile
+  profile.bio = bio;
+  profile.profilePicture = profilePicture;
+  profile.location = location;
+  profile.games = games;
+  profile.socials = socials;
+  await profile.save();
+
+  // Update user profile picture
+  const user = await User.find({ profile: mongoose.Types.ObjectId(id) });
+  user.profilePicture = profilePicture;
+  await user.save();
+  
+  res.status(200).json(profile);
 });
 
 //@route DELETE api/profile/:id
