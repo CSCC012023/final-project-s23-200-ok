@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
@@ -9,6 +8,7 @@ import {
   createFriendRequest,
   reset
 } from "../features/friendRequests/friendRequestsSlice";
+import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -21,6 +21,17 @@ const Search = () => {
     isError, 
     message 
   } = useSelector((state) => state.friendRequests);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const getFilteredNonFriendUsers = () => {
+    return nonFriendUsers.filter(nonFriendUser => 
+      nonFriendUser.userName.toLowerCase().includes(searchQuery.toLowerCase()));
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+  };
 
   const handleAddFriend = (id) => {
     dispatch(createFriendRequest(id));
@@ -51,14 +62,36 @@ const Search = () => {
 
   return (
     <>
-      <h3>Add friends</h3>
-      {nonFriendUsers.map((nonFriendUser) => (
-        <NonFriendUser 
-          key={nonFriendUser._id}
-          nonFriendUser={nonFriendUser}
-          handleAddFriend={handleAddFriend}
-        />
-      ))}
+      <p className="heading">Add friends</p>
+
+      <div className="search-bar">
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            placeholder="Search users by username"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button className="clear-search-button" onClick={handleClearSearch}>
+              <AiOutlineCloseCircle />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {getFilteredNonFriendUsers().length > 0 ? (
+        getFilteredNonFriendUsers().map((nonFriendUser) => (
+          <NonFriendUser 
+            key={nonFriendUser._id}
+            nonFriendUser={nonFriendUser}
+            handleAddFriend={handleAddFriend}
+          />
+        ))
+      ) : (
+        <h3>No such users</h3>
+      )
+      }
     </>
   );
 
