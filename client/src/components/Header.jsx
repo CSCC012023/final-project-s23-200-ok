@@ -21,11 +21,11 @@ function Header() {
       <ul>
         {user ? (
           <>
-          <li>
-              {" "}
-              <div className="logo">
-                <Link to="/chat">Chat</Link>
-              </div>
+            <li>
+              <Link to="/chat">chat</Link>
+            </li>
+            <li>
+              <Link to="/search">search</Link>
             </li>
             <li>
               <Link to="/profile">profile</Link>
@@ -34,10 +34,7 @@ function Header() {
               <Link to="/notifications">notifications</Link>
             </li>
             <li>
-              {" "}
-              <div className="logo">
-                <Link to="/lfg">Lfg</Link>
-              </div>
+              <Link to="/lfg">lfg</Link>
             </li>
             <li>
               <button className="btn" onClick={onLogout}>

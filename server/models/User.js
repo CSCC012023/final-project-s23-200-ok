@@ -29,6 +29,11 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
   },
   profile: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" },
+  profilePicture: { 
+    type: String,
+    required: false,
+    default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+  },
   friends: {
     type: [FriendSchema]
   },
