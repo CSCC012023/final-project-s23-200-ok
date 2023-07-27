@@ -136,11 +136,13 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   if (user && (await bcrypt.compare(password, user.password))) {
+    console.log("user.chatAlert: " + user.chatalert);
     res.status(200).json({
       _id: user.id,
       userName: user.userName,
       email: user.email,
       token: generateToken(user.id),
+      chatAlert: user.chatalert,
     });
   } else {
     res.status(400);
@@ -164,17 +166,21 @@ const getNonFriendUsers = asyncHandler(async (req, res) => {
   // User id set in authentication middleware
   const loggedInUser = await User.findById(req.user._id);
 
-  res.status(200).json(users.filter(user => {
-    return (
-      // don't include logged in user
-      (user._id.toString() !== loggedInUser._id.toString())
-      &&
-      // don't include logged in user's friends
-      (!loggedInUser.friends.some(friend => {
-        return friend.user_id === user._id.toString() && friend.userName === user.userName;
-      }))
-    );
-  }));
+  res.status(200).json(
+    users.filter((user) => {
+      return (
+        // don't include logged in user
+        user._id.toString() !== loggedInUser._id.toString() &&
+        // don't include logged in user's friends
+        !loggedInUser.friends.some((friend) => {
+          return (
+            friend.user_id === user._id.toString() &&
+            friend.userName === user.userName
+          );
+        })
+      );
+    })
+  );
 });
 
 //@route   GET api/users/:id
@@ -183,9 +189,23 @@ const getNonFriendUsers = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res) => {});
 
 //@route PUT api/users/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const updateUser = asyncHandler(async (req, res) => {});
+//@desc  set user chat alert to req.body.chatalert
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
+  console.log("req.params" + req.params.id);
+  console.log("req.body" + req.body.chatAlert);
+  let user = await User.findById(req.params.id);
+  if (user) {
+    user.chatalert = req.body.chatAlert;
+    await user.save();
+    res.json({
+      chatAlert: user.chatalert,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 //@route   GET api/users/friends
 //@desc    Return list of logged in user's friends
@@ -297,5 +317,5 @@ export {
   getFriends,
   unfriendFriend,
   deleteUser,
-  verifyEmail
+  verifyEmail,
 };

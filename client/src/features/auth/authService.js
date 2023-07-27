@@ -20,7 +20,8 @@ const login = async (userData) => {
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
-  
+
+  console.log(response.data);
   return response.data;
 };
 
@@ -72,6 +73,31 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+const updateChatAlert = async (userId, chatAlert, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem("user")),
+      chatAlert: chatAlert,
+    })
+  );
+
+  const response = await axios.put(
+    API_URL + userId,
+    { chatAlert: chatAlert },
+    config
+  );
+  console.log(response.data);
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
@@ -79,6 +105,7 @@ const authService = {
   getFriends,
   unfriend,
   deleteUser,
+  updateChatAlert,
 };
 
 export default authService;

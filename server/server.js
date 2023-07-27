@@ -31,7 +31,6 @@ let users = {};
 
 io.on("connection", (socket) => {
   socket.on("register", (userId) => {
-    console.log(`Socket registered: ${socket.id} for user ${userId}`);
     users[userId] = socket.id;
   });
 
@@ -47,7 +46,6 @@ io.on("connection", (socket) => {
     let recipientId = user1Id === message.sender_user_id ? user2Id : user1Id;
     if (users[recipientId]) {
       io.to(users[recipientId]).emit("chatAlert");
-      console.log(`Chat alert sent to ${recipientId}`);
     }
   });
 
@@ -75,13 +73,8 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
   gridBucket = new mongoose.mongo.GridFSBucket(connection.db, {
-<<<<<<< HEAD
     bucketName: "postFiles",
   });
-  // console.log(gridBucket.s._filesCollection);
-=======
-    bucketName: 'postFiles'});
->>>>>>> develop
 });
 
 app.use(cors());

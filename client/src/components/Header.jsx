@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, reset } from "../features/auth/authSlice";
 
-function Header({chatAlert}) {
+function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -22,7 +22,7 @@ function Header({chatAlert}) {
         {user ? (
           <>
             <li>
-              <Link to="/chat">chat {chatAlert && <span class="badge">New</span>}</Link>
+              <Link to="/chat">chat {user.chatAlert && <span class="badge">New</span>}</Link>
             </li>
             <li>
               <Link to="/search">search</Link>
@@ -41,7 +41,6 @@ function Header({chatAlert}) {
                 Logout
               </button>
             </li>
-            
           </>
         ) : (
           <>

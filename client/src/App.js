@@ -14,13 +14,16 @@ import Lfg from "./pages/Lfg";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
 import Search from "./pages/Search";
+import { updateChatAlert } from "./features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
   const socket = io("http://localhost:8080");
   const socketRef = useRef();
-  const [chatAlert, setChatAlert] = useState(false);
-
   const { user } = useSelector((state) => state.auth);
+
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     socketRef.current = socket;
@@ -33,7 +36,7 @@ function App() {
     socketRef.current.on("chatAlert", () => {
       // Handle notifications
       console.log("Chat alert received");
-      setChatAlert(true);
+      dispatch(updateChatAlert({ chatAlert: true, userId: user._id }));
     });
 
     return () => {
@@ -45,7 +48,7 @@ function App() {
     <>
       <Router>
         <div className="container">
-          <Header chatAlert={chatAlert} />
+          <Header  />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
@@ -58,8 +61,6 @@ function App() {
               path="/chat"
               element={
                 <Chat
-                  chatAlert={chatAlert}
-                  setChatAlert={setChatAlert}
                   socketRef={socketRef}
                 />
               }

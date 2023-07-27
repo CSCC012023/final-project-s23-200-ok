@@ -9,7 +9,7 @@ import {
   getFriends,
   unfriendFriend,
   deleteUser,
-  verifyEmail
+  verifyEmail,
 } from "../controllers/userController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
@@ -21,7 +21,8 @@ router.route("/login").post(loginUser);
 router.route("/nonfriends").get(protect, getNonFriendUsers);
 router.route("/friends").get(protect, getFriends);
 router.route("/:friendUserId").patch(protect, unfriendFriend);
-router.route("/:id")
+router
+  .route("/:id")
   .get(protect, getUser)
   .put(protect, updateUser)
   .delete(protect, deleteUser);

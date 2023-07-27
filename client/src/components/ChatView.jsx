@@ -6,11 +6,12 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localeEn from "dayjs/locale/en";
 import Message from "../components/Message";
+import { updateChatAlert } from "../features/auth/authSlice";
 
 
 
 
-const ChatView = ({ chat, chatAlert, setChatAlert, socketRef }) => {
+const ChatView = ({ chat, socketRef }) => {
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.message);
   const { user } = useSelector((state) => state.auth);
@@ -44,7 +45,7 @@ const ChatView = ({ chat, chatAlert, setChatAlert, socketRef }) => {
 
   useEffect(() => {
     dispatch(getMessages(chat._id));
-    setChatAlert(false)
+    dispatch(updateChatAlert({ chatAlert: false, userId: user._id }));
   }, [dispatch, chat]);
 
 
@@ -63,6 +64,7 @@ const ChatView = ({ chat, chatAlert, setChatAlert, socketRef }) => {
 
     socketRef.current.on("receiveMessage", (message) => {
       dispatch(addMessage(message));
+      dispatch(updateChatAlert({ chatAlert: false, userId: user._id }));
       scrollToBottom();
     });
 

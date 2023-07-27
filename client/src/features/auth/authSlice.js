@@ -107,6 +107,27 @@ export const deleteUserAccount = createAsyncThunk(
   }
 );
 
+// Update chat alert
+export const updateChatAlert = createAsyncThunk(
+  "auth/updateChatAlert",
+  async ({ chatAlert, userId }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      console.log(chatAlert);
+      console.log(userId);
+      return await authService.updateChatAlert(userId, chatAlert, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -192,6 +213,21 @@ export const authSlice = createSlice({
         state.user = null;
       })
       .addCase(deleteUserAccount.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // update chat alert
+      .addCase(updateChatAlert.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateChatAlert.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        console.log(action.payload);
+        state.user.chatAlert = action.payload.chatAlert;
+      })
+      .addCase(updateChatAlert.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
