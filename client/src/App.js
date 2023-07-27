@@ -4,12 +4,13 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
+import Verify from "./pages/Verify";
 import Login from "./pages/Login";
-import Verify from "./pages/Verify.jsx";
 import Profile from "./pages/Profile";
 import Lfg from "./pages/Lfg";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -20,12 +21,13 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify/:id" element={<Verify />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/lfg" element={<Lfg />} />
-            <Route path="/verify/:id" element={<Verify />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </div>
       </Router>

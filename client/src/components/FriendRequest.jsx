@@ -2,7 +2,7 @@ import React from "react";
 
 const FriendRequest = ({ friendRequest, isOutgoing, handleAccept, handleDecline, handleCancel }) => {
   const handleAcceptRequest = () => {
-    handleAccept(friendRequest._id);
+    handleAccept(friendRequest);
   };
 
   const handleDeclineRequest = () => {
