@@ -1,8 +1,8 @@
 import React from "react";
 
-const NonFriendUser = ({ user, handleAddFriend }) => {
+const NonFriendUser = ({ nonFriendUser, handleAddFriend }) => {
   const handleAddFriendUser = () => {
-    handleAddFriend(user._id);
+    handleAddFriend(nonFriendUser._id);
   };
 
   return (
@@ -10,10 +10,10 @@ const NonFriendUser = ({ user, handleAddFriend }) => {
       <div className="friend-request-user-details">
         <img
           className="friend-request-pfp"
-          src={user.profilePicture}
+          src={nonFriendUser.profilePicture}
         />
         <div className="friend-request-username">
-          {user.userName}
+          {nonFriendUser.userName}
         </div>
       </div>
       <button className="btn" onClick={handleAddFriendUser}>Add Friend</button>

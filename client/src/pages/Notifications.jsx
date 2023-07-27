@@ -20,8 +20,7 @@ const Notifications = () => {
   const { 
     incomingFriendRequests, 
     outgoingFriendRequests, 
-    isLoading, 
-    isSuccess, 
+    isLoading,
     isError, 
     message 
   } = useSelector((state) => state.friendRequests);

@@ -80,7 +80,9 @@ const getNonFriendUsers = async (token) => {
     },
   };
 
-  const response = await axios.get("/api/users");
+  const response = await axios.get("/api/users/nonfriends", config);
+
+  return response.data;
 };
 
 const friendRequestsService = {
@@ -88,7 +90,8 @@ const friendRequestsService = {
   respondToFriendRequest,
   getIncomingFriendRequests,
   getOutgoingFriendRequests,
-  deleteFriendRequest
+  deleteFriendRequest,
+  getNonFriendUsers
 };
 
 export default friendRequestsService;
