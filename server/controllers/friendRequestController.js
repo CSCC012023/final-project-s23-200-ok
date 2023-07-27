@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
 import Profile from "../models/Profile.js";
+import { createChat } from "./chatController.js";
 
 //@route POST api/friendrequests/:recipientUserId
 //@desc Create (send) a friend request

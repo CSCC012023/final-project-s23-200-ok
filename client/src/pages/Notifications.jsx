@@ -11,6 +11,7 @@ import {
   deleteFriendRequest,
   reset
 } from "../features/friendRequests/friendRequestsSlice";
+import { createChat } from "../features/chat/chatSlice";
 
 const Notifications = () => {
   const navigate = useNavigate();
@@ -25,11 +26,22 @@ const Notifications = () => {
     message 
   } = useSelector((state) => state.friendRequests);
 
-  const handleAccept = (id) => {
+  const handleAccept = (friendRequest) => {
     dispatch(respondToFriendRequest({
-      friendRequestId: id,
+      friendRequestId: friendRequest._id,
       newStatus: "accepted"
     }));
+
+    dispatch(
+      createChat(
+        {
+          user_id: friendRequest.sender_user_id,
+          user_name: friendRequest.sender_userName,
+          other_user_id: friendRequest.recipient_user_id,
+          other_user_name: friendRequest.recipient_userName
+        }
+      )
+    );
   };
 
   const handleDecline = (id) => {
