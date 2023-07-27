@@ -75,9 +75,13 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
   gridBucket = new mongoose.mongo.GridFSBucket(connection.db, {
+<<<<<<< HEAD
     bucketName: "postFiles",
   });
   // console.log(gridBucket.s._filesCollection);
+=======
+    bucketName: 'postFiles'});
+>>>>>>> develop
 });
 
 app.use(cors());

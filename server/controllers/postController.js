@@ -1,54 +1,41 @@
 import asyncHandler from "express-async-handler";
 import Post from "../models/Post.js";
 
-//temp removable
-import mongoose from "mongoose";
-
 //@route  POST api/posts
 //@desc   Create a new post
 //@access Private
 const createPost = asyncHandler(async (req, res) => {
-  try {
+  // User id and userName set in authentication middleware
+  const { user_id, userName, text, image } = req.body;
+  let file = req.file;
 
-    // User id and userName set in authentication middleware
-    const { user_id, userName, text, image } = req.body;
-    let file = req.file;
-    console.log("is file comin? ");
-    console.log(file);
+  // Create post
+  let post;
+  if (req.file) {
+    post = await Post.create({
+      user_id,
+      userName,
+      text,
+      image,
+      file:file.id 
+    });
+  }
+  else {
+    post = await Post.create({
+      user_id,
+      userName,
+      text,
+      image,
+      file
+    });
+  }
 
-    // Create post
-    let post;
-    if (req.file){
-      post = await Post.create({
-        user_id,
-        userName,
-        text,
-        image,
-        file:file.id 
-      });
-    }
-    else{
-      post = await Post.create({
-        user_id,
-        userName,
-        text,
-        image,
-        file
-      });
-    }
-
-
-    if (post) {
-      res.status(201).json(post);
-    } 
-    else {
-      res.status(400);
-      throw new Error("Invalid post data");
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    throw new Error("Error while creating post");
+  if (post) {
+    res.status(201).json(post);
+  } 
+  else {
+    res.status(400);
+    throw new Error("Invalid post data");
   }
 });
 
@@ -62,7 +49,6 @@ const getPosts = asyncHandler(async (req, res) => {
     throw new Error("Invalid user");
   }
 
-  // res.status(200);
   const posts = await Post.find({});
   res.status(200).json(posts);
 });
@@ -83,54 +69,48 @@ const updatePost = asyncHandler(async (req, res) => {});
 const deletePost = asyncHandler(async (req, res) => {
     const post = await Post.findById(req.params.id);
 
-    // the user is authorized to delete it. 
     if (post) {
       await post.deleteOne();
       res.status(200).json({ "_id": req.params.id });
-    } else { // post not available
+    } else {
       res.status(404);
       throw new Error("Post not found");
     }
-    
 });
 
 //@route   PATCH api/posts/:id/react
 //@desc    Add a like to the post
 //@access  Private
 const reactToPost = asyncHandler(async (req, res) => {
-  try {
-    const { reaction } = req.body; // Taking reaction type from the request body
-    const user = req.user.id;
-    const post = await Post.findById(req.params.id);
+  const { reaction } = req.body; // Taking reaction type from the request body
+  const user = req.user.id;
+  const post = await Post.findById(req.params.id);
 
-    if (!post) {
-      res.status(404);
-      throw new Error("Post not found");
-    }
-
-    // Gettting the index of the reaction to update
-    const reactionIndex = post.likes.findIndex(like => like.user.toString() === user);
-
-    if (reactionIndex === -1) {
-      // If the user has not reacted to the post before, add reaction
-      post.likes.unshift({ user, reaction });
-    } else {
-      if (reaction === post.likes[reactionIndex].reaction) {
-        // If the user clicked the same reaction again, remove reaction
-        post.likes.splice(reactionIndex, 1);
-      } else {
-        // If the user clicked a different reaction, change reaction
-        post.likes[reactionIndex].reaction = reaction;
-      }
-    }
-    await post.save();
-
-    return res.status(200).json(post);
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    throw new Error("Error while liking post");
+  if (!post) {
+    res.status(404);
+    throw new Error("Post not found");
   }
+
+  // Gettting the index of the reaction to update
+  const reactionIndex = post.likes.findIndex(like => like.user.toString() === user);
+
+  if (reactionIndex === -1) {
+    // If the user has not reacted to the post before, add reaction
+    post.likes.unshift({ user, reaction });
+  }
+  else {
+    if (reaction === post.likes[reactionIndex].reaction) {
+      // If the user clicked the same reaction again, remove reaction
+      post.likes.splice(reactionIndex, 1);
+    }
+    else {
+      // If the user clicked a different reaction, change reaction
+      post.likes[reactionIndex].reaction = reaction;
+    }
+  }
+  await post.save();
+
+  return res.status(200).json(post);
 });
 
 export {

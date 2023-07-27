@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   getUsers,
+  getNonFriendUsers,
   getUser,
   updateUser,
   getFriends,
@@ -17,6 +18,7 @@ const router = Router();
 router.route("/").post(registerUser).get(protect, getUsers);
 router.route("/verify/:id").get(verifyEmail);
 router.route("/login").post(loginUser);
+router.route("/nonfriends").get(protect, getNonFriendUsers);
 router.route("/friends").get(protect, getFriends);
 router.route("/:friendUserId").patch(protect, unfriendFriend);
 router.route("/:id")

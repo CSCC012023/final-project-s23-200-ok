@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
 import Profile from "../models/Profile.js";
+import { createChat } from "./chatController.js";
 
 //@route POST api/friendrequests/:recipientUserId
 //@desc Create (send) a friend request
@@ -22,7 +23,7 @@ const createFriendRequest = asyncHandler(async (req, res) => {
   const sender = await User.findById(req.user._id);
   if (sender._id.toString() === recipient._id.toString()
     || sender.friends.some(friend => {
-      return friend.user_id === recipient._id.toString() && friend.userName === recipient.userName
+      return friend.user_id === recipient._id.toString() && friend.userName === recipient.userName;
     })) {
     res.status(400);
     throw new Error("Invalid recipient");

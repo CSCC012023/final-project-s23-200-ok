@@ -156,6 +156,27 @@ const getUsers = asyncHandler(async (req, res) => {
   res.status(200).json(users);
 });
 
+//@route   GET api/users/nonfriends
+//@desc    Get all non friend users
+//@access  Private
+const getNonFriendUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  // User id set in authentication middleware
+  const loggedInUser = await User.findById(req.user._id);
+
+  res.status(200).json(users.filter(user => {
+    return (
+      // don't include logged in user
+      (user._id.toString() !== loggedInUser._id.toString())
+      &&
+      // don't include logged in user's friends
+      (!loggedInUser.friends.some(friend => {
+        return friend.user_id === user._id.toString() && friend.userName === user.userName;
+      }))
+    );
+  }));
+});
+
 //@route   GET api/users/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
@@ -185,6 +206,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
     throw new Error("Friend not found");
   }
 
+  // User id set in authentication middleware
   const user = await User.findById(req.user._id);
   user.friends = user.friends.filter(
     (friend) => friend.user_id.toString() !== req.params.friendUserId
@@ -238,14 +260,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
   await res.status(200);
 });
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: "30000s",
-  });
-};
-
 const createProfileWithUserId = async (user) => {
-  console.log("createProfileWithUserId");
   // Check if this user already has a profile
   const userHasProfile = await Profile.findOne({ user_id: user._id });
 
@@ -266,14 +281,21 @@ const createProfileWithUserId = async (user) => {
   }
 };
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30000s",
+  });
+};
+
 export {
   registerUser,
   loginUser,
   getUsers,
+  getNonFriendUsers,
   getUser,
   updateUser,
   getFriends,
   unfriendFriend,
   deleteUser,
-  verifyEmail,
+  verifyEmail
 };

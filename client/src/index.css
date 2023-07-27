@@ -827,3 +827,33 @@ h3 {
   border-radius: 5px;
   margin-left: 5px;
 }
+/* Add this CSS to your existing stylesheet or create a new one */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  width: 300px; /* Set the width to an appropriate value as per your design */
+}
+
+.search-bar input {
+  flex: 1;
+  padding-right: 30px; /* To accommodate the search and clear search icons */
+  /* Add other styles for the input */
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  /* Add other styles for the buttons if needed */
+}
+
+.clear-search-button {
+  right: 5px;
+}

@@ -21,11 +21,11 @@ function Header({chatAlert}) {
       <ul>
         {user ? (
           <>
-          <li>
-              {" "}
-          
-                <Link to="/chat">Chat {chatAlert && <span class="badge">New</span>}</Link>
-              
+            <li>
+              <Link to="/chat">chat {chatAlert && <span class="badge">New</span>}</Link>
+            </li>
+            <li>
+              <Link to="/search">search</Link>
             </li>
             <li>
               <Link to="/profile">Profile</Link>
@@ -34,10 +34,7 @@ function Header({chatAlert}) {
               <Link to="/notifications">Notifications</Link>
             </li>
             <li>
-              {" "}
-              <div className="logo">
-                <Link to="/lfg">Lfg</Link>
-              </div>
+              <Link to="/lfg">lfg</Link>
             </li>
             <li>
               <button className="btn" onClick={onLogout}>

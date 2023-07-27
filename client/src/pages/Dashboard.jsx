@@ -38,7 +38,6 @@ function Dashboard() {
     };
 
     const allowFiles=["image/jpeg", "image/png", "image/gif", "video/mp4"];
-    // console.log(file.type);
     if (!allowFiles.includes(newfile?.type)  ){
         console.log("invalid type " + newfile.type);
         return;
@@ -53,28 +52,8 @@ function Dashboard() {
       setIsVideo(false);
     }
     else{
-      // console.log(newPost);
       setFile(newfile);
       setIsVideo(true);
-      // let form = new FormData();
-      // form.append("text",text);
-      // form.append("file",newfile);
-
-      // for (var key in newPost){
-      //   console.log(key+" "+newPost[key]);
-      //   if (key === "file"){
-      //     console.log(123);
-      //     form.append("PostFile", file);
-      //     continue;
-      //   }
-      //   form.append(key, newPost[key])
-      // }
-
-      // print form
-      // for (var pair of form.entries()) {
-      //   console.log(pair[0]+ ', ' + pair[1]); 
-      // }
-      // setNewPost(form);
     }
   };
 
@@ -146,8 +125,6 @@ function Dashboard() {
               />
               <input
                 type="file"
-                // name="image"
-                // accept="image/*"
                 className="file-upload"
                 onChange={handleFileChange}
               />

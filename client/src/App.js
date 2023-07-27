@@ -7,12 +7,13 @@ import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
+import Verify from "./pages/Verify";
 import Login from "./pages/Login";
-import Verify from "./pages/Verify.jsx";
 import Profile from "./pages/Profile";
 import Lfg from "./pages/Lfg";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
+import Search from "./pages/Search";
 
 function App() {
   const socket = io("http://localhost:8080");
@@ -48,10 +49,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify/:id" element={<Verify />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/lfg" element={<Lfg />} />
-            <Route path="/verify/:id" element={<Verify />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route
               path="/chat"
@@ -63,6 +64,7 @@ function App() {
                 />
               }
             />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </div>
       </Router>
