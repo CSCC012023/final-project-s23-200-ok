@@ -136,7 +136,6 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   if (user && (await bcrypt.compare(password, user.password))) {
-    console.log("user.chatAlert: " + user.chatalert);
     res.status(200).json({
       _id: user.id,
       userName: user.userName,
@@ -192,8 +191,6 @@ const getUser = asyncHandler(async (req, res) => {});
 //@desc  set user chat alert to req.body.chatalert
 //@access private
 const updateUser = asyncHandler(async (req, res) => {
-  console.log("req.params" + req.params.id);
-  console.log("req.body" + req.body.chatAlert);
   let user = await User.findById(req.params.id);
   if (user) {
     user.chatalert = req.body.chatAlert;

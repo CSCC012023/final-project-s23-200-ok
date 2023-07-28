@@ -113,8 +113,6 @@ export const updateChatAlert = createAsyncThunk(
   async ({ chatAlert, userId }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      console.log(chatAlert);
-      console.log(userId);
       return await authService.updateChatAlert(userId, chatAlert, token);
     } catch (error) {
       const message =

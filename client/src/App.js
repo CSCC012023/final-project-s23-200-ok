@@ -34,8 +34,7 @@ function App() {
     }
 
     socketRef.current.on("chatAlert", () => {
-      // Handle notifications
-      console.log("Chat alert received");
+      
       dispatch(updateChatAlert({ chatAlert: true, userId: user._id }));
     });
 

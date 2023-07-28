@@ -21,7 +21,6 @@ const login = async (userData) => {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
 
-  console.log(response.data);
   return response.data;
 };
 
@@ -51,7 +50,6 @@ const unfriend = async (friendUserId, token) => {
     },
   };
 
-  console.log(API_URL + friendUserId);
 
   const response = await axios.patch(API_URL + friendUserId, {}, config);
 
@@ -93,7 +91,6 @@ const updateChatAlert = async (userId, chatAlert, token) => {
     { chatAlert: chatAlert },
     config
   );
-  console.log(response.data);
 
   return response.data;
 };
