@@ -195,12 +195,12 @@ const getFriends = asyncHandler(async (req, res) => {
   res.status(200).json(user.friends);
 });
 
-//@route   PATCH api/users/:friendUserId
-//@desc    Remove friend with user_id friendUserId from logged in user's friends array
+//@route   PATCH api/users/:frienduserId
+//@desc    Remove friend with user_id frienduserId from logged in user's friends array
 //@access  Private
 const unfriendFriend = asyncHandler(async (req, res) => {
   // No such friend
-  const friend = await User.findById(req.params.friendUserId);
+  const friend = await User.findById(req.params.frienduserId);
   if (!friend) {
     res.status(404);
     throw new Error("Friend not found");
@@ -209,7 +209,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   // User id set in authentication middleware
   const user = await User.findById(req.user._id);
   user.friends = user.friends.filter(
-    (friend) => friend.user_id.toString() !== req.params.friendUserId
+    (friend) => friend.user_id.toString() !== req.params.frienduserId
   );
   user.save();
 
@@ -219,6 +219,39 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   friend.save();
 
   res.status(200).json(user.friends);
+});
+
+//@route PATCH api/users/block/:userId
+//@desc Block or unblock another user
+//@access Private
+const blockUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const userToBlock = await User.findById(req.params.userId);
+  const blockedUserIndex = user.blockedUsers.indexOf(req.params.userId);
+
+  // Check if user being blocked/unblocked exists
+  if (!userToBlock) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  // Don't allow a user to block self
+  if (req.user._id.toString() === req.params.userId) {
+    res.status(400);
+    throw new Error("Cannot block self");
+  }
+
+  // Block or unblock depending on whether target user is already blocked
+  try {
+    if (blockedUserIndex === -1) user.blockedUsers.push(req.params.userId);
+    else user.blockedUsers.splice(blockedUserIndex, 1);
+  } catch (error) {
+    res.status(500);
+    throw new Error("An error occurred while blocking user");
+  }
+
+  user.save();
+  res.status(200).json(user.blockedUsers);
 });
 
 //@route DELETE api/users/:id
@@ -256,7 +289,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   user.isverified = true;
   await user.save();
-  await createProfileWithUserId(user);
+  await createProfileWithuserId(user);
   await res.status(200);
 });
 
@@ -296,6 +329,7 @@ export {
   updateUser,
   getFriends,
   unfriendFriend,
+  blockUser,
   deleteUser,
   verifyEmail
 };

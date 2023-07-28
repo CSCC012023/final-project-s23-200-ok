@@ -37,6 +37,7 @@ const UserSchema = new mongoose.Schema({
   friends: {
     type: [FriendSchema]
   },
+  blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   lfgposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "LFGPost" }],
   picture: { type: String },

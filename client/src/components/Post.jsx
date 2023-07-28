@@ -12,8 +12,7 @@ import ReactPlayer from 'react-player';
 
 const Post = ({ post, handleDelete }) => {
   const { user } = useSelector((state) => state.auth);
-  const [reactBtnClicked, setReactBtnClicked] = useState(false),
-        [userReaction, setUserReaction] = useState('');
+  const [userReaction, setUserReaction] = useState('');
   const dispatch = useDispatch();
 
   const calculateTime = (date) => {
@@ -43,7 +42,7 @@ const Post = ({ post, handleDelete }) => {
     }
     getVideo();
 
-  }, [])
+  }, [post.file])
   const reactionCounter = useMemo(() => {
     const reactionCount = {
       like: 0,
@@ -69,14 +68,6 @@ const Post = ({ post, handleDelete }) => {
 
     return reactionCount;
   }, [post, user, userReaction]);
-
-  const handleReactionButtonClick = () => {
-    if (!reactBtnClicked) {
-      setReactBtnClicked(true);
-    } else { 
-      setReactBtnClicked(false);
-    }
-  };
 
   const handleReactionClick = (reaction) => {
     dispatch(reactToPost({postId: post._id, reaction}));
@@ -106,19 +97,6 @@ const Post = ({ post, handleDelete }) => {
     ));
   
     return reactionElements;
-  };
-
-  const reactButtonContents = () => {
-    if (userReaction === '') {
-      return <button className='btn' onClick={() => handleReactionButtonClick()}>React</button>;
-    } else {
-      const buttonElement = (
-        <button className='btn' onClick={() => handleReactionButtonClick()}>
-          {userReaction}
-        </button>
-      );
-      return buttonElement;
-    }
   };
 
   return (

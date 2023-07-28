@@ -8,6 +8,7 @@ import {
   updateUser,
   getFriends,
   unfriendFriend,
+  blockUser,
   deleteUser,
   verifyEmail
 } from "../controllers/userController.js";
@@ -17,6 +18,7 @@ const router = Router();
 
 router.route("/").post(registerUser).get(protect, getUsers);
 router.route("/verify/:id").get(verifyEmail);
+router.route("/block/:userId").patch(protect, blockUser);
 router.route("/login").post(loginUser);
 router.route("/nonfriends").get(protect, getNonFriendUsers);
 router.route("/friends").get(protect, getFriends);
