@@ -92,7 +92,12 @@ const getLFGPosts = asyncHandler(async (req, res) => {
     throw new Error("Invalid user");
   }
 
-  const posts = await LFGPost.find({});
+  const posts = await LFGPost.find({
+    $and: [
+      { user_id: { $nin: req.user.blockedUsers } }, // Exclude posts by blocked users
+      { 'user.blockedUsers.user_id': { $ne: req.user._id } }, // Exclude post if user is blocked by post creator
+    ],
+  });
   res.json(posts);
 });
 
