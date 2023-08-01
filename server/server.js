@@ -10,6 +10,7 @@ import userRoutes from "./routes/userRoutes.js";
 import LFGPostRoutes from "./routes/LFGPostRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import friendRequestRoutes from "./routes/friendRequestRoutes.js";
+import tournamentRoutes from "./routes/tournamentRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -43,7 +44,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// new 
+// new
 global.mongoose = mongoose;
 
 app.use(cors());
@@ -62,7 +63,8 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
   gridBucket = new mongoose.mongo.GridFSBucket(connection.db, {
-    bucketName: 'postFiles'});
+    bucketName: "postFiles",
+  });
 });
 
 app.use(cors());
@@ -77,6 +79,7 @@ app.use("/api/lfg", LFGPostRoutes);
 app.use("/api/friendrequests", friendRequestRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/tournament", tournamentRoutes);
 
 app.use(errorHandler);
 
