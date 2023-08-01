@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner";
+import Bracket from "../components/Bracket";
 import {
   reset, 
   getAllTournaments,
@@ -65,15 +66,20 @@ const Tournament = () => {
         ))}
       </select>
 
-      {selectedTournament ? (
-        <h1>
-          {selectedTournament}
-        </h1>
-      ) : (
-        <h1>
-          No tournaments
-        </h1>
-      )}
+      {tournaments &&
+        selectedTournament &&
+        tournaments.map((tournament) => {
+          if (tournament._id.toString() === selectedTournament) {
+            return (
+              <Bracket
+                key={selectedTournament}
+                tournament={tournament}
+              />
+            );
+          }
+          return null;
+        })
+      }
     </>
   );
 
