@@ -17,5 +17,6 @@ router.route("/").post(protect, createProfile).get(protect, getProfileNoId).put(
 router.route("/:id").delete(protect, deleteProfile);
 router.route("/:id/games/valorant").post(protect, linkValorant);
 router.route("/:id/games/overwatch").post(protect, linkOverwatch);
+router.route("/:user_id").get(protect, getProfile);
 
 export default router;

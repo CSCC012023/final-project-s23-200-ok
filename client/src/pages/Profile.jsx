@@ -172,10 +172,6 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    if (isError) {
-      console.log(message);
-    }
-
     //If no user is logged in redirect to the login page
     if (!user) {
       navigate("/login");
