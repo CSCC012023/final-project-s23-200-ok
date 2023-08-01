@@ -6,6 +6,7 @@ import postsReducer from "../features/posts/postsSlice";
 import friendRequestsReducer from "../features/friendRequests/friendRequestsSlice";
 import messageReducer from "../features/message/messageSlice";
 import chatReducer from "../features/chat/chatSlice";
+import tournamentsReducer from "../features/tournaments/tournamentsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,5 +17,6 @@ export const store = configureStore({
     friendRequests: friendRequestsReducer,
     message: messageReducer,
     chat: chatReducer,
+    tournaments: tournamentsReducer
   },
 });

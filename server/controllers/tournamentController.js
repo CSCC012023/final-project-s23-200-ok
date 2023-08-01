@@ -245,4 +245,11 @@ const leaveTournament = asyncHandler(async (req, res) => {
   res.status(200).json(tournament);
 });
 
-export { createTournament, addParticipantToTeam, leaveTournament };
+export {
+  createTournament,
+  getTournamentById,
+  getAllTournaments,
+  updateTournamentById,
+  addParticipantToTeam,
+  leaveTournament
+};
