@@ -53,6 +53,20 @@ const getPosts = asyncHandler(async (req, res) => {
   res.status(200).json(posts);
 });
 
+//@route   GET api/posts/byfriends
+//@desc    get the posts of the friends of the user
+//@access  Private
+const getPostsByFriends = asyncHandler(async (req, res) => {
+  var friend_posts = [];
+    for (var i = 0; i <req.user.friends.length; i++){
+      const friend_post = await Post.find().where("user_id").equals(req.user.friends[i].user_id);
+      for (var j = 0; j < friend_post.length; j++){
+        friend_posts.push(friend_post[j]);
+      }
+    }
+    res.status(200).json(friend_posts);
+});
+
 //@route   GET api/posts/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
@@ -116,6 +130,7 @@ const reactToPost = asyncHandler(async (req, res) => {
 export {
     createPost,
     getPosts,
+    getPostsByFriends,
     getPost,
     updatePost,
     deletePost,
