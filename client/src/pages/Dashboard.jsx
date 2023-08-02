@@ -109,7 +109,7 @@ function Dashboard() {
     }
 
     friendView? 
-    dispatch(getPostsByFriends(user._id)):
+    dispatch(getPostsByFriends()):
     dispatch(getPosts());
   }, [dispatch, friendView]);
 

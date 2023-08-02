@@ -50,10 +50,10 @@ export const getPosts = createAsyncThunk(
 //get post by friends
 export const getPostsByFriends = createAsyncThunk(
   "post/getPostsByFriends",
-  async (user_id, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
-      return await postsService.getPostsByFriends(user_id, token);
+      return await postsService.getPostsByFriends( token);
     } catch (error) {
       const message =
         (error.response &&

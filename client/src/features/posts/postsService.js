@@ -31,7 +31,7 @@ const getPosts = async (token) => {
 };
 
 // Get posts by friends
-const getPostsByFriends = async (user_id, token) => {
+const getPostsByFriends = async (token) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
