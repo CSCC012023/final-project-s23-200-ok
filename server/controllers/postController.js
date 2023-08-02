@@ -57,12 +57,7 @@ const getPosts = asyncHandler(async (req, res) => {
 //@desc    get the posts of the friends of the user
 //@access  Private
 const getPostsByFriends = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    res.status(400);
-    throw new Error("Invalid user");
-  }
-  try{ 
-    var friend_posts = [];
+  var friend_posts = [];
     for (var i = 0; i <req.user.friends.length; i++){
       const friend_post = await Post.find().where("user_id").equals(req.user.friends[i].user_id);
       for (var j = 0; j < friend_post.length; j++){
@@ -70,11 +65,6 @@ const getPostsByFriends = asyncHandler(async (req, res) => {
       }
     }
     res.status(200).json(friend_posts);
-  } catch (error) {
-    console.log(error);
-    res.status(500);
-    throw new Error("Error while getting posts by friends");
-  } 
 });
 
 //@route   GET api/posts/:id
