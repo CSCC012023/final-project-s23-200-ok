@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getPosts, createPost, deletePost } from "../features/posts/postsSlice";
+import { getPosts, createPost, deletePost, getPostsByFriends} from "../features/posts/postsSlice";
 import { readAndCompressImage } from "browser-image-resizer";
 import Spinner from "../components/Spinner";
 import Post from "../components/Post";
@@ -16,6 +16,7 @@ function Dashboard() {
   const [text, setText] = useState("");
   const [file, setFile] = useState();
   const [isVideo, setIsVideo] = useState(false);
+  const [friendView, setFriendView] = useState(false);
 
 
   const handleInputChange = (e) => {  
@@ -98,13 +99,19 @@ function Dashboard() {
     });
   }
 
+  const ToggleViewFriendPost = () => {
+    friendView ? setFriendView(false) : setFriendView(true);
+  }
+
   useEffect(() => {
     if (isError) {
       console.log(message);
     }
 
+    friendView? 
+    dispatch(getPostsByFriends(user._id)):
     dispatch(getPosts());
-  }, [dispatch]);
+  }, [dispatch, friendView]);
 
   if (isLoading) {
     return <Spinner />;
@@ -134,8 +141,15 @@ function Dashboard() {
             </form>
           </section>
 
+          <div>
+            <h1>Posts</h1>
+            <button className="btn" onClick={()=>ToggleViewFriendPost()}>View Friend Posts</button>
+          </div>
+          {posts.length==0 && 
+            <div>There are no posts yet!</div>
+          }
           {posts && posts.map((post) => (
-            <Post key={post._id} post={post} handleDelete={handleDelete}/>
+            <Post key={post._id} post={post} handleDelete={handleDelete} />
           ))}
         </>
         

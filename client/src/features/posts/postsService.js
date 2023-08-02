@@ -30,6 +30,17 @@ const getPosts = async (token) => {
   return response.data;
 };
 
+// Get posts by friends
+const getPostsByFriends = async (user_id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await axios.get(API_URL + "byfriends", config);
+  return response.data;
+};
+
 // Update post
 const updatePost = async (postId, postData, token) => {
   const config = {
@@ -73,6 +84,7 @@ const reactToPost = async (postId, reaction, token) => {
 const postsService = {
   createPost,
   getPosts,
+  getPostsByFriends,
   updatePost,
   deletePost,
   reactToPost,
