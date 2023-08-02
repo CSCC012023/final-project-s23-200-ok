@@ -130,12 +130,14 @@ const loginUser = asyncHandler(async (req, res) => {
   // Check for user email
   const user = await User.findOne({ email });
 
-  if (user.isverified === false) {
-    res.status(403);
-    throw new Error("Email not verified");
-  }
-
+  // If user exists and password is correct
   if (user && (await bcrypt.compare(password, user.password))) {
+    // Check if email verified
+    if (user.isverified === false) {
+      res.status(403);
+      throw new Error("Email not verified");
+    }
+
     res.status(200).json({
       _id: user.id,
       userName: user.userName,
