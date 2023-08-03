@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createPost,
   getPosts,
+  getPostsByFriends,
   getPost,
   updatePost,
   deletePost,
@@ -13,6 +14,7 @@ import { postFileUpload }from "../middleware/fileMiddleware.js"
 const router = Router(); 
 
 router.route("/").post(protect, postFileUpload().single('PostFile'), createPost).get(protect, getPosts);
+router.route("/byfriends").get(protect, getPostsByFriends)
 router.route("/:id/react").patch(protect, reactToPost);
 router.route("/:id").delete(protect, deletePost);
 
