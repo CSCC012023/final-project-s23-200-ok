@@ -166,17 +166,21 @@ const getNonFriendUsers = asyncHandler(async (req, res) => {
   // User id set in authentication middleware
   const loggedInUser = await User.findById(req.user._id);
 
-  res.status(200).json(users.filter(user => {
-    return (
-      // don't include logged in user
-      (user._id.toString() !== loggedInUser._id.toString())
-      &&
-      // don't include logged in user's friends
-      (!loggedInUser.friends.some(friend => {
-        return friend.user_id === user._id.toString() && friend.userName === user.userName;
-      }))
-    );
-  }));
+  res.status(200).json(
+    users.filter((user) => {
+      return (
+        // don't include logged in user
+        user._id.toString() !== loggedInUser._id.toString() &&
+        // don't include logged in user's friends
+        !loggedInUser.friends.some((friend) => {
+          return (
+            friend.user_id === user._id.toString() &&
+            friend.userName === user.userName
+          );
+        })
+      );
+    })
+  );
 });
 
 //@route   GET api/users/:id
@@ -198,52 +202,56 @@ const getFriends = asyncHandler(async (req, res) => {
 });
 
 //@route GET api/users/friends/:id
-//@desc    Return list of user's friends given id 
+//@desc    Return list of user's friends given id
 //@access  Private
 const getFriendsWithId = asyncHandler(async (req, res) => {
   const id = req.params.id;
   try {
     // Check if user exists
     let user = await User.findById(id);
-    if (!user) { 
+    if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
     res.status(200).json(user.friends);
   } catch (error) {
     res.status(500).json({ msg: "Server error" });
   }
-})
+});
 
 //@route   PATCH api/users/:friendUserId
 //@desc    Remove friend with user_id friendUserId from logged in user's friends array
 //@access  Private
 const unfriendFriend = asyncHandler(async (req, res) => {
+  console.log("unfriendFriend");
   // No such friend
   const friend = await User.findById(req.params.friendUserId);
   if (!friend) {
     res.status(404);
     throw new Error("Friend not found");
   }
- 
+
   // User id set in authentication middleware
   const user = await User.findById(req.user._id);
-  
+
+  // delete chats between user and friend
   const chatsToDelete = await Chat.find({
-    user_ids_names: {
-      $all: [
-        { user_id: user._id.toString() },
-        { user_id: friend._id.toString() }
-      ]
-    }
+    $and: [
+      { "user_ids_names.user_id": user._id.toString() },
+      { "user_ids_names.user_id": friend._id.toString() },
+    ],
   });
 
-  // Iterate over the chats and delete the associated messages
   for (const chat of chatsToDelete) {
-    await Message.deleteMany({ chat_id: chat._id });
+    Message.deleteMany({ chat_id: chat._id });
   }
 
-  // Delete the chats themselves
-  await Chat.deleteMany({ _id: { $in: chatsToDelete.map(c => c._id) } });
+  await Chat.deleteMany({
+    $and: [
+      { "user_ids_names.user_id": user._id.toString() },
+      { "user_ids_names.user_id": friend._id.toString() },
+    ],
+  });
+
   user.friends = user.friends.filter(
     (friend) => friend.user_id.toString() !== req.params.friendUserId
   );
@@ -254,6 +262,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   );
   friend.save();
 
+  console.log("user.friends: ", user.friends);
   res.status(200).json(user.friends);
 });
 
@@ -334,5 +343,5 @@ export {
   getFriendsWithId,
   unfriendFriend,
   deleteUser,
-  verifyEmail
+  verifyEmail,
 };
