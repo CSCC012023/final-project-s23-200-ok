@@ -31,6 +31,7 @@ let users = {};
 
 io.on("connection", (socket) => {
   socket.on("register", (userId) => {
+    console.log(`Socket registered: ${socket.id}`);
     users[userId] = socket.id;
   });
 
