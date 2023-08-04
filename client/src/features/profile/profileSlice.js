@@ -94,6 +94,23 @@ export const linkValorant = createAsyncThunk(
   }
 );
 
+export const getValStat = createAsyncThunk(
+  "profile/getValStat",
+  async ({ valorantData }, thunkAPI) => {
+    try {
+      return await profileService.getValStat(valorantData);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Link Overwatch
 export const linkOverwatch = createAsyncThunk(
   "profile/linkOverwatch",

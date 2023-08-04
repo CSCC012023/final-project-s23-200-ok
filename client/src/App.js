@@ -10,11 +10,15 @@ import Register from "./pages/Register";
 import Verify from "./pages/Verify";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import ForgotPassword from "./pages/ForgotPassword";
 import ViewProfile from "./pages/ViewProfile";
 import Lfg from "./pages/Lfg";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
 import Search from "./pages/Search";
+import GameStat from "./pages/GameStat";
+
+import ResetPassword from "./pages/ResetPassword";
 import { updateChatAlert } from "./features/auth/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -50,14 +54,18 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/resetpassword/:id" element={<ResetPassword />} />
             <Route path="/verify/:id" element={<Verify />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:user_id" element={<ViewProfile />}/>
             <Route path="/lfg" element={<Lfg />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/chat" element={<Chat socketRef={socketRef} />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/stat" element={<GameStat />} />
+
           </Routes>
         </div>
       </Router>
