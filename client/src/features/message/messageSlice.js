@@ -14,7 +14,6 @@ export const createMessage = createAsyncThunk(
   "message/createMessage",
   async (messageData, thunkAPI) => {
     try {
-
       const token = thunkAPI.getState().auth.user?.token;
       return await messageService.createMessage(messageData, token);
     } catch (error) {

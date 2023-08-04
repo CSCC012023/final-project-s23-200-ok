@@ -22,7 +22,6 @@ function App() {
   const socketRef = useRef();
   const { user } = useSelector((state) => state.auth);
 
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,20 +33,19 @@ function App() {
     }
 
     socketRef.current.on("chatAlert", () => {
-      
       dispatch(updateChatAlert({ chatAlert: true, userId: user._id }));
     });
 
     return () => {
       socketRef.current.off("chatAlert");
     };
-  }, []);
+  }, [socketRef]);
 
   return (
     <>
       <Router>
         <div className="container">
-          <Header  />
+          <Header />
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/register" element={<Register />} />
@@ -56,14 +54,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/lfg" element={<Lfg />} />
             <Route path="/notifications" element={<Notifications />} />
-            <Route
-              path="/chat"
-              element={
-                <Chat
-                  socketRef={socketRef}
-                />
-              }
-            />
+            <Route path="/chat" element={<Chat socketRef={socketRef} />} />
             <Route path="/search" element={<Search />} />
           </Routes>
         </div>
