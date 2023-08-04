@@ -275,12 +275,15 @@ export const authSlice = createSlice({
       .addCase(blockUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true; 
-        state.user = action.payload;
+        state.user.currUser = action.payload.currUser;
+        state.user.tgtUser = action.payload.tgtUser;
+        console.log(action.payload);
       })
       .addCase(blockUser.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        console.log(action.payload);
       })
       // update chat alert
       .addCase(updateChatAlert.pending, (state) => {

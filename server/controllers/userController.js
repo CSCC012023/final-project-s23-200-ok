@@ -144,6 +144,8 @@ const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user.id),
       chatAlert: user.chatalert,
+      currUser: user.blockedBy,
+      tgtUser: user.blockedUsers,
     });
   } else {
     res.status(400);

@@ -8,7 +8,7 @@ import {
   createFriendRequest,
   reset
 } from "../features/friendRequests/friendRequestsSlice";
-import blockUser from "../features/auth/authSlice";
+import { blockUser } from "../features/auth/authSlice";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const Search = () => {
@@ -39,7 +39,7 @@ const Search = () => {
   };
 
   const handleBlock = (id) => {
-    console.log('handleBlock' + id)
+    console.log('handleBlock' + id);
     dispatch(blockUser(id));
   };
 

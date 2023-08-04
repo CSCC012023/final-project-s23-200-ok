@@ -8,7 +8,7 @@ const NonFriendUser = ({ nonFriendUser, handleAddFriend, handleBlock }) => {
   }; 
 
   const handleBlockUser = () => {
-    console.log('handleBlockUser' + nonFriendUser._id)
+    console.log('handleBlockUser' + nonFriendUser._id);
     handleBlock(nonFriendUser._id);
   };
 
