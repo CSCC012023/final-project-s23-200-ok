@@ -230,6 +230,7 @@ const blockUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   const userToBlock = await User.findById(req.params.userId);
   const blockedUserIndex = user.blockedUsers.indexOf(req.params.userId);
+  const blockedByIndex = userToBlock.blockedUsers.indexOf(req.user._id);
 
   // Check if user being blocked/unblocked exists
   if (!userToBlock) {
@@ -245,15 +246,22 @@ const blockUser = asyncHandler(async (req, res) => {
 
   // Block or unblock depending on whether target user is already blocked
   try {
-    if (blockedUserIndex === -1) user.blockedUsers.push(req.params.userId);
-    else user.blockedUsers.splice(blockedUserIndex, 1);
+    if (blockedUserIndex === -1) {
+      user.blockedUsers.push(req.params.userId);
+      userToBlock.blockedBy.push(req.user._id);
+    }
+    else {
+      user.blockedUsers.splice(blockedUserIndex, 1);
+      userToBlock.blockedBy.splice(blockedByIndex, 1);
+    }
   } catch (error) {
     res.status(500);
     throw new Error("An error occurred while blocking user");
   }
 
   user.save();
-  res.status(200).json(user.blockedUsers);
+  userToBlock.save();
+  res.status(200).json({currUser: user.blockedUsers, tgtUser: userToBlock.blockedBy});
 });
 
 //@route DELETE api/users/:id

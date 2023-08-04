@@ -49,6 +49,11 @@ const createLFGPost = asyncHandler(async (req, res) => {
 //@desc   Create a new LFG comment 
 //@access Private
 const createLFGComment = asyncHandler(async (req, res) => {
+  if (req.post.user.blockedUsers.includes(req.user._id.toString())) {
+    res.status(400);
+    throw new Error("Access denied, you are blocked by this user");
+  }
+  
   try {
     // User id and userName set in authentication middleware
     const {
@@ -95,7 +100,7 @@ const getLFGPosts = asyncHandler(async (req, res) => {
   const posts = await LFGPost.find({
     $and: [
       { user_id: { $nin: req.user.blockedUsers } }, // Exclude posts by blocked users
-      { 'user.blockedUsers.user_id': { $ne: req.user._id } }, // Exclude post if user is blocked by post creator
+      { user_id: { $nin: req.user.blockedBy } }, // Exclude post if user is blocked by post creator
     ],
   });
   res.json(posts);
@@ -112,11 +117,16 @@ const getLFGPostsFiltered = asyncHandler(async (req, res) => {
   }
 
   try{
-    const filteredLFGPosts = await LFGPost.find()
-                                          .where("game").equals(req.query.game)
-                                          .where("server").equals(req.query.server)
-                                          .where("numberOfPlayers").equals(req.query.numberOfPlayers)
-                                          .where("status").equals(req.query.status);
+    const filteredLFGPosts = await LFGPost.find({
+      $and: [
+        { game: { $eq: req.query.game } },
+        { server: { $eq: req.query.server } },
+        { numberOfPlayers: { $eq: req.query.numberOfPlayers } },
+        { status: { $eq: req.query.status } },
+        { user_id: { $nin: req.user.blockedUsers } },
+        { user_id: { $nin: req.user.blockedBy } },
+      ],
+    });
     res.status(200).json(filteredLFGPosts);
   } catch (error) {
     console.log(error);
@@ -155,7 +165,14 @@ const getLFGComments = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Invalid user");
   }
-  const comments = await LFGComment.find().where("post_id").equals(req.params.id);
+  //const comments = await LFGComment.find().where("post_id").equals(req.params.id);
+  const comments = await LFGComment.find({
+    $and: [
+      { post_id: req.params.id },
+      { user_id: { $nin: req.user.blockedUsers } },
+      { user_id: { $nin: req.user.blockedBy } },
+    ],
+  });
   if (comments) {
     res.status(200).json(comments);
   } 
