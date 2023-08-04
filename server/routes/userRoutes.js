@@ -23,7 +23,8 @@ router.route("/nonfriends").get(protect, getNonFriendUsers);
 router.route("/friends").get(protect, getFriends);
 router.route("/friends/:id").get(protect, getFriendsWithId);
 router.route("/:friendUserId").patch(protect, unfriendFriend);
-router.route("/:id")
+router
+  .route("/:id")
   .get(protect, getUser)
   .put(protect, updateUser)
   .delete(protect, deleteUser);

@@ -3,7 +3,7 @@ import ChatView from "../components/ChatView";
 import { useDispatch, useSelector } from 'react-redux';
 import { getChats } from '../features/chat/chatSlice';
 
-const Chat = () => {
+const Chat = ({socketRef}) => {
   const dispatch = useDispatch();
   const [selectedChat, setSelectedChat] = useState(null);
   const { chats } = useSelector(state => state.chat);
@@ -45,7 +45,8 @@ const Chat = () => {
         ))}
       </div>
       <div className="chat-view">
-        {selectedChat ? <ChatView chat={selectedChat} /> : "Select a chat"}
+        {selectedChat ? <ChatView chat={selectedChat} 
+                  socketRef={socketRef}/> : "Select a chat"}
       </div>
     </div>
     </>

@@ -37,7 +37,6 @@ const Post = ({ post, handleDelete }) => {
             method: 'GET',
           }
         );
-        // console.log(data);
         setVideoUrl(data.url)
       }
     }

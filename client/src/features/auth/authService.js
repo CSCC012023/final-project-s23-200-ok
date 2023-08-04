@@ -20,7 +20,7 @@ const login = async (userData) => {
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
-  
+
   return response.data;
 };
 
@@ -63,7 +63,6 @@ const unfriend = async (friendUserId, token) => {
     },
   };
 
-  console.log(API_URL + friendUserId);
 
   const response = await axios.patch(API_URL + friendUserId, {}, config);
 
@@ -85,6 +84,30 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+const updateChatAlert = async (userId, chatAlert, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem("user")),
+      chatAlert: chatAlert,
+    })
+  );
+
+  const response = await axios.put(
+    API_URL + userId,
+    { chatAlert: chatAlert },
+    config
+  );
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
@@ -93,6 +116,7 @@ const authService = {
   getFriendsWithId,
   unfriend,
   deleteUser,
+  updateChatAlert,
 };
 
 export default authService;

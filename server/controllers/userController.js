@@ -143,6 +143,7 @@ const loginUser = asyncHandler(async (req, res) => {
       userName: user.userName,
       email: user.email,
       token: generateToken(user.id),
+      chatAlert: user.chatalert,
     });
   } else {
     res.status(400);
@@ -189,9 +190,21 @@ const getNonFriendUsers = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res) => {});
 
 //@route PUT api/users/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const updateUser = asyncHandler(async (req, res) => {});
+//@desc  set user chat alert to req.body.chatalert
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
+  let user = await User.findById(req.params.id);
+  if (user) {
+    user.chatalert = req.body.chatAlert;
+    await user.save();
+    res.json({
+      chatAlert: user.chatalert,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 //@route   GET api/users/friends
 //@desc    Return list of logged in user's friends
