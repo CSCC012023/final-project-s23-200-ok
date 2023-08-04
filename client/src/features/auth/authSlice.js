@@ -149,6 +149,26 @@ export const forgotPassword = createAsyncThunk(
   }
 );
 
+// Block user
+export const blockUser = createAsyncThunk(
+  "auth/block",
+  async (blockedUserId, thunkAPI) => {
+    console.log(blockedUserId);
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await authService.blockUser(blockedUserId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Update chat alert
 export const updateChatAlert = createAsyncThunk(
   "auth/updateChatAlert",
@@ -271,7 +291,23 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-
+      // block user
+      .addCase(blockUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(blockUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true; 
+        state.user.currUser = action.payload.currUser;
+        state.user.tgtUser = action.payload.tgtUser;
+        console.log(action.payload);
+      })
+      .addCase(blockUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        console.log(action.payload);
+      })
       // forgotPassword
       .addCase(forgotPassword.pending, (state) => {
         state.isLoading = true;

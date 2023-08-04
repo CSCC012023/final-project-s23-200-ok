@@ -61,7 +61,7 @@ function Dashboard() {
   const handlePostSubmit = async (e) => {
     e.preventDefault();
 
-    var form = new FormData;
+    var form = new FormData();
 
     // requet using fetch, 
     if (isVideo){
@@ -159,7 +159,7 @@ function Dashboard() {
           <p><u><Link to="/register">Sign up</Link></u> to start using Playbook!</p>
         </section>
       ) }
-    </> 
+    </>
   );
 
 }

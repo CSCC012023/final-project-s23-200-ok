@@ -83,6 +83,18 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+// Block user
+const blockUser = async (blockedUserId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.patch(API_URL + "block/" + blockedUserId, {}, config);
+
+  return response.data;
+};
 // forgot password
 const forgotPassword = async (userData) => {
   const response = await axios.post(API_URL + "forgotpassword", userData);
@@ -126,6 +138,7 @@ const authService = {
   getFriendsWithId,
   unfriend,
   deleteUser,
+  blockUser,
   forgotPassword,
   updateChatAlert,
 };

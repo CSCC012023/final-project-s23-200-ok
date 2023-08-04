@@ -144,6 +144,8 @@ const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user.id),
       chatAlert: user.chatalert,
+      currUser: user.blockedBy,
+      tgtUser: user.blockedUsers,
     });
   } else {
     res.status(400);
@@ -237,7 +239,7 @@ const getFriendsWithId = asyncHandler(async (req, res) => {
 const unfriendFriend = asyncHandler(async (req, res) => {
   console.log("unfriendFriend");
   // No such friend
-  const friend = await User.findById(req.params.friendUserId);
+  const friend = await User.findById(req.params.frienduserId);
   if (!friend) {
     res.status(404);
     throw new Error("Friend not found");
@@ -266,7 +268,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   });
 
   user.friends = user.friends.filter(
-    (friend) => friend.user_id.toString() !== req.params.friendUserId
+    (friend) => friend.user_id.toString() !== req.params.frienduserId
   );
   user.save();
 
@@ -277,6 +279,47 @@ const unfriendFriend = asyncHandler(async (req, res) => {
 
   console.log("user.friends: ", user.friends);
   res.status(200).json(user.friends);
+});
+
+//@route PATCH api/users/block/:userId
+//@desc Block or unblock another user
+//@access Private
+const blockUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const userToBlock = await User.findById(req.params.userId);
+  const blockedUserIndex = user.blockedUsers.indexOf(req.params.userId);
+  const blockedByIndex = userToBlock.blockedUsers.indexOf(req.user._id);
+
+  // Check if user being blocked/unblocked exists
+  if (!userToBlock) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+
+  // Don't allow a user to block self
+  if (req.user._id.toString() === req.params.userId) {
+    res.status(400);
+    throw new Error("Cannot block self");
+  }
+
+  // Block or unblock depending on whether target user is already blocked
+  try {
+    if (blockedUserIndex === -1) {
+      user.blockedUsers.push(req.params.userId);
+      userToBlock.blockedBy.push(req.user._id);
+    }
+    else {
+      user.blockedUsers.splice(blockedUserIndex, 1);
+      userToBlock.blockedBy.splice(blockedByIndex, 1);
+    }
+  } catch (error) {
+    res.status(500);
+    throw new Error("An error occurred while blocking user");
+  }
+
+  user.save();
+  userToBlock.save();
+  res.status(200).json({currUser: user.blockedUsers, tgtUser: userToBlock.blockedBy});
 });
 
 //@route DELETE api/users/:id
@@ -446,6 +489,7 @@ export {
   getFriends,
   getFriendsWithId,
   unfriendFriend,
+  blockUser,
   deleteUser,
   verifyEmail,
   resetPassword,
