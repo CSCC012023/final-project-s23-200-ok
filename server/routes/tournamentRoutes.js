@@ -5,17 +5,20 @@ import {
   getAllTournaments,
   updateTournamentById,
   addParticipantToTeam,
-  leaveTournament
+  leaveTournament,
 } from "../controllers/tournamentController.js";
 import { protect } from "../middleware/authMiddleware.js";
 
 const router = Router();
 
-router.route("/:id")
+router
+  .route("/:id")
   .post(protect, addParticipantToTeam)
-  .delete(protect, leaveTournament);
-router.route("/")
-.post(protect, createTournament)
-.get(protect, getAllTournaments);
+  .delete(protect, leaveTournament)
+  .patch(protect, updateTournamentById);
+router
+  .route("/")
+  .post(protect, createTournament)
+  .get(protect, getAllTournaments);
 
 export default router;

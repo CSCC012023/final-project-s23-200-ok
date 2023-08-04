@@ -14,8 +14,73 @@ const getAllTournaments = async (token) => {
   return response.data;
 };
 
+const createTournament = async (token, tournamentName) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.post(
+    API_URL,
+    { tournamentName: tournamentName },
+    config
+  );
+
+  return response.data;
+};
+
+const updateTournamentById = async (token, tournamentId, tournament) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.put(
+    `${API_URL}${tournamentId}`,
+
+    tournament,
+    config
+  );
+
+  return response.data;
+};
+
+const addParticipantToTeam = async (token, tournamentId, teamId) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.post(
+    `${API_URL}${tournamentId}`,
+    { teamId: teamId },
+    config
+  );
+
+  return response.data;
+};
+
+const leaveTournament = async (token, tournamentId) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.delete(`${API_URL}${tournamentId}`, config);
+
+  return response.data;
+};
+
 const tournamentsService = {
   getAllTournaments,
+  createTournament,
+  updateTournamentById,
+  addParticipantToTeam,
+  leaveTournament,
 };
 
 export default tournamentsService;
