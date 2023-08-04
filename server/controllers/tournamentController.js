@@ -80,6 +80,11 @@ const createTournament = asyncHandler(async (req, res) => {
     teams.push(teamName);
   }
 
+  if (!req.body.tournamentName) {
+    res.status(400);
+    throw new Error("Please provide a tournament name");
+  }
+
   let tournament = new Tournament({
     name: req.body.tournamentName,
     admin_user_id: req.user._id,

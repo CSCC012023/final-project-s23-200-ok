@@ -16,7 +16,7 @@ const TeamSchema = new mongoose.Schema({
     required: true,
     unique: true,
     minlength: 3,
-    maxlength: 20,
+    maxlength: 50,
   },
   teamMembers: {
     type: [ParticipantSchema],

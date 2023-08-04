@@ -6,6 +6,7 @@ import Spinner from "../components/Spinner";
 import Bracket from "../components/Bracket";
 import {
   reset,
+  createTournament,
   getAllTournaments,
   addParticipantToTeam,
   leaveTournament,
@@ -23,7 +24,20 @@ const Tournament = () => {
     message
   } = useSelector((state) => state.tournaments);
 
-  const [selectedTournament, setSelectedTournament] = useState();
+  const [createTournamentName, setCreateTournamentName] = useState("");
+  const [selectedTournament, setSelectedTournament] = useState("Create tourney");
+
+  const onChange = (e) => {
+    setCreateTournamentName(e.target.value);
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    dispatch(createTournament({ tournamentName: createTournamentName }));
+
+    setCreateTournamentName("");
+  };
 
   const handleSelectTournament = (e) => {
     setSelectedTournament(e.target.value);
@@ -71,11 +85,26 @@ const Tournament = () => {
         value={selectedTournament}
         onChange={handleSelectTournament}
         required>
-        <option value="">Select a game</option>
+        <option value="Create tourney">Create a tournament</option>
         {tournaments && tournaments.map((tournament) => (
           <option value={tournament._id}>{tournament.name} - {tournament.admin_user_name}</option>
         ))}
       </select>
+
+      {selectedTournament === "Create tourney" &&
+        (
+          <section className="form">
+            <form onSubmit={onSubmit} className="form-group">
+              <input 
+              type="text"
+              value={createTournamentName}
+              placeholder="Tournament Name"
+              onChange={onChange} />
+              <button className="btn btn-block" type="submit">Create</button>
+            </form>
+          </section>
+        )
+      }
 
       {tournaments &&
         selectedTournament &&
