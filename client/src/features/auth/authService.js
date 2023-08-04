@@ -63,7 +63,6 @@ const unfriend = async (friendUserId, token) => {
     },
   };
 
-
   const response = await axios.patch(API_URL + friendUserId, {}, config);
 
   return response.data;
@@ -80,6 +79,17 @@ const deleteUser = async (userId, token) => {
   const response = await axios.delete(API_URL + userId, config);
 
   localStorage.removeItem("user");
+
+  return response.data;
+};
+
+// forgot password
+const forgotPassword = async (userData) => {
+  const response = await axios.post(API_URL + "forgotpassword", userData);
+
+  if (response.data) {
+    localStorage.setItem("user", JSON.stringify(response.data));
+  }
 
   return response.data;
 };
@@ -116,6 +126,7 @@ const authService = {
   getFriendsWithId,
   unfriend,
   deleteUser,
+  forgotPassword,
   updateChatAlert,
 };
 

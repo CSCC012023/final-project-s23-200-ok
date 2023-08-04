@@ -85,7 +85,7 @@ const registerUser = asyncHandler(async (req, res) => {
     let mail = MailGenerator.generate(response);
 
     let message = {
-      from: "lovelyasunaa@gmail.com",
+      from: process.env.EMAIL,
       to: user.email,
       subject: "Playbook Verification Link",
       text: "Welcome to Playbook. Please verify your account by clicking link below. Happy Gaming.",
@@ -339,11 +339,102 @@ const createProfileWithUserId = async (user) => {
   }
 };
 
+// generate token for jwt
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30000s",
   });
 };
+
+const resetPassword = asyncHandler(async (req, res) => {
+  // find user from req params id
+  const user = await User.findById(req.params.id);
+  const { password } = req.body;
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  if (!password) {
+    res.status(400);
+    throw new Error("Please enter new password");
+  }
+  // Update user's password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  user.password = hashedPassword;
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful" });
+});
+
+const sendResetPasswordEmail = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  // Check for user email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid Credentials");
+  } else {
+    // check if the user is verified first
+    // if not, they can't reset their email
+    if (user.isverified === false) {
+      res.status(403);
+      throw new Error("Email not verified");
+    }
+    // email verification config
+    let config = {
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
+
+    // transporter to send mail
+    let transporter = nodemailer.createTransport(config);
+    let MailGenerator = new mailgen({
+      theme: "default",
+      product: {
+        name: "Playbook",
+        link: "http://localhost:3000",
+      },
+    });
+
+    let response = {
+      body: {
+        name: user.userName,
+        intro: "Sorry to hear you're having trouble logging in.",
+        action: {
+          instructions: "To reset your password, please click here:",
+          button: {
+            color: "#22BC66", // action button color
+            text: "Reset Password",
+            link: "http://localhost:3000/resetpassword/" + user._id,
+          },
+        },
+        outro: "Happy Gaming.",
+      },
+    };
+    let mail = MailGenerator.generate(response);
+
+    let message = {
+      from: process.env.EMAIL,
+      to: user.email,
+      subject: "Reset Your Playbook Password",
+      text: "Please reset your password by clicking the link below. Happy Gaming.",
+      html: mail,
+    };
+
+    try {
+      transporter.sendMail(message);
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(403);
+    throw new Error("Check your email to reset password");
+  }
+});
 
 export {
   registerUser,
@@ -357,4 +448,6 @@ export {
   unfriendFriend,
   deleteUser,
   verifyEmail,
+  resetPassword,
+  sendResetPasswordEmail,
 };
