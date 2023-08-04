@@ -27,7 +27,14 @@ const io = new Server(httpServer, {
   },
 });
 
+let users = {};
+
 io.on("connection", (socket) => {
+  socket.on("register", (userId) => {
+    console.log(`Socket registered: ${socket.id}`);
+    users[userId] = socket.id;
+  });
+
   socket.on("joinRoom", ({ user1Id, user2Id }) => {
     const room = [user1Id, user2Id].sort().join("-");
     socket.join(room);
@@ -36,6 +43,11 @@ io.on("connection", (socket) => {
   socket.on("newMessage", ({ user1Id, user2Id, message }) => {
     const roomId = [user1Id, user2Id].sort().join("-");
     io.to(roomId).emit("receiveMessage", message);
+
+    let recipientId = user1Id === message.sender_user_id ? user2Id : user1Id;
+    if (users[recipientId]) {
+      io.to(users[recipientId]).emit("chatAlert");
+    }
   });
 
   socket.on("disconnect", () => {
@@ -43,7 +55,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// new 
+// new
 global.mongoose = mongoose;
 
 app.use(cors());
@@ -62,7 +74,8 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("MongoDB database connection established successfully");
   gridBucket = new mongoose.mongo.GridFSBucket(connection.db, {
-    bucketName: 'postFiles'});
+    bucketName: "postFiles",
+  });
 });
 
 app.use(cors());

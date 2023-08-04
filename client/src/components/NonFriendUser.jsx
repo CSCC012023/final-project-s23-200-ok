@@ -1,9 +1,11 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+
 
 const NonFriendUser = ({ nonFriendUser, handleAddFriend }) => {
   const handleAddFriendUser = () => {
     handleAddFriend(nonFriendUser._id);
-  };
+  }; 
 
   return (
     <div className={"friend-request"}>
@@ -16,6 +18,9 @@ const NonFriendUser = ({ nonFriendUser, handleAddFriend }) => {
           {nonFriendUser.userName}
         </div>
       </div>
+      <Link to={`/profile/${nonFriendUser._id}`}>
+        <button className="btn" style={{marginRight: "100px"}}>View Profile</button>
+      </Link>      
       <button className="btn" onClick={handleAddFriendUser}>Add Friend</button>
     </div>
   );

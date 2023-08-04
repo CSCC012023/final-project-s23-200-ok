@@ -85,7 +85,7 @@ const registerUser = asyncHandler(async (req, res) => {
     let mail = MailGenerator.generate(response);
 
     let message = {
-      from: "lovelyasunaa@gmail.com",
+      from: process.env.EMAIL,
       to: user.email,
       subject: "Playbook Verification Link",
       text: "Welcome to Playbook. Please verify your account by clicking link below. Happy Gaming.",
@@ -130,17 +130,20 @@ const loginUser = asyncHandler(async (req, res) => {
   // Check for user email
   const user = await User.findOne({ email });
 
-  if (user.isverified === false) {
-    res.status(403);
-    throw new Error("Email not verified");
-  }
-
+  // If user exists and password is correct
   if (user && (await bcrypt.compare(password, user.password))) {
+    // Check if email verified
+    if (user.isverified === false) {
+      res.status(403);
+      throw new Error("Email not verified");
+    }
+
     res.status(200).json({
       _id: user.id,
       userName: user.userName,
       email: user.email,
       token: generateToken(user.id),
+      chatAlert: user.chatalert,
     });
   } else {
     res.status(400);
@@ -164,17 +167,21 @@ const getNonFriendUsers = asyncHandler(async (req, res) => {
   // User id set in authentication middleware
   const loggedInUser = await User.findById(req.user._id);
 
-  res.status(200).json(users.filter(user => {
-    return (
-      // don't include logged in user
-      (user._id.toString() !== loggedInUser._id.toString())
-      &&
-      // don't include logged in user's friends
-      (!loggedInUser.friends.some(friend => {
-        return friend.user_id === user._id.toString() && friend.userName === user.userName;
-      }))
-    );
-  }));
+  res.status(200).json(
+    users.filter((user) => {
+      return (
+        // don't include logged in user
+        user._id.toString() !== loggedInUser._id.toString() &&
+        // don't include logged in user's friends
+        !loggedInUser.friends.some((friend) => {
+          return (
+            friend.user_id === user._id.toString() &&
+            friend.userName === user.userName
+          );
+        })
+      );
+    })
+  );
 });
 
 //@route   GET api/users/:id
@@ -183,9 +190,21 @@ const getNonFriendUsers = asyncHandler(async (req, res) => {
 const getUser = asyncHandler(async (req, res) => {});
 
 //@route PUT api/users/:id
-//@desc  [DESCRIPTION OF WHAT ROUTE DOES]
-//@access [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const updateUser = asyncHandler(async (req, res) => {});
+//@desc  set user chat alert to req.body.chatalert
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
+  let user = await User.findById(req.params.id);
+  if (user) {
+    user.chatalert = req.body.chatAlert;
+    await user.save();
+    res.json({
+      chatAlert: user.chatalert,
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
 
 //@route   GET api/users/friends
 //@desc    Return list of logged in user's friends
@@ -195,10 +214,28 @@ const getFriends = asyncHandler(async (req, res) => {
   res.status(200).json(user.friends);
 });
 
+//@route GET api/users/friends/:id
+//@desc    Return list of user's friends given id
+//@access  Private
+const getFriendsWithId = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  try {
+    // Check if user exists
+    let user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.status(200).json(user.friends);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 //@route   PATCH api/users/:friendUserId
 //@desc    Remove friend with user_id friendUserId from logged in user's friends array
 //@access  Private
 const unfriendFriend = asyncHandler(async (req, res) => {
+  console.log("unfriendFriend");
   // No such friend
   const friend = await User.findById(req.params.friendUserId);
   if (!friend) {
@@ -208,6 +245,26 @@ const unfriendFriend = asyncHandler(async (req, res) => {
 
   // User id set in authentication middleware
   const user = await User.findById(req.user._id);
+
+  // delete chats between user and friend
+  const chatsToDelete = await Chat.find({
+    $and: [
+      { "user_ids_names.user_id": user._id.toString() },
+      { "user_ids_names.user_id": friend._id.toString() },
+    ],
+  });
+
+  for (const chat of chatsToDelete) {
+    Message.deleteMany({ chat_id: chat._id });
+  }
+
+  await Chat.deleteMany({
+    $and: [
+      { "user_ids_names.user_id": user._id.toString() },
+      { "user_ids_names.user_id": friend._id.toString() },
+    ],
+  });
+
   user.friends = user.friends.filter(
     (friend) => friend.user_id.toString() !== req.params.friendUserId
   );
@@ -218,6 +275,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   );
   friend.save();
 
+  console.log("user.friends: ", user.friends);
   res.status(200).json(user.friends);
 });
 
@@ -281,11 +339,102 @@ const createProfileWithUserId = async (user) => {
   }
 };
 
+// generate token for jwt
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30000s",
   });
 };
+
+const resetPassword = asyncHandler(async (req, res) => {
+  // find user from req params id
+  const user = await User.findById(req.params.id);
+  const { password } = req.body;
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  if (!password) {
+    res.status(400);
+    throw new Error("Please enter new password");
+  }
+  // Update user's password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  user.password = hashedPassword;
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successful" });
+});
+
+const sendResetPasswordEmail = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  // Check for user email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("Invalid Credentials");
+  } else {
+    // check if the user is verified first
+    // if not, they can't reset their email
+    if (user.isverified === false) {
+      res.status(403);
+      throw new Error("Email not verified");
+    }
+    // email verification config
+    let config = {
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    };
+
+    // transporter to send mail
+    let transporter = nodemailer.createTransport(config);
+    let MailGenerator = new mailgen({
+      theme: "default",
+      product: {
+        name: "Playbook",
+        link: "http://localhost:3000",
+      },
+    });
+
+    let response = {
+      body: {
+        name: user.userName,
+        intro: "Sorry to hear you're having trouble logging in.",
+        action: {
+          instructions: "To reset your password, please click here:",
+          button: {
+            color: "#22BC66", // action button color
+            text: "Reset Password",
+            link: "http://localhost:3000/resetpassword/" + user._id,
+          },
+        },
+        outro: "Happy Gaming.",
+      },
+    };
+    let mail = MailGenerator.generate(response);
+
+    let message = {
+      from: process.env.EMAIL,
+      to: user.email,
+      subject: "Reset Your Playbook Password",
+      text: "Please reset your password by clicking the link below. Happy Gaming.",
+      html: mail,
+    };
+
+    try {
+      transporter.sendMail(message);
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(403);
+    throw new Error("Check your email to reset password");
+  }
+});
 
 export {
   registerUser,
@@ -295,7 +444,10 @@ export {
   getUser,
   updateUser,
   getFriends,
+  getFriendsWithId,
   unfriendFriend,
   deleteUser,
-  verifyEmail
+  verifyEmail,
+  resetPassword,
+  sendResetPasswordEmail,
 };

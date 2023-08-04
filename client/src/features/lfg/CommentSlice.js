@@ -14,7 +14,6 @@ export const createLFGComment = createAsyncThunk(
             error.response.data.message) ||
           error.message ||
           error.toString();
-        console.log(message);
         return thunkAPI.rejectWithValue(message);
       }
     }
@@ -125,7 +124,6 @@ export const CommentSlice = createSlice({
         .addCase(getLFGComments.rejected, (state, action) => {
           state.isLoading = false;
           state.isError = true;
-          console.log("action payload: " + action.payload);
           state.message = action.payload;
         })
   
@@ -153,7 +151,6 @@ export const CommentSlice = createSlice({
         .addCase(deleteLFGComment.fulfilled, (state, action) => {
           state.isLoading = false;
           state.isSuccess = true;
-          console.log("Delete payload: " + action.payload);
           state.comments = state.comments.filter((comment) => comment._id !== action.payload._id);
         })
         .addCase(deleteLFGComment.rejected, (state, action) => {
