@@ -357,7 +357,7 @@ const verifyEmail = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
   user.isverified = true;
   await user.save();
-  await createProfileWithuserId(user);
+  await createProfileWithUserId(user);
   await res.status(200);
 });
 
