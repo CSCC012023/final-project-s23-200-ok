@@ -72,6 +72,20 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+
+// forgot password
+const forgotPassword = async (userData) => {
+  
+  const response = await axios.post(API_URL + "forgotpassword", userData);
+
+  if (response.data) {
+    localStorage.setItem("user", JSON.stringify(response.data));
+  }
+
+  return response.data;
+};
+
+
 const authService = {
   register,
   login,
@@ -79,6 +93,7 @@ const authService = {
   getFriends,
   unfriend,
   deleteUser,
+  forgotPassword, 
 };
 
 export default authService;
