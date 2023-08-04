@@ -37,7 +37,7 @@ const updateTournamentById = async (token, tournamentId, tournament) => {
     },
   };
 
-  const response = await axios.put(
+  const response = await axios.patch(
     `${API_URL}${tournamentId}`,
 
     tournament,

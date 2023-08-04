@@ -148,13 +148,13 @@ const updateTournamentById = asyncHandler(async (req, res) => {
   }
 
   // Only allow the admin to update the tournament (not any logged in user)
-  if (req.user._id !== tournament.admin_user_id) {
+  if (req.user._id.toString() !== tournament.admin_user_id) {
     res.status(403);
     throw new Error("You do not have permission to update this tournament");
   }
 
   // Validate data
-  if (!started || !semifinals || !finals || !winner) {
+  if (!started || !semifinals || !finals) {
     res.status(400);
     throw new Error("Missing field(s)");
   }
@@ -272,5 +272,5 @@ export {
   getAllTournaments,
   updateTournamentById,
   addParticipantToTeam,
-  leaveTournament
+  leaveTournament,
 };

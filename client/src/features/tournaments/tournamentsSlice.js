@@ -51,6 +51,7 @@ export const createTournament = createAsyncThunk(
 export const updateTournamentById = createAsyncThunk(
   "tournaments/updateTournamentById",
   async ({ tournamentId, tournament }, thunkAPI) => {
+    console.log(tournamentId, tournament);
     try {
       const token = thunkAPI.getState().auth.user?.token;
       return await tournamentsService.updateTournamentById(
@@ -129,6 +130,7 @@ export const tournamentsSlice = createSlice({
       .addCase(getAllTournaments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+        state.isError = false;
         state.tournaments = action.payload;
       })
       .addCase(getAllTournaments.rejected, (state, action) => {
