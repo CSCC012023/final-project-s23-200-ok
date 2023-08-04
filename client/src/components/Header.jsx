@@ -14,7 +14,7 @@ function Header() {
   };
 
   return (
-    <header className="header">
+    <header className="header" >
       <div className="logo">
         <Link to="/">playbook</Link>
       </div>
@@ -22,26 +22,25 @@ function Header() {
         {user ? (
           <>
             <li>
-              <Link to="/chat">chat</Link>
+              <Link to="/chat">chat {user.chatAlert && <span class="badge">New</span>}</Link>
             </li>
             <li>
               <Link to="/search">search</Link>
             </li>
             <li>
-              <Link to="/profile">profile</Link>
+              <Link to="/profile">Profile</Link>
             </li>
             <li>
-              <Link to="/notifications">notifications</Link>
+              <Link to="/notifications">Notifications</Link>
             </li>
             <li>
               <Link to="/lfg">lfg</Link>
             </li>
             <li>
               <button className="btn" onClick={onLogout}>
-                logout
+                Logout
               </button>
             </li>
-            
           </>
         ) : (
           <>

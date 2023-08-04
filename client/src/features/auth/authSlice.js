@@ -71,6 +71,25 @@ export const getFriends = createAsyncThunk(
   }
 );
 
+// Get friends with id
+export const getFriendsWithId = createAsyncThunk(
+  "auth/getFriendsWithId",
+  async (userId, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await authService.getFriendsWithId(userId, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Unfriend
 export const unfriend = createAsyncThunk(
   "auth/unFriend",
@@ -108,7 +127,7 @@ export const deleteUserAccount = createAsyncThunk(
     }
   }
 );
-// reset password 
+// reset password
 export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async (userData, thunkAPI) => {
@@ -130,6 +149,24 @@ export const forgotPassword = createAsyncThunk(
   }
 );
 
+// Update chat alert
+export const updateChatAlert = createAsyncThunk(
+  "auth/updateChatAlert",
+  async ({ chatAlert, userId }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await authService.updateChatAlert(userId, chatAlert, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 export const authSlice = createSlice({
   name: "auth",
@@ -192,6 +229,20 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
+      // get friends with id
+      .addCase(getFriendsWithId.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getFriendsWithId.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.friends = action.payload;
+      })
+      .addCase(getFriendsWithId.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       // unfriend
       .addCase(unfriend.pending, (state) => {
         state.isLoading = true;
@@ -220,7 +271,8 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-        // forgotPassword
+
+      // forgotPassword
       .addCase(forgotPassword.pending, (state) => {
         state.isLoading = true;
         state.isSuccess = false;
@@ -230,9 +282,24 @@ export const authSlice = createSlice({
       .addCase(forgotPassword.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // state.message = "Password reset successful"; 
+        state.message = "Password reset successful";
       })
       .addCase(forgotPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      // update chat alert
+      .addCase(updateChatAlert.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateChatAlert.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        console.log(action.payload);
+        state.user.chatAlert = action.payload.chatAlert;
+      })
+      .addCase(updateChatAlert.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
