@@ -204,6 +204,7 @@ const Profile = () => {
   if (isLoading) {
     return <Spinner />;
   }
+  console.log(games);
 
   return (
     <div className="profile-container">

@@ -44,6 +44,16 @@ const linkValorant = async (profileId, valorantData, token) => {
   return response.data;
 };
 
+const getValStat = async (valorantData) => {
+  const response = await axios.get(
+    API_URL + "games/valorant/" + 
+    valorantData.region + "/" + 
+    valorantData.username + "/" +
+    valorantData.tagline + "/stat"
+  );
+  return response.data;
+}
+
 // Link Overwatch
 const linkOverwatch = async (profileId, overwatchData, token) => {
   const config = {
@@ -78,6 +88,7 @@ const profileService = {
   linkValorant,
   linkOverwatch,
   updateProfile,
+  getValStat
 };
 
 export default profileService;

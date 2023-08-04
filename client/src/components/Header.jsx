@@ -37,6 +37,9 @@ function Header() {
               <Link to="/lfg">lfg</Link>
             </li>
             <li>
+              <Link to="/stat">stat</Link>
+            </li>
+            <li>
               <button className="btn" onClick={onLogout}>
                 logout
               </button>
