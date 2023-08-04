@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import Bracket from "../components/Bracket";
 import {
-  reset, 
+  reset,
   getAllTournaments,
+  addParticipantToTeam,
+  leaveTournament,
 } from "../features/tournaments/tournamentsSlice";
 
 const Tournament = () => {
@@ -26,6 +29,17 @@ const Tournament = () => {
     setSelectedTournament(e.target.value);
   };
 
+  const handleAddParticipantToTeam = (tournamentId, teamId) => {
+    dispatch(addParticipantToTeam({
+      tournamentId,
+      teamId
+    }));
+  };
+
+  const handleLeaveTournament = (tournamentId) => {
+    dispatch(leaveTournament({ tournamentId }));
+  };
+
   useEffect(() => {
     dispatch(getAllTournaments());
 
@@ -37,20 +51,17 @@ const Tournament = () => {
   useEffect(() => {
     if (isError) {
       console.log(message);
+      toast.error(message);
     }
 
     //If no user is logged in redirect to the login page
     if (!user) {
       navigate("/login");
     }
-  }, [selectedTournament]);
+  }, [isError, message, selectedTournament]);
 
   if (isLoading) {
     return <Spinner />;
-  }
-
-  if (isError) {
-    return <div>Error: {message}</div>;
   }
 
   return (
@@ -74,6 +85,8 @@ const Tournament = () => {
               <Bracket
                 key={selectedTournament}
                 tournament={tournament}
+                handleAddParticipantToTeam={handleAddParticipantToTeam}
+                handleLeaveTournament={handleLeaveTournament}
               />
             );
           }

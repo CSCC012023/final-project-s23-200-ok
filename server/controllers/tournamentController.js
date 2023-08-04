@@ -176,16 +176,25 @@ const addParticipantToTeam = asyncHandler(async (req, res) => {
 
   const tournament = await Tournament.findById(req.params.id);
 
-  if (!tournament) return res.status(404).json("Tournament not found");
-  if (tournament.started)
-    return res.status(403).json("Tournament has already started");
+  if (!tournament) {
+    res.status(404);
+    throw new Error("Tournament not found");
+  }
+
+  if (tournament.started) {
+    return res.status(403);
+    throw new Error("Tournament has already started");
+  }
 
   // Find the index of the team that the participant is being added to
   const teamIndex = tournament.semifinals.findIndex(
     (team) => team._id.toString() === teamId
   );
 
-  if (teamIndex === -1) return res.status(404).json("Team not found");
+  if (teamIndex === -1) {
+    res.status(404);
+    throw new Error("Team not found");
+  }
 
   // Check if the participant is already in the team
   const participantIndex = tournament.semifinals[
@@ -194,12 +203,16 @@ const addParticipantToTeam = asyncHandler(async (req, res) => {
     (participant) => participant.user_id === _id.toString()
   );
 
-  if (participantIndex !== -1)
-    return res.status(400).json("Participant is already in the team");
+  if (participantIndex !== -1) {
+    res.status(400);
+    throw new Error("Participant is already in the team");
+  }
 
   // Check if the team is full
-  if (tournament.semifinals[teamIndex].teamMembers.length === 5)
-    return res.status(400).json("Team is full");
+  if (tournament.semifinals[teamIndex].teamMembers.length >= 5) {
+    res.status(403);
+    throw new Error("Team is full");
+  }
 
   // check if the participant is already in another team, if so, remove them from that team
   for (let i = 0; i < tournament.semifinals.length; i++) {
@@ -229,9 +242,12 @@ const leaveTournament = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const tournament = await Tournament.findById(req.params.id);
 
-  if (!tournament) return res.status(404).json("Tournament not found");
+  if (!tournament) {
+    res.status(404);
+    throw new Error("Tournament not found");
+  }
 
-  // check if the participant is already in another team, if so, remove them from that team
+  // remove participant from whichever team they are in
   for (let i = 0; i < tournament.semifinals.length; i++) {
     const participantIndex = tournament.semifinals[i].teamMembers.findIndex(
       (participant) => participant.user_id === _id.toString()

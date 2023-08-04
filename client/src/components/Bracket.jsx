@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-const Bracket = ({ tournament }) => {
+const Bracket = ({ tournament, handleAddParticipantToTeam, handleLeaveTournament }) => {
   const { name, semifinals, finals, winner, admin_user_name, admin_user_id, started, participants } = tournament;
   const { user } = useSelector((state) => state.auth);
 
@@ -15,19 +15,27 @@ const Bracket = ({ tournament }) => {
   };
 
   const handleJoinTeam = (team) => {
-    // TODO: implement logic to join the selected team
+    handleAddParticipantToTeam(tournament._id, team._id);
   };
 
-  const handleLeaveTeam = (team) => {
-    // TODO: implement logic to leave the selected team
+  const handleLeaveTeam = () => {
+    // Leaving a team without joining another is equivalent to leaving the tournament
+    handleLeaveTournament(tournament._id);
   };
 
   const isUserInTeam = (team) => {
-    // TODO: implement logic to check if the user is in the given team
-    return false; // Example return value
+    for (let i = 0; i < tournament.semifinals.length; i++) {
+      if (tournament.semifinals[i].name === team.name) {
+        const participantIndex = tournament.semifinals[i].teamMembers.findIndex(
+          (participant) => participant.user_id === user._id.toString()
+        );
+        if (participantIndex !== -1) {
+          return true;
+        }
+        return false;
+      }
+    }
   };
-
-
 
   const renderTeam = (team) => (
     <div className="team" onClick={() => handleAdvanceTeam(team, "semifinals")}>
@@ -37,34 +45,70 @@ const Bracket = ({ tournament }) => {
           <li key={index}>{member.userName}</li>
         ))}
       </ul>
-      {!started && (
-        isUserInTeam(team) ?
-          <button onClick={() => handleLeaveTeam(team)}>Leave Team</button>
-        :
-          <button onClick={() => handleJoinTeam(team)}>Join Team</button>
-      )}
+      {!started &&
+        <>
+          {isUserInTeam(team) ? (
+            <button onClick={() => handleLeaveTeam(team)}>Leave Team</button>
+          ) : (
+            <>
+              {team.teamMembers.length < 5 &&
+                <button onClick={() => handleJoinTeam(team)}>Join Team</button>
+              }
+            </>
+          )}
+        </>
+      }
     </div>
   );
 
   return (
     <>
-    <h3>{name}</h3>
-    <h4>Admin: {admin_user_name}</h4>
-    <div className="tournament-bracket">
-     
-      <div className="round semifinals">
-        <h4>Semifinals</h4>
-        {semifinals.map(renderTeam)}
+      <h3>{name}</h3>
+      <h4>Admin: {admin_user_name}</h4>
+      <div className="tournament-bracket">
+        <div className="round semifinals">
+          <h4>Semifinals</h4>
+          <div className="bracket-container">
+            <div className="rectangle">
+              {semifinals.slice(0, 2).map((team, index) => (
+                <div key={index} className="bracket-slot">
+                  {renderTeam(team)}
+                </div>
+              ))}
+            </div>
+            <div className="rectangle">
+              {semifinals.slice(2, 4).map((team, index) => (
+                <div key={index} className="bracket-slot">
+                  {renderTeam(team)}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="round finals">
+          <h4>Finals</h4>
+          <div className="bracket-container finals-bracket">
+            <div className="rectangle">
+              <div className="bracket-slot">
+                {finals.length >= 1 ? (
+                  renderTeam(finals[0], true)
+                ) : (
+                  <h3>TBD</h3>
+                )}
+              </div>
+            </div>
+            <div className="rectangle">
+              <div className="bracket-slot">
+                {finals.length == 2 ? (
+                  renderTeam(finals[1], true)
+                ) : (
+                  <h3>TBD</h3>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="round finals">
-        <h4>Finals</h4>
-        {finals.map(renderTeam)}
-      </div>
-      <div className="round winner">
-        <h4>Winner</h4>
-        {winner && renderTeam(winner)}
-      </div>
-    </div>
     </>
   );
 };

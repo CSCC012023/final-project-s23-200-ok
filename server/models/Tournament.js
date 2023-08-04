@@ -60,7 +60,6 @@ const TournamentSchema = new mongoose.Schema({
     required: false,
     default: [],
   },
-
   started: {
     type: Boolean,
     required: true,
