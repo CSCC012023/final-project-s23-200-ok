@@ -20,7 +20,7 @@ const login = async (userData) => {
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
-  
+
   return response.data;
 };
 
@@ -42,6 +42,19 @@ const getFriends = async (token) => {
   return response.data;
 };
 
+// Get friends with userId
+const getFriendsWithId = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "friends/" + userId, config);
+
+  return response.data;
+};
+
 // Unfriend
 const unfriend = async (friendUserId, token) => {
   const config = {
@@ -50,7 +63,6 @@ const unfriend = async (friendUserId, token) => {
     },
   };
 
-  console.log(API_URL + friendUserId);
 
   const response = await axios.patch(API_URL + friendUserId, {}, config);
 
@@ -81,6 +93,28 @@ const forgotPassword = async (userData) => {
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
+  
+}
+const updateChatAlert = async (userId, chatAlert, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  localStorage.setItem(
+    "user",
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem("user")),
+      chatAlert: chatAlert,
+    })
+  );
+
+  const response = await axios.put(
+    API_URL + userId,
+    { chatAlert: chatAlert },
+    config
+  );
 
   return response.data;
 };
@@ -91,9 +125,11 @@ const authService = {
   login,
   logout,
   getFriends,
+  getFriendsWithId,
   unfriend,
   deleteUser,
   forgotPassword, 
+  updateChatAlert,
 };
 
 export default authService;
