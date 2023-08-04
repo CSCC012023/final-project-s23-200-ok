@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Verify from "./pages/Verify";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import ViewProfile from "./pages/ViewProfile";
 import Lfg from "./pages/Lfg";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
@@ -24,6 +25,7 @@ function App() {
             <Route path="/verify/:id" element={<Verify />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:user_id" element={<ViewProfile />}/>
             <Route path="/lfg" element={<Lfg />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/chat" element={<Chat />} />

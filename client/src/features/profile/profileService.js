@@ -28,6 +28,19 @@ const getProfile = async (token) => {
   return response.data;
 };
 
+// Get profile with userId
+const getProfileWithId = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + id, config);
+
+  return response.data;
+};
+
 // Link Valorant
 const linkValorant = async (profileId, valorantData, token) => {
   const config = {
@@ -75,6 +88,7 @@ const updateProfile = async (profileData, token) => {
 const profileService = {
   createProfile,
   getProfile,
+  getProfileWithId,
   linkValorant,
   linkOverwatch,
   updateProfile,

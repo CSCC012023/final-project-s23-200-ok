@@ -197,6 +197,23 @@ const getFriends = asyncHandler(async (req, res) => {
   res.status(200).json(user.friends);
 });
 
+//@route GET api/users/friends/:id
+//@desc    Return list of user's friends given id 
+//@access  Private
+const getFriendsWithId = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  try {
+    // Check if user exists
+    let user = await User.findById(id);
+    if (!user) { 
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.status(200).json(user.friends);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+})
+
 //@route   PATCH api/users/:friendUserId
 //@desc    Remove friend with user_id friendUserId from logged in user's friends array
 //@access  Private
@@ -207,9 +224,26 @@ const unfriendFriend = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Friend not found");
   }
-
+ 
   // User id set in authentication middleware
   const user = await User.findById(req.user._id);
+  
+  const chatsToDelete = await Chat.find({
+    user_ids_names: {
+      $all: [
+        { user_id: user._id.toString() },
+        { user_id: friend._id.toString() }
+      ]
+    }
+  });
+
+  // Iterate over the chats and delete the associated messages
+  for (const chat of chatsToDelete) {
+    await Message.deleteMany({ chat_id: chat._id });
+  }
+
+  // Delete the chats themselves
+  await Chat.deleteMany({ _id: { $in: chatsToDelete.map(c => c._id) } });
   user.friends = user.friends.filter(
     (friend) => friend.user_id.toString() !== req.params.friendUserId
   );
@@ -297,6 +331,7 @@ export {
   getUser,
   updateUser,
   getFriends,
+  getFriendsWithId,
   unfriendFriend,
   deleteUser,
   verifyEmail
