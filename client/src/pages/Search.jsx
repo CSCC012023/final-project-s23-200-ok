@@ -56,7 +56,7 @@ const Search = () => {
     if (!user) {
       navigate("/login");
     }
-  });
+  }, [navigate, user]);
 
   if (isLoading) {
     return <Spinner />;
