@@ -47,6 +47,25 @@ export const getPosts = createAsyncThunk(
   }
 );
 
+//get post by friends
+export const getPostsByFriends = createAsyncThunk(
+  "post/getPostsByFriends",
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await postsService.getPostsByFriends( token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Update post
 export const updatePost = createAsyncThunk(
   "posts/updatePost",
@@ -144,6 +163,24 @@ export const postsSlice = createSlice({
         state.posts = action.payload.reverse();
       })
       .addCase(getPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+
+      //get posts by friends
+      .addCase(getPostsByFriends.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(getPostsByFriends.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.posts = action.payload.reverse();
+      })
+      .addCase(getPostsByFriends.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
