@@ -214,10 +214,28 @@ const getFriends = asyncHandler(async (req, res) => {
   res.status(200).json(user.friends);
 });
 
+//@route GET api/users/friends/:id
+//@desc    Return list of user's friends given id
+//@access  Private
+const getFriendsWithId = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  try {
+    // Check if user exists
+    let user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    res.status(200).json(user.friends);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 //@route   PATCH api/users/:friendUserId
 //@desc    Remove friend with user_id friendUserId from logged in user's friends array
 //@access  Private
 const unfriendFriend = asyncHandler(async (req, res) => {
+  console.log("unfriendFriend");
   // No such friend
   const friend = await User.findById(req.params.friendUserId);
   if (!friend) {
@@ -227,6 +245,26 @@ const unfriendFriend = asyncHandler(async (req, res) => {
 
   // User id set in authentication middleware
   const user = await User.findById(req.user._id);
+
+  // delete chats between user and friend
+  const chatsToDelete = await Chat.find({
+    $and: [
+      { "user_ids_names.user_id": user._id.toString() },
+      { "user_ids_names.user_id": friend._id.toString() },
+    ],
+  });
+
+  for (const chat of chatsToDelete) {
+    Message.deleteMany({ chat_id: chat._id });
+  }
+
+  await Chat.deleteMany({
+    $and: [
+      { "user_ids_names.user_id": user._id.toString() },
+      { "user_ids_names.user_id": friend._id.toString() },
+    ],
+  });
+
   user.friends = user.friends.filter(
     (friend) => friend.user_id.toString() !== req.params.friendUserId
   );
@@ -237,6 +275,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   );
   friend.save();
 
+  console.log("user.friends: ", user.friends);
   res.status(200).json(user.friends);
 });
 
@@ -314,6 +353,7 @@ export {
   getUser,
   updateUser,
   getFriends,
+  getFriendsWithId,
   unfriendFriend,
   deleteUser,
   verifyEmail,

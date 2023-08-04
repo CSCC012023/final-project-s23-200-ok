@@ -52,15 +52,15 @@ const getProfileNoId = asyncHandler(async (req, res) => {
   }
 });
 
-//@route   GET api/profile/:id
-//@desc    get profile by id
+//@route   GET api/profile/:user_id
+//@desc    get profile by user_id
 //@access  Public
 const getProfile = asyncHandler(async (req, res) => {
-  const id = req.params.id;
+  const user_id = req.params.user_id;
   try {
     // Check if profile exists
-    let profile = await Profile.findById(id);
-    if (!profile) {
+    let profile = await Profile.findOne({ user_id: user_id });
+    if (!profile) { 
       return res.status(404).json({ msg: "Profile not found" });
     }
     res.status(200).json(profile);
