@@ -42,6 +42,19 @@ const getFriends = async (token) => {
   return response.data;
 };
 
+// Get friends with userId
+const getFriendsWithId = async (userId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "friends/" + userId, config);
+
+  return response.data;
+};
+
 // Unfriend
 const unfriend = async (friendUserId, token) => {
   const config = {
@@ -77,6 +90,7 @@ const authService = {
   login,
   logout,
   getFriends,
+  getFriendsWithId,
   unfriend,
   deleteUser,
 };

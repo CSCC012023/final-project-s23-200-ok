@@ -6,22 +6,19 @@ import {
   getProfileWithId,
 } from "../features/profile/profileSlice";
 import {
-  getFriends,
-  unfriend,
-  logout,
-  deleteUserAccount
+  getFriendsWithId,
 } from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
 import Modal from "react-modal";
-import Friend from "../components/Friend";
+import ZombieFriend from "../components/ZombieFriend";
 import Spinner from "../components/Spinner";
 import InstagramIcon from "../assets/InstagramIcon.png";
 import TwitterIcon from "../assets/TwitterIcon.png";
 import TikTokIcon from "../assets/TikTokIcon.png";
 import YoutubeIcon from "../assets/YoutubeIcon.png";
 import TwitchIcon from "../assets/TwitchIcon.png";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const ViewProfile = () => {
   const navigate = useNavigate();
@@ -52,10 +49,6 @@ const ViewProfile = () => {
     setIsFriendsModalOpen(true);
   };
 
-  const handleUnfriend = (id) => {
-    dispatch(unfriend(id));
-  };
-
   const closeFriendsModal = () => {
     setIsFriendsModalOpen(false);
   };
@@ -71,12 +64,12 @@ const ViewProfile = () => {
     }
 
     dispatch(getProfileWithId(user_id));
-    //dispatch(getFriends());
+    dispatch(getFriendsWithId(user_id));
 
     return () => {
       dispatch(reset());
     };
-  }, [user, isError, message, navigate, dispatch]);
+  }, [user, isError, message, navigate, dispatch, user_id]);
 
   // Render an error message if there was an error
   if (isError) {
@@ -146,7 +139,7 @@ const ViewProfile = () => {
                     <a
                       className="YouTube-link"
                       href={social.url}
-                      target="_blank">
+                      >
                       <img src={YoutubeIcon} alt="Youtube" />
                     </a>
                   )}
@@ -182,11 +175,11 @@ const ViewProfile = () => {
           </div>
           <>
             {friends.map((friend) => (
-              <Friend 
-                key={friend._id}
-                friend={friend}
-                handleUnfriend={handleUnfriend}
-              />
+                <ZombieFriend 
+                  key={friend._id}
+                  friend={friend}
+                  closeFriendsModal={closeFriendsModal}
+                />
             ))}
           </>
         </Modal>

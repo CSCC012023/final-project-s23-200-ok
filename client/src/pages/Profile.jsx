@@ -347,12 +347,13 @@ const Profile = () => {
             </button>
           </div>
           <>
-            {friends.map((friend) => (
-              <Friend 
-                key={friend._id}
-                friend={friend}
-                handleUnfriend={handleUnfriend}
-              />
+            {friends.map((friend) => (  
+                <Friend 
+                  key={friend._id}
+                  friend={friend}
+                  handleUnfriend={handleUnfriend}
+                  closeFriendsModal={closeFriendsModal}
+                />
             ))}
           </>
         </Modal>
