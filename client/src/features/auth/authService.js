@@ -72,6 +72,19 @@ const deleteUser = async (userId, token) => {
   return response.data;
 };
 
+// Block user
+const blockUser = async (blockedUserId, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.patch(API_URL + "block/" + blockedUserId, {}, config);
+
+  return response.data;
+};
+
 const authService = {
   register,
   login,
@@ -79,6 +92,7 @@ const authService = {
   getFriends,
   unfriend,
   deleteUser,
+  blockUser,
 };
 
 export default authService;
