@@ -22,22 +22,22 @@ function Header() {
         {user ? (
           <>
             <li>
-              <Link to="/chat">chat</Link>
+              <Link to="/chat">Chat</Link>
             </li>
             <li>
-              <Link to="/search">search</Link>
+              <Link to="/search">Search</Link>
             </li>
             <li>
-              <Link to="/profile">profile</Link>
+              <Link to="/profile">Profile</Link>
             </li>
             <li>
-              <Link to="/notifications">notifications</Link>
+              <Link to="/notifications">Notifications</Link>
             </li>
             <li>
-              <Link to="/lfg">lfg</Link>
+              <Link to="/lfg">Lfg</Link>
             </li>
             <li>
-              <Link to="/stat">stat</Link>
+              <Link to="/stat">Stats</Link>
             </li>
             <li>
               <button className="btn" onClick={onLogout}>
@@ -49,10 +49,10 @@ function Header() {
         ) : (
           <>
             <li>
-              <Link to="/register">register</Link>
+              <Link to="/register">Register</Link>
             </li>
             <li>
-              <Link to="/login">log in</Link>
+              <Link to="/login">Log In</Link>
             </li>
           </>
         )}
