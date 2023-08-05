@@ -239,7 +239,7 @@ const getFriendsWithId = asyncHandler(async (req, res) => {
 const unfriendFriend = asyncHandler(async (req, res) => {
   console.log("unfriendFriend");
   // No such friend
-  const friend = await User.findById(req.params.frienduserId);
+  const friend = await User.findById(req.params.friendUserId);
   if (!friend) {
     res.status(404);
     throw new Error("Friend not found");
@@ -268,7 +268,7 @@ const unfriendFriend = asyncHandler(async (req, res) => {
   });
 
   user.friends = user.friends.filter(
-    (friend) => friend.user_id.toString() !== req.params.frienduserId
+    (friend) => friend.user_id.toString() !== req.params.friendUserId
   );
   user.save();
 
