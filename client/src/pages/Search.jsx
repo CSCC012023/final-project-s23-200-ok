@@ -8,6 +8,7 @@ import {
   createFriendRequest,
   reset
 } from "../features/friendRequests/friendRequestsSlice";
+import { blockUser } from "../features/auth/authSlice";
 import { AiOutlineCloseCircle } from "react-icons/ai";
 
 const Search = () => {
@@ -37,6 +38,11 @@ const Search = () => {
     dispatch(createFriendRequest(id));
   };
 
+  const handleBlock = (id) => {
+    console.log('handleBlock' + id);
+    dispatch(blockUser(id));
+  };
+
   useEffect(() => {
     dispatch(getNonFriendUsers());
 
@@ -50,7 +56,7 @@ const Search = () => {
     if (!user) {
       navigate("/login");
     }
-  });
+  }, [navigate, user]);
 
   if (isLoading) {
     return <Spinner />;
@@ -86,6 +92,7 @@ const Search = () => {
             key={nonFriendUser._id}
             nonFriendUser={nonFriendUser}
             handleAddFriend={handleAddFriend}
+            handleBlock={handleBlock}
           />
         ))
       ) : (

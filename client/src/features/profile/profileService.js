@@ -28,6 +28,19 @@ const getProfile = async (token) => {
   return response.data;
 };
 
+// Get profile with userId
+const getProfileWithId = async (id, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + id, config);
+
+  return response.data;
+};
+
 // Link Valorant
 const linkValorant = async (profileId, valorantData, token) => {
   const config = {
@@ -43,6 +56,16 @@ const linkValorant = async (profileId, valorantData, token) => {
   );
   return response.data;
 };
+
+const getValStat = async (valorantData) => {
+  const response = await axios.get(
+    API_URL + "games/valorant/" + 
+    valorantData.region + "/" + 
+    valorantData.username + "/" +
+    valorantData.tagline + "/stat"
+  );
+  return response.data;
+}
 
 // Link Overwatch
 const linkOverwatch = async (profileId, overwatchData, token) => {
@@ -75,9 +98,11 @@ const updateProfile = async (profileData, token) => {
 const profileService = {
   createProfile,
   getProfile,
+  getProfileWithId,
   linkValorant,
   linkOverwatch,
   updateProfile,
+  getValStat
 };
 
 export default profileService;

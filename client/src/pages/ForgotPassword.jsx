@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
-import { login, reset } from "../features/auth/authSlice";
-import { getProfile } from "../features/profile/profileSlice";
-import { getIncomingFriendRequests, getOutgoingFriendRequests } from "../features/friendRequests/friendRequestsSlice";
+import { forgotPassword, reset } from "../features/auth/authSlice";
 
-function Login() {
+function ForgotPassword() {
   const [formData, setFormData] = useState({
     email: "",
-    password: ""
   });
 
-  const { email, password } = formData;
+  const { email } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,10 +23,7 @@ function Login() {
       toast.error(message);
     }
 
-    if (isSuccess || user) {
-      dispatch(getProfile());
-      dispatch(getIncomingFriendRequests());
-      dispatch(getOutgoingFriendRequests());
+    if (isSuccess || user || email) {
       navigate("/");
     }
 
@@ -45,13 +39,15 @@ function Login() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!email) {
+      toast.error('Please enter an email'); 
+    } else {
+      const userData = {
+        email
+      };
+      dispatch(forgotPassword(userData));
 
-    const userData = {
-      email,
-      password
-    };
-
-    dispatch(login(userData));
+    }
   };
 
   if (isLoading) {
@@ -62,9 +58,9 @@ function Login() {
     <>
       <section className="heading">
         <h1>
-          Login
+          Forgot Password? 
         </h1>
-        <p>Connect with fellow gamers on Playbook.</p>
+        <p>Please enter your email.</p>
       </section>
 
       <section className="form">
@@ -76,27 +72,12 @@ function Login() {
             value={email} 
             placeholder="Email" 
             onChange={onChange} />
-          <input 
-            type="password" 
-            id="password" 
-            name="password" 
-            value={password} 
-            placeholder="Password" 
-            onChange={onChange} />
-          <button className="btn btn-block" type="submit">Log In</button>
+          <button className="btn btn-block" type="submit">Submit</button>
           <hr />
-          {/* TODO: add underline-link class in css in dev branch, process is weird atm */}
-          <Link to="/register" className="underline-link">
-            Don't have an account? Register today!
-          </Link>
-          <br></br>
-          <Link to="/forgotpassword" className="underline-link">
-            Forgot Password? 
-          </Link>
         </form>
       </section>
     </>
   );
 }
 
-export default Login;
+export default ForgotPassword;

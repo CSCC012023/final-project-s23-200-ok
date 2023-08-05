@@ -1,0 +1,68 @@
+.game-select {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.game-select-linebreak{
+    color: white;
+    margin-top:1rem;
+}
+
+.game-select-block {
+    padding: 1rem;
+    border-color: azure;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 1px;
+}
+
+.game-select-block:hover {
+    color:grey;
+    border-color:red;
+}
+
+.stat-container {
+    padding:1rem;
+    /* border-color: azure;
+    border-width: 1px;
+    border-style: solid; */
+}
+
+.highest-val-rank-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.val-stat-username {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.val-stat-current-data-container {
+    margin-bottom: 1rem;
+}
+
+.val-stat-ctier-mmr-c {
+    display: flex;
+    justify-content: space-around;
+}
+
+.val-stat-seasons {
+
+}
+
+.val-stat-season {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 1px;
+    border-width: 1px;
+    border-color: azure;
+    border-style: solid;
+    margin-bottom: 1rem;
+    padding: 5px;
+}
