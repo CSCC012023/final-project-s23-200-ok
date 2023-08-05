@@ -10,6 +10,7 @@ import userRoutes from "./routes/userRoutes.js";
 import LFGPostRoutes from "./routes/LFGPostRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import friendRequestRoutes from "./routes/friendRequestRoutes.js";
+import tournamentRoutes from "./routes/tournamentRoutes.js";
 import errorHandler from "./middleware/errorMiddleware.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -90,6 +91,7 @@ app.use("/api/lfg", LFGPostRoutes);
 app.use("/api/friendrequests", friendRequestRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/tournament", tournamentRoutes);
 
 app.use(errorHandler);
 

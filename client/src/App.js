@@ -16,9 +16,10 @@ import Lfg from "./pages/Lfg";
 import Notifications from "./pages/Notifications";
 import Chat from "./pages/Chat";
 import Search from "./pages/Search";
+import Tournament from "./pages/Tournament";
 import GameStat from "./pages/GameStat";
-
 import ResetPassword from "./pages/ResetPassword";
+
 import { updateChatAlert } from "./features/auth/authSlice";
 import { useDispatch } from "react-redux";
 
@@ -64,8 +65,8 @@ function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/chat" element={<Chat socketRef={socketRef} />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/tournament" element={<Tournament />} />
             <Route path="/stat" element={<GameStat />} />
-
           </Routes>
         </div>
       </Router>

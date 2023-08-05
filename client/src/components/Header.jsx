@@ -40,6 +40,9 @@ function Header() {
               <Link to="/stat">Stats</Link>
             </li>
             <li>
+              <Link to="/tournament">tournament</Link>
+            </li>
+            <li>
               <button className="btn" onClick={onLogout}>
                 Logout
               </button>
