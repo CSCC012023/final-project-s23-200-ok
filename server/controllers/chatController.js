@@ -9,8 +9,8 @@ const getChats = asyncHandler(async (req, res) => {
     const user_id = req.user._id;
     const chats = await Chat.find({
       user_ids_names: { $elemMatch: { user_id: user_id } },
-      'user_ids_names.name': { $nin: req.user.blockedUsers },
-      'user_ids_names.name': { $nin: req.user.blockedBy },
+      'user_ids_names.user_id': { $nin: req.user.blockedUsers },
+      'user_ids_names.user_id': { $nin: req.user.blockedBy },
     });
     res.status(200).json(chats);
   } catch (error) {
@@ -26,7 +26,11 @@ const getChats = asyncHandler(async (req, res) => {
 const getChatById = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
-    const chat = await Chat.findById(id);
+    const chat = await Chat.findById({
+      _id: id,
+      'user_ids_names.user_id': { $nin: req.user.blockedUsers },
+      'user_ids_names.user_id': { $nin: req.user.blockedBy },
+    });
     res.status(200).json(chat);
   } catch (error) {
     console.error(error);

@@ -12,6 +12,7 @@ import {
 } from "../controllers/profileController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { checkBlockedUser } from "../middleware/blockUserMiddleware.js";
+import { blockUser } from "../controllers/userController.js";
 
 const router = Router();
 const blockCheck = await checkBlockedUser('profile');
