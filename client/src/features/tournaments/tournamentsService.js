@@ -30,7 +30,7 @@ const createTournament = async (token, tournamentName) => {
   return response.data;
 };
 
-const updateTournamentById = async (token, tournamentId, tournament) => {
+const updateTournamentById = async (token, tournamentId, updatedTournament) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -39,8 +39,7 @@ const updateTournamentById = async (token, tournamentId, tournament) => {
 
   const response = await axios.patch(
     `${API_URL}${tournamentId}`,
-
-    tournament,
+    updatedTournament,
     config
   );
 

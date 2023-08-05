@@ -50,14 +50,13 @@ export const createTournament = createAsyncThunk(
 // Update tournament by id
 export const updateTournamentById = createAsyncThunk(
   "tournaments/updateTournamentById",
-  async ({ tournamentId, tournament }, thunkAPI) => {
-    console.log(tournamentId, tournament);
+  async ({ tournamentId, updatedTournament }, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user?.token;
       return await tournamentsService.updateTournamentById(
         token,
         tournamentId,
-        tournament
+        updatedTournament
       );
     } catch (error) {
       const message =

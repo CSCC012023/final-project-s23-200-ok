@@ -153,7 +153,7 @@ const updateTournamentById = asyncHandler(async (req, res) => {
     throw new Error("You do not have permission to update this tournament");
   }
 
-  // Validate data
+  // Validate data - fields can be unchanged but still need to provided
   if (!started || !semifinals || !finals) {
     res.status(400);
     throw new Error("Missing field(s)");
@@ -163,6 +163,12 @@ const updateTournamentById = asyncHandler(async (req, res) => {
   tournament.semifinals = semifinals;
   tournament.finals = finals;
   tournament.winner = winner;
+
+  // End the tournament if we have a winner
+  if (tournament.winner) {
+    tournament.ended = true;
+  }
+
   await tournament.save();
 
   res.status(200).json(tournament);

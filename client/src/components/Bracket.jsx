@@ -15,7 +15,7 @@ const Bracket = ({
     admin_user_name,
     admin_user_id,
     started,
-    participants,
+    ended,
   } = tournament;
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -26,48 +26,52 @@ const Bracket = ({
       return;
     }
 
-    // TODO : advance the team to the next stage
     // get the next stage
-    const nextStage = checkStage(team);
+    const nextStage = getNextStage(team);
 
-    // make sure the number of teams in the next stage is less than 2
-    if (tournament[nextStage].length >= 2) {
-      return;
-    }
+    let updatedTournament;
 
     if (nextStage === "finals") {
-      // add the team to the next stage
-      const updatedTournament = {
+      // add the team to the finals
+      updatedTournament = {
         ...tournament,
-        [nextStage]: [...tournament[nextStage], team],
+        finals: [...tournament.finals, team],
       };
+    }
+    else if (nextStage === "winner") {
+      // add the team as the winner
+      updatedTournament = {
+        ...tournament,
+        winner: team
+      }
+    }
 
-      // get the next stage's index
+    if (nextStage !== "n/a") {
       dispatch(
         updateTournamentById({
           tournamentId: tournament._id,
-          tournament: updatedTournament,
-        })
-      );
-    } else {
-      const updatedTournament = { ...tournament, 'winner': team };
-      dispatch(
-        updateTournamentById({
-          tournamentId: tournament._id,
-          tournament: updatedTournament,
+          updatedTournament,
         })
       );
     }
   };
 
-  const checkStage = (team) => {
-    if (tournament.finals.includes(team)) {
-      return "winner";
-    } else if (tournament.semifinals.includes(team)) {
-      return "finals";
-    } else {
+  const getNextStage = (team) => {
+    // Team is already the winner
+    if (tournament.winner === team) {
+      return "n/a";
+    }
+    // Next of finals is winner
+    else if (tournament.finals.includes(team)) {
       return "winner";
     }
+    // Next of semifinals is finals (if there aren't already 2 finalists)
+    else if (tournament.semifinals.includes(team) && finals.length < 2) {
+      return "finals";
+    }
+    // Otherwise cannot be advanced (team doesn't exist in the tournament)
+    console.log(team);
+    return "n/a";
   };
 
   const handleJoinTeam = (team) => {
@@ -80,12 +84,9 @@ const Bracket = ({
   };
 
   const startTournament = () => {
-    // TODO : start the tournament
-    // dispatch an action to update the tournament in the database with the started field set to true and
-    // everyting else the same
-    const tournamentId = tournament._id;
-    const newtournament = { ...tournament, started: true };
-    dispatch(updateTournamentById({ tournamentId, tournament: newtournament }));
+    // updated the started field to true
+    const updatedTournament = { ...tournament, started: true };
+    dispatch(updateTournamentById({ tournamentId: tournament._id, updatedTournament }));
   };
 
   const isUserInTeam = (team) => {
@@ -124,7 +125,10 @@ const Bracket = ({
           )}
         </>
       )}
-      {started && user._id === admin_user_id && (
+      {started &&
+        !ended &&
+        user._id === admin_user_id &&
+        tournament.winner !== team && (
         <button onClick={() => handleAdvanceTeam(team)}>Advance Team</button>
       )}
     </div>
@@ -165,7 +169,7 @@ const Bracket = ({
             <div className="rectangle">
               <div className="bracket-slot">
                 {finals.length >= 1 ? (
-                  renderTeam(finals[0], true)
+                  renderTeam(finals[0])
                 ) : (
                   <h3>TBD</h3>
                 )}
@@ -173,8 +177,8 @@ const Bracket = ({
             </div>
             <div className="rectangle">
               <div className="bracket-slot">
-                {finals.length == 2 ? (
-                  renderTeam(finals[1], true)
+                {finals.length === 2 ? (
+                  renderTeam(finals[1])
                 ) : (
                   <h3>TBD</h3>
                 )}

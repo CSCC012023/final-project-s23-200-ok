@@ -65,6 +65,11 @@ const TournamentSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  ended: {
+    type: Boolean,
+    required: true,
+    default: false,
+  }
 });
 
 const Tournament = mongoose.model("Tournament", TournamentSchema);
