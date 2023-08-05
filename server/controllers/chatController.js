@@ -9,6 +9,8 @@ const getChats = asyncHandler(async (req, res) => {
     const user_id = req.user._id;
     const chats = await Chat.find({
       user_ids_names: { $elemMatch: { user_id: user_id } },
+      'user_ids_names.name': { $nin: req.user.blockedUsers },
+      'user_ids_names.name': { $nin: req.user.blockedBy },
     });
     res.status(200).json(chats);
   } catch (error) {
@@ -39,19 +41,6 @@ const getChatById = asyncHandler(async (req, res) => {
 const createChat = asyncHandler(async (req, res) => {
   try {
     const { user_id, user_name, other_user_id, other_user_name } = req.body;
-
-    const otherUser = await User.findById(other_user_id);
-
-    if (!otherUser) {
-      res.status(400);
-      throw new Error("Invalid user");
-    } else if (otherUser.blockedUsers.includes(user_id)) {
-      res.status(400);
-      throw new Error("You have been blocked by this user");
-    } else if (otherUser.blockedBy.includes(user_id)) {
-      res.status(400);
-      throw new Error("You have blocked this user");
-    }
 
     const newChat = new Chat({
       user_ids_names: [
