@@ -149,16 +149,23 @@ const Bracket = ({
           <div className="bracket-container">
             <div className="rectangle">
               {semifinals.slice(0, 2).map((team, index) => (
-                <div key={index} className="bracket-slot">
-                  {renderTeam(team)}
-                </div>
+                <>
+                  <div key={index} className="bracket-slot">
+                    {renderTeam(team)}
+                  </div>
+                  {index === 0 && <h1>Vs</h1>}
+                </>
               ))}
             </div>
+            <br />
             <div className="rectangle">
               {semifinals.slice(2, 4).map((team, index) => (
-                <div key={index} className="bracket-slot">
-                  {renderTeam(team)}
-                </div>
+                <>
+                  <div key={index} className="bracket-slot">
+                    {renderTeam(team)}
+                  </div>
+                  {index === 0 && <h1>Vs</h1>}
+                </>
               ))}
             </div>
           </div>
@@ -175,6 +182,7 @@ const Bracket = ({
                 )}
               </div>
             </div>
+            <h1>Vs</h1>
             <div className="rectangle">
               <div className="bracket-slot">
                 {finals.length === 2 ? (
