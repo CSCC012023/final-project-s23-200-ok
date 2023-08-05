@@ -60,6 +60,7 @@ function Dashboard() {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
+    console.log(file);
 
     var form = new FormData();
 

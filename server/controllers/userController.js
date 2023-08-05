@@ -307,8 +307,7 @@ const blockUser = asyncHandler(async (req, res) => {
     if (blockedUserIndex === -1) {
       user.blockedUsers.push(req.params.userId);
       userToBlock.blockedBy.push(req.user._id);
-    }
-    else {
+    } else {
       user.blockedUsers.splice(blockedUserIndex, 1);
       userToBlock.blockedBy.splice(blockedByIndex, 1);
     }
@@ -319,7 +318,9 @@ const blockUser = asyncHandler(async (req, res) => {
 
   user.save();
   userToBlock.save();
-  res.status(200).json({currUser: user.blockedUsers, tgtUser: userToBlock.blockedBy});
+  res
+    .status(200)
+    .json({ currUser: user.blockedUsers, tgtUser: userToBlock.blockedBy });
 });
 
 //@route DELETE api/users/:id
