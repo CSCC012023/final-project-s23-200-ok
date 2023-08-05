@@ -5,6 +5,7 @@ const GameSchema = new mongoose.Schema({
   ign: { type: String, default: "" },
   rank: { type: String, default: "" },
   stats: [{ type: String, default: "" }],
+  region: { type: String, default: "" }
 });
 
 const SocialSchema = new mongoose.Schema({
@@ -38,7 +39,7 @@ const ProfileSchema = new mongoose.Schema({
     type: [GameSchema],
     required: false,
     default: [
-      { name: "Valorant", ign: "", rank: "", stats: [] },
+      { name: "Valorant", ign: "", rank: "", stats: [] , region: ""},
       { name: "Overwatch", ign: "", rank: "", stats: [] },
     ],
   },

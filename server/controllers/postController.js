@@ -17,7 +17,7 @@ const createPost = asyncHandler(async (req, res) => {
       userName,
       text,
       image,
-      file:file.id 
+      file:file.id
     });
   }
   else {
@@ -49,14 +49,53 @@ const getPosts = asyncHandler(async (req, res) => {
     throw new Error("Invalid user");
   }
 
-  const posts = await Post.find({});
+  const posts = await Post.find({
+    $and: [
+      { user_id: { $nin: req.user.blockedUsers } }, // Exclude posts by blocked users
+      { user_id: { $nin: req.user.blockedBy } }, // Exclude post if user is blocked by post creator
+    ],
+  });
   res.status(200).json(posts);
+});
+
+//@route   GET api/posts/byfriends
+//@desc    get the posts of the friends of the user
+//@access  Private
+const getPostsByFriends = asyncHandler(async (req, res) => {
+  var friend_posts = [];
+    for (var i = 0; i <req.user.friends.length; i++){
+      const friend_post = await Post.find().where("user_id").equals(req.user.friends[i].user_id);
+      for (var j = 0; j < friend_post.length; j++){
+        friend_posts.push(friend_post[j]);
+      }
+    }
+    res.status(200).json(friend_posts);
 });
 
 //@route   GET api/posts/:id
 //@desc    [DESCRIPTION OF WHAT ROUTE DOES]
 //@access  [WHETHER PUBLIC OR PRIVATE i.e. LOGGED IN USER CAN ACCESS IT OR NOT]
-const getPost = asyncHandler(async (req, res) => {});
+const getPost = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    res.status(401);
+    throw new Error("Invalid user");
+  }
+
+  try{
+    const post = await Post.findById(req.params.id);
+
+    if (post) {
+      res.status(200).json(post);
+    } else {
+      res.status(404);
+      throw new Error("Post not found");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    throw new Error("Error while retrieving post");
+  }
+});
 
 //@route PUT api/posts/:id
 //@desc  [DESCRIPTION OF WHAT ROUTE DOES]
@@ -67,15 +106,15 @@ const updatePost = asyncHandler(async (req, res) => {});
 //@desc  delete post
 //@access private 
 const deletePost = asyncHandler(async (req, res) => {
-    const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.id);
 
-    if (post) {
-      await post.deleteOne();
-      res.status(200).json({ "_id": req.params.id });
-    } else {
-      res.status(404);
-      throw new Error("Post not found");
-    }
+  if (post) {
+    await post.deleteOne();
+    res.status(200).json({ "_id": req.params.id });
+  } else {
+    res.status(404);
+    throw new Error("Post not found");
+  }
 });
 
 //@route   PATCH api/posts/:id/react
@@ -116,6 +155,7 @@ const reactToPost = asyncHandler(async (req, res) => {
 export {
     createPost,
     getPosts,
+    getPostsByFriends,
     getPost,
     updatePost,
     deletePost,

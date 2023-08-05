@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 const FriendSchema = new mongoose.Schema({
   user_id: { type: String, required: true, unique: true },
   userName: { type: String, required: true },
-  profilePicture: { 
+  profilePicture: {
     type: String,
     required: false,
-    default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-  }
+    default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
+  },
 });
 
 const UserSchema = new mongoose.Schema({
@@ -29,13 +29,21 @@ const UserSchema = new mongoose.Schema({
     minlength: 6,
   },
   profile: { type: mongoose.Schema.Types.ObjectId, ref: "Profile" },
-  friends: {
-    type: [FriendSchema]
+  profilePicture: {
+    type: String,
+    required: false,
+    default: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
   },
+  friends: {
+    type: [FriendSchema],
+  },
+  blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  blockedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   lfgposts: [{ type: mongoose.Schema.Types.ObjectId, ref: "LFGPost" }],
   picture: { type: String },
-  isverified: { type: Boolean, default: false }, 
+  isverified: { type: Boolean, default: false },
+  chatalert: { type: Boolean, default: false },
 });
 
 const User = mongoose.model("User", UserSchema);

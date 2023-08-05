@@ -4,11 +4,31 @@ import friendRequestsService from "./friendRequestsService";
 const initialState = {
   incomingFriendRequests: [],
   outgoingFriendRequests: [],
+  nonFriendUsers: [],
   isLoading: false,
   isSuccess: false,
   isError: false,
   message: "",
 };
+
+// Get non friend users
+export const getNonFriendUsers = createAsyncThunk(
+  "friendRequests/getNonFriendUsers",
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await friendRequestsService.getNonFriendUsers(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
 
 // Create friend request
 export const createFriendRequest = createAsyncThunk(
@@ -113,6 +133,23 @@ export const friendRequestsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Get non friend users
+      .addCase(getNonFriendUsers.pending, (state) => {
+        state.isLoading = true;
+        state.isSuccess = false;
+        state.isError = false;
+        state.message = "";
+      })
+      .addCase(getNonFriendUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.nonFriendUsers = action.payload;
+      })
+      .addCase(getNonFriendUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       // Create
       .addCase(createFriendRequest.pending, (state) => {
         state.isLoading = true;
@@ -124,6 +161,13 @@ export const friendRequestsSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.outgoingFriendRequests.unshift(action.payload);
+        state.nonFriendUsers = state.nonFriendUsers.filter(nonFriendUser => {
+          return (
+            (nonFriendUser._id.toString() !== action.payload.recipient_user_id)
+            &&
+            (nonFriendUser.userName !== action.payload.recipient_userName)
+          );
+        });
       })
       .addCase(createFriendRequest.rejected, (state, action) => {
         state.isLoading = false;
