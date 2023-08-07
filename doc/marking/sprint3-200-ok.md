@@ -215,7 +215,7 @@ Sprint Completion Total Mark: 20 / 20
   - 1 mark = The majority of class names do not match the collaborator names or the responsibilities of the majority of the classes are not stated or are unclear
   - 0 marks = No CRC provided or the provided document does not match the CRC model
 
-  Your Mark: 2
+  Your Mark: 4
 
 - Software Architecture Diagram (max 4 marks)
 
