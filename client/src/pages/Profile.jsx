@@ -191,7 +191,7 @@ const Profile = () => {
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [isGameModalOpen]);
 
   useEffect(() => {
     setSubmittedLinks(socials);
