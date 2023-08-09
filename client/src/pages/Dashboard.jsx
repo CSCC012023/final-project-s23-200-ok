@@ -155,9 +155,9 @@ function Dashboard() {
         
       ) : (
         <section className="heading">
-          <p><u><Link to="/login">Login</Link></u> and see what your fellow gamers are up to!</p>
+          <p><Link to="/login" className="dashboard-link">Login</Link> and see what your fellow gamers are up to!</p>
           <p>OR</p>
-          <p><u><Link to="/register">Sign up</Link></u> to start using Playbook!</p>
+          <p><Link to="/register" className="dashboard-link">Sign up</Link> to start using Playbook!</p>
         </section>
       ) }
     </>

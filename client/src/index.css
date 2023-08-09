@@ -11,7 +11,37 @@
 body {
   font-family: 'Poppins', sans-serif;
   height: 100vh;
+  overflow-y: scroll; /* Always show vertical scrollbar */
 }
+
+/*---------------------SCROLLING-----------------------*/
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+  body {
+      background-color: inherit;
+      -webkit-background-clip: text;
+      transition: background-color 0.5s;
+  }
+  body:hover {
+    background-color: #fff; 
+  }
+  body::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+  } 
+  body::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: inherit;
+  }
+}
+
+/* Firefox and Edge (Chromium-based) */
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #fff;
+}
+
+/*---------------------------------------*/
 
 a {
   text-decoration: none;
@@ -46,7 +76,6 @@ h3 {
 }
 
 .header {
-  color: #fff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,7 +85,6 @@ h3 {
 }
 
 .header ul {
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,16 +94,34 @@ h3 {
   margin-left: 20px;
 }
 
-.header ul li a {
-  display: flex;
-  align-items: center;
+/* Button style */
+.active-nav-btn {
+  display: inline-block;
+  background-color: #fff; /* Button color */
+  color: #191820; /* Text color */
+  border-radius: 5px;
+  padding: 0 0.5rem;
+  margin: 0 -0.5rem;
+  transition: background-color 0.5s ease;
 }
 
-.header ul li a:hover {
-  color: #777;
+.active-nav-btn:hover {
+  background-color: #191820; /* Button color */
+  color: #da1414; /* Text color */
 }
 
-.header ul li a svg {
+.inactive-nav-btn:hover {
+  background-color: #191820; /* Button color */
+  color: #da1414; /* Text color */
+}
+
+.header img {
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: -12px;
   margin-right: 5px;
 }
 
@@ -88,6 +134,16 @@ h3 {
 
 .heading p {
   color: #fff;
+}
+
+.dashboard-link {
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.dashboard-link:hover {
+  color: #da1414;
+  text-decoration: none;
 }
 
 .form,
@@ -119,10 +175,11 @@ h3 {
 
 .btn {
   padding: 10px 20px;
-  border: 1px solid #000;
+  border: 1px solid #da1414;
   border-radius: 5px;
-  background: #000;
-  color: #fff;
+  background: #da1414;
+  color: #191820;
+  transition: color 0.3s ease;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
@@ -131,6 +188,12 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.btn:hover {
+  border: 1px solid #fff;
+  background: #fff;
+  color: #191820;
 }
 
 .h1 {
@@ -152,10 +215,6 @@ h3 {
 .btn-block {
   width: 100%;
   margin-bottom: 20px;
-}
-
-.btn:hover {
-  transform: scale(0.98);
 }
 
 .loadingSpinnerContainer {
@@ -219,7 +278,6 @@ h3 {
       font-size: 1.5rem;
   }
 }
-
 
 .profile-container {
   display: flex;
@@ -438,8 +496,8 @@ h3 {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 10px;
-  border: 1px solid #ff6363;
-  color: #ff6363;
+  border: 1px solid #da1414;
+  color: #da1414;
   font-family: 'Poppins', sans-serif;
   height: 120px;
 }
@@ -557,14 +615,14 @@ h3 {
 .lfg-post-server-icon,
 .lfg-post-players-icon,
 .lfg-post-rank-icon {
-  color: #ff6363;
+  color: #da1414;
 }
 
 .lfg-post-game,
 .lfg-post-server,
 .lfg-post-players,
 .lfg-post-rank {
-  color: #ff6363;
+  color: #da1414;
   font-weight: 400;
 }
 
@@ -820,7 +878,7 @@ h3 {
 .badge {
   display: inline-block;
   font-size: x-small;
-  background-color: red;
+  background-color: #da1414;
   color: white;
   padding: 1px 6px;
   text-align: center;
@@ -1077,5 +1135,5 @@ h3 {
 
 .team-members li {
   font-size: 12px;
-  color: red;
+  color: #da1414;
 }
