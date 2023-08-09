@@ -7,6 +7,7 @@ import {
 } from "../features/profile/profileSlice";
 import {
   getFriendsWithId,
+  getBlockedUsers
 } from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
@@ -18,7 +19,7 @@ import TwitterIcon from "../assets/TwitterIcon.png";
 import TikTokIcon from "../assets/TikTokIcon.png";
 import YoutubeIcon from "../assets/YoutubeIcon.png";
 import TwitchIcon from "../assets/TwitchIcon.png";
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const ViewProfile = () => {
   const navigate = useNavigate();
@@ -28,13 +29,12 @@ const ViewProfile = () => {
   const { user_id } = useParams();
 
   // Get and destructure the auth slice
-  const { user, friends } = useSelector((state) => state.auth);
+  const { user, friends, blockedUsers, blockedBy } = useSelector((state) => state.auth);
   // Get and destructure the profile slice
   const {
     userName,
     bio,
     profilePicture,
-    location,
     games,
     socials,
     isLoading,
@@ -65,6 +65,7 @@ const ViewProfile = () => {
 
     dispatch(getProfileWithId(user_id));
     dispatch(getFriendsWithId(user_id));
+    dispatch(getBlockedUsers());
 
     return () => {
       dispatch(reset());
@@ -78,6 +79,17 @@ const ViewProfile = () => {
 
   if (isLoading) {
     return <Spinner />;
+  }
+
+  const blocking = blockedUsers.includes(user_id);
+  const blocked = blockedBy.includes(user_id);
+
+  if (blocking) {
+    return <div>You have blocked this user.</div>;
+  }
+
+  if (blocked) {
+    return <div>You have been blocked by this user.</div>;
   }
   
   return (

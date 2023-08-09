@@ -62,11 +62,14 @@ const getProfile = asyncHandler(async (req, res) => {
     let profile = await Profile.findOne({ user_id: user_id });
     let user = await User.findById(user_id);
     if (!profile) { 
-      return res.status(404).json({ msg: "Profile not found" });
+      res.status(404);
+      throw new Error("Profile not found");
     } else if (user.blockedUsers.includes(req.user._id)) {
-      res.status(400).json({ msg: "Access denied, you have blocked this user" });
+      res.status(400);
+      throw new Error("Access denied, you have blocked this user");
     } else if (user.blockedBy.includes(req.user._id)) {
-      res.status(400).json({ msg: "Access denied, you are blocked by this user" });
+      res.status(400);
+      throw new Error("Access denied, you are blocked by this user");
     }
     res.status(200).json(profile);
   } catch (error) {

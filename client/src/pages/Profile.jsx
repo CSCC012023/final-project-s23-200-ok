@@ -10,6 +10,7 @@ import {
   getFriends,
   unfriend,
   logout,
+  getBlockedUsers,
   deleteUserAccount
 } from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
@@ -142,7 +143,7 @@ const Profile = () => {
   }
 
   const handleDeleteUser = async () => {
-    if(inputText != userName){
+    if(inputText !== userName){
       alert("Invalid username, try again.");
     } else {
       setIsDeleteModalOpen(false);
@@ -179,6 +180,7 @@ const Profile = () => {
 
     dispatch(getProfile());
     dispatch(getFriends());
+    dispatch(getBlockedUsers());
 
     setEditBio(bio);
     setEditPicture(profilePicture);
@@ -186,7 +188,7 @@ const Profile = () => {
     return () => {
       dispatch(reset());
     };
-  }, [user, isError, message, navigate, dispatch, isGameModalOpen]);
+  }, [user, isError, message, navigate, dispatch, isGameModalOpen, bio, profilePicture]);
 
   useEffect(() => {
     setSubmittedLinks(socials);
