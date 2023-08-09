@@ -76,7 +76,7 @@ export default function ValStat () {
                 </div>}
               {valStat.highest_rank && 
                 <div className="highest-val-rank-container">
-                  <p>Career heighest rank: {" " + valStat.highest_rank.patched_tier}</p>
+                  <p>Career highest rank: {" " + valStat.highest_rank.patched_tier}</p>
                   <p>Season: {" " + valStat.highest_rank.season}</p>
                 </div>
               }

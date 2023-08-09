@@ -247,7 +247,7 @@ const Profile = () => {
         <h2>Socials</h2>
         {edit ? (
           <div className="update-socials-button">
-            <button className="edit-button" onClick={openSocialsModal}>
+            <button className="btn" onClick={openSocialsModal}>
               Update Socials
             </button>
           </div>
@@ -315,24 +315,24 @@ const Profile = () => {
             submittedLinks={submittedLinks}
             setSubmittedLinks={setSubmittedLinks}
             closeSocialsModal={closeSocialsModal}></SocialLinkForm>
-          <button className="edit-button" onClick={closeSocialsModal}>
+          <button className="btn" onClick={closeSocialsModal}>
             Close
           </button>
         </Modal>
       </div>
 
       {edit === false ? (
-        <button className="edit-button" onClick={editProfile}>
+        <button className="btn" onClick={editProfile}>
           Edit Profile
         </button>
       ) : (
-        <button className="edit-button" onClick={confirmEdit}>
+        <button className="btn" onClick={confirmEdit}>
           Confirm
         </button>
       )}
 
       <div>
-        <button onClick={openFriendsModal}>
+        <button className="btn" onClick={openFriendsModal}>
           {friends.length} friend(s)
         </button>
         <Modal
@@ -343,7 +343,7 @@ const Profile = () => {
           contentLabel="Friends">
           <div className="modal-header">
             <h2>Friends</h2>
-            <button className="edit-button" onClick={closeFriendsModal}>
+            <button className="btn" onClick={closeFriendsModal}>
               Close
             </button>
           </div>
@@ -360,7 +360,7 @@ const Profile = () => {
         </Modal>
       </div>
 
-      <button className="edit-button" onClick={openGameModal}>
+      <button className="btn" onClick={openGameModal}>
         Link Account
       </button>
 
@@ -410,7 +410,7 @@ const Profile = () => {
           contentLabel="Link Account">
           <div className="modal-header">
             <h2>Link Account</h2>
-            <button className="edit-button" onClick={closeGameModal}>
+            <button className="btn" onClick={closeGameModal}>
               Close
             </button>
           </div>
@@ -442,7 +442,7 @@ const Profile = () => {
       </div>
 
       <div>
-        <button className="edit-button" onClick={openDeleteModal}>Delete Account</button>
+        <button className="btn" onClick={openDeleteModal}>Delete Account</button>
         <Modal
           isOpen={isDeleteModalOpen}
           onRequestClose={closeDeleteModal}
@@ -455,8 +455,8 @@ const Profile = () => {
                 value={inputText}
                 onChange={handleInputChange}
           />
-          <button className="edit-button" onClick={handleDeleteUser}>Submit</button>
-          <button className="edit-button" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>Cancel</button>
+          <button className="btn" onClick={handleDeleteUser}>Submit</button>
+          <button className="btn" style={{marginLeft: "25px"}} onClick={closeDeleteModal}>Cancel</button>
         </Modal>
       </div>
     </div>
