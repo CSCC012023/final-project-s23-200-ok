@@ -144,8 +144,8 @@ const loginUser = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user.id),
       chatAlert: user.chatalert,
-      currUser: user.blockedBy,
-      tgtUser: user.blockedUsers,
+      blockedUsers: user.blockedUsers,
+      blockedBy: user.blockedBy,
     });
   } else {
     res.status(400);
@@ -318,9 +318,19 @@ const blockUser = asyncHandler(async (req, res) => {
 
   user.save();
   userToBlock.save();
-  res
-    .status(200)
-    .json({ currUser: user.blockedUsers, tgtUser: userToBlock.blockedBy });
+  res.status(200).json({blockedUsers: user.blockedUsers, blockedBy: user.blockedBy});
+});
+
+//@route   GET api/users/block
+//@desc    Return list of logged in user's blocked users and blocked by users
+//@access  Private
+const getBlockedUsers = asyncHandler(async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    res.status(200).json({ blockedUsers: user.blockedUsers, blockedBy: user.blockedBy });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error" });
+  }
 });
 
 //@route DELETE api/users/:id
@@ -491,6 +501,7 @@ export {
   getFriendsWithId,
   unfriendFriend,
   blockUser,
+  getBlockedUsers,
   deleteUser,
   verifyEmail,
   resetPassword,

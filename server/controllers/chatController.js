@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Chat from "../models/Chat.js";
+import User from "../models/User.js";
 
 // @route  GET api/chat/
 // @desc   Get all chats for a user
