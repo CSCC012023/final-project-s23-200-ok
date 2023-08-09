@@ -72,7 +72,7 @@ function Header() {
               <NavLink to="/tournament"className={({ isActive }) => (
                 isActive ? "active-nav-btn" : "inactive-nav-btn"
               )}>
-                tournament
+                Tournament
               </NavLink>
             </li>
             <li>
