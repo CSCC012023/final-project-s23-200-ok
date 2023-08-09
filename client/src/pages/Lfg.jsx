@@ -189,7 +189,7 @@ const Lfg = () => {
 
       {user && (
         <>
-          {isEditing ? <h3>Edit Post</h3> : <h3>Create Post</h3>}
+          {isEditing ? <h1>Edit Post</h1> : <h1>Create Post</h1>}
 
           <form className="form-group" onSubmit={handleSubmit}>
             <select
@@ -243,14 +243,16 @@ const Lfg = () => {
         </>
       )}
       
-      <h1>Looking For Group</h1>
+      <h1>Filter posts</h1>
       <form className="form-group" onSubmit={handleFilter}>
         <select
           name="game"
           value={newFilter.game}
           onChange={handleFilterChange}
-          required>
+          // required
+          >
           <option value="">Select a game</option>
+          {/* <option value="any">Any game</option> */}
           {games.map((game) => (
             true ? <option value={game.name}>{game.name}</option> : null
           ))}
@@ -259,8 +261,10 @@ const Lfg = () => {
           name="status"
           value={newFilter.status}
           onChange={handleFilterChange}
-          required>
+          //required
+          >
           <option value="">Select a status</option>
+          {/* <option value="any">Any status</option> */}
           <option value="Open">Open</option>
           <option value="Closed">Closed</option>
           <option value="Almost Full">Almost Full</option>
@@ -271,7 +275,7 @@ const Lfg = () => {
           value={newFilter.server}
           onChange={handleFilterChange}
           placeholder="Server"
-          required
+          // required
         />
 
         <input
@@ -280,7 +284,7 @@ const Lfg = () => {
           value={newFilter.numberOfPlayers}
           onChange={handleFilterChange}
           placeholder="Number of Players"
-          required
+          // required
         />
 
         <button className="btn" type="submit">

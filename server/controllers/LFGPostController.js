@@ -113,16 +113,36 @@ const getLFGPostsFiltered = asyncHandler(async (req, res) => {
   }
 
   try{
-    const filteredLFGPosts = await LFGPost.find({
+    var filteredLFGPosts = await LFGPost.find({
       $and: [
-        { game: { $eq: req.query.game } },
-        { server: { $eq: req.query.server } },
-        { numberOfPlayers: { $eq: req.query.numberOfPlayers } },
-        { status: { $eq: req.query.status } },
+        // { game: { $eq: req.query.game } },
+        // { server: { $eq: req.query.server } },
+        // { numberOfPlayers: { $eq: req.query.numberOfPlayers } },
+        // { status: { $eq: req.query.status } },
         { user_id: { $nin: req.user.blockedUsers } },
         { user_id: { $nin: req.user.blockedBy } },
       ],
     });
+    if (req.query.game){
+      filteredLFGPosts = filteredLFGPosts.filter(
+        (post) => post.game === req.query.game
+      )
+    }
+    if (req.query.server){
+      filteredLFGPosts = filteredLFGPosts.filter(
+        (post) => post.server === req.query.server
+      )
+    }
+    if (req.query.numberOfPlayers){
+      filteredLFGPosts = filteredLFGPosts.filter(
+        (post) => post.numberOfPlayers == req.query.numberOfPlayers
+      )
+    }
+    if (req.query.status){
+      filteredLFGPosts = filteredLFGPosts.filter(
+        (post) => post.status === req.query.status
+      )
+    }
     res.status(200).json(filteredLFGPosts);
   } catch (error) {
     console.log(error);
