@@ -39,7 +39,6 @@ const Search = () => {
   };
 
   const handleBlock = (id) => {
-    console.log('handleBlock' + id);
     dispatch(blockUser(id));
   };
 
@@ -90,6 +89,7 @@ const Search = () => {
         getFilteredNonFriendUsers().map((nonFriendUser) => (
           <NonFriendUser 
             key={nonFriendUser._id}
+            user={user}
             nonFriendUser={nonFriendUser}
             handleAddFriend={handleAddFriend}
             handleBlock={handleBlock}

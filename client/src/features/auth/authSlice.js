@@ -169,6 +169,24 @@ export const blockUser = createAsyncThunk(
   }
 );
 
+export const getBlockedUsers = createAsyncThunk(
+  "auth/getBlockedUsers",
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user?.token;
+      return await authService.getBlockedUsers(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 // Update chat alert
 export const updateChatAlert = createAsyncThunk(
   "auth/updateChatAlert",
@@ -298,8 +316,8 @@ export const authSlice = createSlice({
       .addCase(blockUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true; 
-        state.user.currUser = action.payload.currUser;
-        state.user.tgtUser = action.payload.tgtUser;
+        state.user.blockedUsers = action.payload.blockedUsers;
+        state.user.blockedBy = action.payload.blockedBy;
         console.log(action.payload);
       })
       .addCase(blockUser.rejected, (state, action) => {
@@ -307,6 +325,21 @@ export const authSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         console.log(action.payload);
+      })
+      // get blocked users and users who blocked current user
+      .addCase(getBlockedUsers.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getBlockedUsers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user.blockedUsers = action.payload.blockedUsers;
+        state.user.blockedBy = action.payload.blockedBy;
+      })
+      .addCase(getBlockedUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
       })
       // forgotPassword
       .addCase(forgotPassword.pending, (state) => {
