@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { logout, reset } from "../features/auth/authSlice";
 
 function Header() {
@@ -16,31 +16,64 @@ function Header() {
   return (
     <header className="header" >
       <div className="logo">
-        <Link to="/">playbook</Link>
+        <NavLink to="/">
+          <img
+            src="https://cdn.discordapp.com/attachments/1105994213834899538/1117232429883740220/logo.png" 
+            alt="playbookLogo" />
+          playbook
+        </NavLink>
       </div>
       <ul>
         {user ? (
           <>
             <li>
-              <Link to="/chat">Chat {user.chatAlert && <span class="badge">New</span>}</Link>
+              <NavLink to="/chat" className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Chat {user.chatAlert && <span class="badge">New</span>}
+              </NavLink>
             </li>
             <li>
-              <Link to="/search">Search</Link>
+              <NavLink to="/search" className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Search
+              </NavLink>
             </li>
             <li>
-              <Link to="/profile">Profile</Link>
+              <NavLink to="/profile"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Profile
+              </NavLink>
             </li>
             <li>
-              <Link to="/notifications">Notifications</Link>
+              <NavLink to="/notifications"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Notifications
+              </NavLink>
             </li>
             <li>
-              <Link to="/lfg">Lfg</Link>
+              <NavLink to="/lfg"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Lfg
+              </NavLink>
             </li>
             <li>
-              <Link to="/stat">Stats</Link>
+              <NavLink to="/stat"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Stats
+              </NavLink>
             </li>
             <li>
-              <Link to="/tournament">tournament</Link>
+              <NavLink to="/tournament"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                tournament
+              </NavLink>
             </li>
             <li>
               <button className="btn" onClick={onLogout}>
@@ -52,10 +85,18 @@ function Header() {
         ) : (
           <>
             <li>
-              <Link to="/register">Register</Link>
+              <NavLink to="/register"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Register
+              </NavLink>
             </li>
             <li>
-              <Link to="/login">Log In</Link>
+              <NavLink to="/login"className={({ isActive }) => (
+                isActive ? "active-nav-btn" : "inactive-nav-btn"
+              )}>
+                Log In
+              </NavLink>
             </li>
           </>
         )}

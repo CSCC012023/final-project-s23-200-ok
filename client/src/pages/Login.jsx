@@ -64,7 +64,7 @@ function Login() {
         <h1>
           Login
         </h1>
-        <p>Connect with fellow gamers on Playbook.</p>
+        <p>Connect with fellow gamers on Playbook</p>
       </section>
 
       <section className="form">
@@ -85,7 +85,6 @@ function Login() {
             onChange={onChange} />
           <button className="btn btn-block" type="submit">Log In</button>
           <hr />
-          {/* TODO: add underline-link class in css in dev branch, process is weird atm */}
           <Link to="/register" className="underline-link">
             Don't have an account? Register today!
           </Link>
