@@ -10,6 +10,7 @@ import {
   getFriends,
   unfriend,
   logout,
+  blockUser,
   deleteUserAccount
 } from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
@@ -142,7 +143,7 @@ const Profile = () => {
   }
 
   const handleDeleteUser = async () => {
-    if(inputText != userName){
+    if(inputText !== userName){
       alert("Invalid username, try again.");
     } else {
       setIsDeleteModalOpen(false);
@@ -167,6 +168,10 @@ const Profile = () => {
     dispatch(unfriend(id));
   };
 
+  const handleBlock = (id) => {
+    dispatch(blockUser(id));
+  };
+
   const closeFriendsModal = () => {
     setIsFriendsModalOpen(false);
   };
@@ -186,7 +191,7 @@ const Profile = () => {
     return () => {
       dispatch(reset());
     };
-  }, [user, isError, message, navigate, dispatch, isGameModalOpen]);
+  }, []);
 
   useEffect(() => {
     setSubmittedLinks(socials);
@@ -287,7 +292,7 @@ const Profile = () => {
                     <a
                       className="YouTube-link"
                       href={social.url}
-                      target="_blank">
+                      target="_blank" rel="noreferrer">
                       <img src={YoutubeIcon} alt="Youtube" />
                     </a>
                   )}
@@ -314,7 +319,8 @@ const Profile = () => {
             socials={socials}
             submittedLinks={submittedLinks}
             setSubmittedLinks={setSubmittedLinks}
-            closeSocialsModal={closeSocialsModal}></SocialLinkForm>
+            closeSocialsModal={closeSocialsModal}>
+          </SocialLinkForm>
           <button className="edit-button" onClick={closeSocialsModal}>
             Close
           </button>
@@ -350,9 +356,11 @@ const Profile = () => {
           <>
             {friends.map((friend) => (  
                 <Friend 
+                  user={user}
                   key={friend._id}
                   friend={friend}
                   handleUnfriend={handleUnfriend}
+                  handleBlock={handleBlock}
                   closeFriendsModal={closeFriendsModal}
                 />
             ))}
