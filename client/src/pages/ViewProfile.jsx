@@ -20,6 +20,7 @@ import TikTokIcon from "../assets/TikTokIcon.png";
 import YoutubeIcon from "../assets/YoutubeIcon.png";
 import TwitchIcon from "../assets/TwitchIcon.png";
 import { useParams } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const ViewProfile = () => {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const ViewProfile = () => {
 
   const handleBlock = () => {
     dispatch(blockUser(user_id));
+    toast("User blocked");
   };
 
   useEffect(() => {
