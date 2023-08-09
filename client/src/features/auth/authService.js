@@ -95,6 +95,20 @@ const blockUser = async (blockedUserId, token) => {
 
   return response.data;
 };
+
+// Get blocked users
+const getBlockedUsers = async (token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  const response = await axios.get(API_URL + "block", config);
+
+  return response.data;
+};
+
 // forgot password
 const forgotPassword = async (userData) => {
   const response = await axios.post(API_URL + "forgotpassword", userData);
@@ -139,6 +153,7 @@ const authService = {
   unfriend,
   deleteUser,
   blockUser,
+  getBlockedUsers,
   forgotPassword,
   updateChatAlert,
 };

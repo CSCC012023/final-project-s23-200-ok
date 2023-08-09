@@ -57,21 +57,20 @@ const getProfileNoId = asyncHandler(async (req, res) => {
 //@access  Public
 const getProfile = asyncHandler(async (req, res) => {
   const user_id = req.params.user_id;
-  try {
-    // Check if profile exists
-    let profile = await Profile.findOne({ user_id: user_id });
-    let user = await User.findById(user_id);
-    if (!profile) { 
-      return res.status(404).json({ msg: "Profile not found" });
-    } else if (user.blockedUsers.includes(req.user._id)) {
-      res.status(400).json({ msg: "Access denied, you have blocked this user" });
-    } else if (user.blockedBy.includes(req.user._id)) {
-      res.status(400).json({ msg: "Access denied, you are blocked by this user" });
-    }
-    res.status(200).json(profile);
-  } catch (error) {
-    res.status(500).json({ msg: "Server error" });
+  // Check if profile exists
+  let profile = await Profile.findOne({ user_id: user_id });
+  let user = await User.findById(user_id);
+  if (!profile) { 
+    res.status(404).json;
+    throw new Error("Profile not found");
+  } else if (user.blockedBy.includes(req.user._id)) {
+    res.status(400);
+    throw new Error("Access denied, you have blocked this user");
+  } else if (user.blockedUsers.includes(req.user._id)) {
+    res.status(400);
+    throw new Error("Access denied, you are blocked by this user");
   }
+  res.status(200).json(profile);
 });
 
 //@route   PUT api/profile/

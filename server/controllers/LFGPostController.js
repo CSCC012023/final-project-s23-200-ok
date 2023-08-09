@@ -49,11 +49,7 @@ const createLFGPost = asyncHandler(async (req, res) => {
 //@desc   Create a new LFG comment 
 //@access Private
 const createLFGComment = asyncHandler(async (req, res) => {
-  if (req.post.user.blockedUsers.includes(req.user._id.toString())) {
-    res.status(400);
-    throw new Error("Access denied, you are blocked by this user");
-  }
-  
+
   try {
     // User id and userName set in authentication middleware
     const {
@@ -168,11 +164,12 @@ const getLFGComments = asyncHandler(async (req, res) => {
   //const comments = await LFGComment.find().where("post_id").equals(req.params.id);
   const comments = await LFGComment.find({
     $and: [
-      { post_id: req.params.id },
+      { post_id: { $eq: req.params.id} },
       { user_id: { $nin: req.user.blockedUsers } },
       { user_id: { $nin: req.user.blockedBy } },
     ],
   });
+
   if (comments) {
     res.status(200).json(comments);
   } 

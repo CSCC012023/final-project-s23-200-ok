@@ -7,6 +7,7 @@ import {
 } from "../features/profile/profileSlice";
 import {
   getFriendsWithId,
+  blockUser,
 } from "../features/auth/authSlice";
 import { valorantLogos } from "../logos/valorantLogo";
 import { overwatchLogos } from "../logos/overwatchLogo";
@@ -18,7 +19,7 @@ import TwitterIcon from "../assets/TwitterIcon.png";
 import TikTokIcon from "../assets/TikTokIcon.png";
 import YoutubeIcon from "../assets/YoutubeIcon.png";
 import TwitchIcon from "../assets/TwitchIcon.png";
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const ViewProfile = () => {
   const navigate = useNavigate();
@@ -34,7 +35,6 @@ const ViewProfile = () => {
     userName,
     bio,
     profilePicture,
-    location,
     games,
     socials,
     isLoading,
@@ -53,6 +53,10 @@ const ViewProfile = () => {
     setIsFriendsModalOpen(false);
   };
 
+  const handleBlock = () => {
+    dispatch(blockUser(user_id));
+  };
+
   useEffect(() => {
     if (isError) {
       console.log(message);
@@ -69,7 +73,7 @@ const ViewProfile = () => {
     return () => {
       dispatch(reset());
     };
-  }, [user, isError, message, navigate, dispatch, user_id]);
+  }, []);
 
   // Render an error message if there was an error
   if (isError) {
@@ -158,9 +162,9 @@ const ViewProfile = () => {
       </div>
 
       <div>
-        <button onClick={openFriendsModal}>
-          {friends.length} friend(s)
-        </button>
+          <button className="btn" onClick={openFriendsModal}>
+            {friends.length} friend(s)
+          </button>
         <Modal
           isOpen={isFriendsModalOpen}
           onRequestClose={closeFriendsModal}
@@ -222,6 +226,11 @@ const ViewProfile = () => {
                 </div>
               </div>
             ))}
+        </div>
+        <div>
+          <button className="edit-button" onClick={handleBlock}>
+            Block User
+          </button>
         </div>
       </div>
     </div>
