@@ -14,9 +14,9 @@
   - 1 mark = Meeting and sprint goal is documented, some spikes not clearly identified, one or more members of team's capacity not recorded, participants are not recorded or the majority has not participated, decisions are unclear, there is no clear evidence which user story will be completed or task breakdown is unclear or incomplete
   - 0 marks = No meeting document submitted or the submitted document contains no relevant information to the sprint 3
 
-  Your Mark: 2
+  Your Mark: 1.5
 
-Planning Meetings Total Mark: 2 / 2
+Planning Meetings Total Mark: 1.5 / 2
 
 ## Sprint Review (sprint-(n-1)review.md) (max 2 marks)
 
@@ -24,9 +24,9 @@ Planning Meetings Total Mark: 2 / 2
   - 1 mark = Meeting is documented, participants are not recorded or the majority has not participated, not enough analysis has been done
   - 0 marks = No meeting document submitted or the submitted document contains no relevant information
   
-    Your Mark: 2
+    Your Mark: 1.5 (participants?)
  
-Sprint Review Total Mark: 2 / 2
+Sprint Review Total Mark: 1.5 / 2
 
 ---
 
@@ -39,9 +39,9 @@ Sprint Review Total Mark: 2 / 2
   - 1 marks = At least 1 group member has not sent their update or is low-quality
   - 0 mark = At least 2 group members or more have not sent their updates or is low-quality
   
-  Your Mark: 10
+  Your Mark: 8.5 (more specific details)
 
-Daily Stand-ups Total Mark: 10 / 10
+Daily Stand-ups Total Mark: 8.5 / 10
 
 ---
 
@@ -175,9 +175,9 @@ User Stories Total Mark: 10 / 10
   - 1 mark = diagram present, but no critical path or explanations provided, or explanations are not adequate.
   - 0 marks = document not available or not containing a valid diagram
   
-  Your Mark: 2
+  Your Mark: 1.5 (description of flow for critical path)
 
-Tracking on JIRA Total Mark: 23 / 24
+Tracking on JIRA Total Mark: 22.5 / 24
 
 ---
 
@@ -215,7 +215,7 @@ Sprint Completion Total Mark: 20 / 20
   - 1 mark = The majority of class names do not match the collaborator names or the responsibilities of the majority of the classes are not stated or are unclear
   - 0 marks = No CRC provided or the provided document does not match the CRC model
 
-  Your Mark: 4
+  Your Mark: 2 (CRC cards can be created for each component)
 
 - Software Architecture Diagram (max 4 marks)
 
@@ -225,9 +225,9 @@ Sprint Completion Total Mark: 20 / 20
   - 1 mark = The Architecture Diagram is present, it is not formatted well, and it is unclear what Architecture it follows. There is no web link or other reference lending support to the presented diagram.
   - 0 marks = No diagram present or the presented document does not look like a software architecture diagram
 
-  Your Mark: 4
+  Your Mark: 2 (system architecture diagram needs more detail)
 
-System Design Total Mark: 10 / 10
+System Design Total Mark: 6 / 10
 
 ## Documentation (max 3 mark)
 
@@ -275,7 +275,7 @@ Sprint Demo Total Mark: 14 / 14
 
 ## Total Mark
 
-94 / 95
+87 / 95
 
 
 
